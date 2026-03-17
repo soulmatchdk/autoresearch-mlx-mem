@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+                "D20:4"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

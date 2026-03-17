@@ -121,6 +121,85 @@ def explanation_quality(question: str, predicted_answer: str | None, explanation
     return "good"
 
 
+def reflective_guidance(
+    query: dict[str, Any],
+    reasoning,
+    context: MemoryContext,
+    support: MemoryEvidence | None,
+    bucket_name: str | None,
+    explanation_grade: str,
+) -> dict[str, str]:
+    if bucket_name == "false_abstain":
+        if reasoning.query_mode == "temporal":
+            if support and support.session_time and not support.text:
+                return {
+                    "missed_evidence_type": "session_time_grounding",
+                    "bad_decision_pattern": "abstained because the snippet lacked an explicit date string",
+                    "should_have_done": "accept the grounded session timestamp when one support snippet uniquely names the event",
+                    "minimal_fix_hint": "temporal_policy should allow indirect date grounding from session time when support is unique",
+                }
+            return {
+                "missed_evidence_type": "temporal_grounding",
+                "bad_decision_pattern": "treated a grounded temporal clue as too weak to answer",
+                "should_have_done": "answer from the strongest grounded temporal clue instead of abstaining",
+                "minimal_fix_hint": "abstain_policy should let one grounded temporal snippet beat default abstain",
+            }
+        if reasoning.query_mode == "multi_hop":
+            return {
+                "missed_evidence_type": "multi_evidence_synthesis",
+                "bad_decision_pattern": "gave up before combining the available support snippets",
+                "should_have_done": "combine the best grounded snippets into one compact answer",
+                "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining",
+            }
+        return {
+            "missed_evidence_type": "direct_answer_span",
+            "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+            "should_have_done": "extract the smallest grounded answer span and answer",
+            "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans",
+        }
+    if bucket_name == "temporal_selection_error":
+        return {
+            "missed_evidence_type": "time_anchor_alignment",
+            "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+            "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+            "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates",
+        }
+    if bucket_name == "multi_hop_failure":
+        return {
+            "missed_evidence_type": "multi_evidence_aggregation",
+            "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+            "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+            "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain",
+        }
+    if bucket_name == "missing_evidence":
+        return {
+            "missed_evidence_type": "retrieval_gap",
+            "bad_decision_pattern": "answered despite having no usable grounded evidence",
+            "should_have_done": "abstain when retrieved evidence is empty or clearly off-target",
+            "minimal_fix_hint": "abstain_policy should trigger earlier when support is absent or weakly grounded",
+        }
+    if bucket_name == "false_confident_answer":
+        return {
+            "missed_evidence_type": "specific_answer_span",
+            "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+            "should_have_done": "either extract a compact grounded span or abstain",
+            "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers",
+        }
+    if bucket_name == "explanation_quality" or explanation_grade != "good":
+        return {
+            "missed_evidence_type": "explanation_faithfulness",
+            "bad_decision_pattern": "the explanation did not clearly tie the decision to specific support evidence",
+            "should_have_done": "cite the strongest support term or the missing support reason explicitly",
+            "minimal_fix_hint": "explanation_policy should mention one distinctive support term and the exact abstain reason",
+        }
+    return {
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed",
+    }
+
+
 def make_group() -> dict[str, int]:
     return {
         "count": 0,
@@ -318,8 +397,11 @@ def evaluate_reasoning_batch(
                 bucket_name = "temporal_selection_error"
             else:
                 bucket_name = "false_confident_answer"
+        elif explanation_grade != "good":
+            bucket_name = "explanation_quality"
         if bucket_name:
             failure_buckets[bucket_name] += 1
+        guidance = reflective_guidance(query, reasoning, context, support, bucket_name, explanation_grade)
 
         row = {
             "query_id": query["query_id"],
@@ -373,6 +455,10 @@ def evaluate_reasoning_batch(
                 "reflection_target": reasoning.query_mode,
                 "answer_match": bool(answer_match),
                 "evidence_hit": bool(evidence_hit),
+                "missed_evidence_type": guidance["missed_evidence_type"],
+                "bad_decision_pattern": guidance["bad_decision_pattern"],
+                "should_have_done": guidance["should_have_done"],
+                "minimal_fix_hint": guidance["minimal_fix_hint"],
             },
         }
         trajectories.append(trajectory)

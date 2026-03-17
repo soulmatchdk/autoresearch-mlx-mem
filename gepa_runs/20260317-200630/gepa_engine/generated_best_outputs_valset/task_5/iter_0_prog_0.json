@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: escape, reality, tim.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 8.681034482758621,
+            "text": "Tim loves curling up with a good book to escape reality and get lost in different worlds during his free time.",
+            "value": "Tim loves curling up with a good book to escape reality and get lost in different worlds during his free time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "5:51 pm on 21 October, 2023",
+            "dia_ids": [
+                "D15:29"
+            ]
+        }
+    ],
+    "answer_style": "focused_span"
+}

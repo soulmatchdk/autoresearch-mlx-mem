@@ -1,0 +1,30 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, car, fixed.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 8.616666666666667,
+            "text": "Calvin confirmed the car was fixed and going strong.",
+            "value": "Calvin confirmed the car was fixed and going strong.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 10,
+            "session_time": null,
+            "dia_ids": [
+                "D10:1",
+                "D10:3",
+                "D10:11",
+                "D10:2",
+                "D10:6",
+                "D10:10",
+                "D10:12"
+            ]
+        }
+    ],
+    "answer_style": "emotion"
+}

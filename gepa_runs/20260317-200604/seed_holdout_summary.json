@@ -1,0 +1,323 @@
+{
+  "aggregate_metrics": {
+    "query_count": 12,
+    "joint_answer_or_abstain_acc": 0.3333333333333333,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 1.0,
+    "answer_match_rate": 0.08333333333333333,
+    "answer_evidence_recall": 0.4166666666666667,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.3333333333333333,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 1.0,
+    "false_abstain_penalty": 0.6666666666666666,
+    "false_confident_answer_penalty": 0.16666666666666666
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.1111111111111111,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 1.0,
+    "false_abstain_penalty": 0.6666666666666666,
+    "false_confident_answer_penalty": 0.16666666666666666
+  },
+  "by_slice": {
+    "abstain_like": {
+      "count": 3,
+      "joint_acc": 1.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 1.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.0
+    },
+    "current": {
+      "count": 3,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    },
+    "multi_hop": {
+      "count": 3,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.6666666666666666
+    },
+    "temporal": {
+      "count": 3,
+      "joint_acc": 0.3333333333333333,
+      "pred_abstain_rate": 0.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.3333333333333333,
+      "evidence_hit_rate": 0.6666666666666666
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 8,
+      "joint_acc": 0.375,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.375,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.25
+    },
+    "multi_hop": {
+      "count": 1,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 1.0
+    },
+    "temporal": {
+      "count": 3,
+      "joint_acc": 0.3333333333333333,
+      "pred_abstain_rate": 0.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.3333333333333333,
+      "evidence_hit_rate": 0.6666666666666666
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 0,
+    "missing_evidence": 0,
+    "false_abstain": 6,
+    "multi_hop_failure": 0,
+    "attribute_mismatch": 4,
+    "entity_mismatch": 0,
+    "false_confident_answer": 4,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-41_q48",
+      "bucket": "false_abstain",
+      "question": "What exercises has John done?",
+      "gold_answer": "Weight training, Circuit training, Kickboxing, yoga",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: done, john.",
+      "support_text": "John has also done weight training classes and found them challenging but peaceful.",
+      "support_dia_ids": [
+        "D25:17"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q20",
+      "bucket": "false_confident_answer",
+      "question": "When did Gina interview for a design internship?",
+      "gold_answer": "10 May, 2023",
+      "predicted_answer": "11 May 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about design, gina, internship, interview. The supported answer is 11 May 2023.",
+      "support_text": "Gina had an interview for a design internship and found it to be great.",
+      "support_dia_ids": [
+        "D11:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q127",
+      "bucket": "false_abstain",
+      "question": "What type of music does Deborah find helpful during her yoga practice?",
+      "gold_answer": "instrumental tracks with mellow melodies and rhythms",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: deborah, during, helpful, her.",
+      "support_text": "Deborah finds instrumental tracks with mellow melodies and rhythms helpful for creating a peaceful vibe during her practice.",
+      "support_dia_ids": [
+        "D11:8"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q51",
+      "bucket": "false_abstain",
+      "question": "What is a skill that Audrey learned to take care of her dogs?",
+      "gold_answer": "Grooming",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, care, her, take.",
+      "support_text": "Audrey had an accident while playing with her pups at the park, making it tricky to take care of them with one arm.",
+      "support_dia_ids": [
+        "D25:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q63",
+      "bucket": "false_confident_answer",
+      "question": "How long did James and Samantha date for before deciding to move in together?",
+      "gold_answer": "nearly three months",
+      "predicted_answer": "10 August 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about date, james, samantha. The supported answer is 10 August 2022.",
+      "support_text": "James is considering asking a girl named Samantha out on a date after they met at the beach outing.",
+      "support_dia_ids": [
+        "D19:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q135",
+      "bucket": "false_abstain",
+      "question": "What is one of Tim's favorite fantasy TV shows, as mentioned on November 11, 2023?",
+      "gold_answer": "\"That\"",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, november.",
+      "support_text": "Tim and John caught up at 10:22 am on 21 November 2023.",
+      "support_dia_ids": [
+        "D19:3",
+        "D19:9",
+        "D19:14",
+        "D19:19",
+        "D19:6",
+        "D19:16",
+        "D19:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q67",
+      "bucket": "false_abstain",
+      "question": "What does Melanie do with her family on hikes?",
+      "gold_answer": "Roast marshmallows, tell stories",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, her, melanie.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:3",
+        "D19:7",
+        "D19:9",
+        "D19:2",
+        "D19:6",
+        "D19:8",
+        "D19:10",
+        "D19:13"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q158",
+      "bucket": "false_abstain",
+      "question": "What dessert did Joanna share a photo of that has an almond flour crust, chocolate ganache, and fresh raspberries?",
+      "gold_answer": "chocolate raspberry tart",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: almond, chocolate, crust, flour.",
+      "support_text": "Joanna's favorite dairy-free sweet treat is a chocolate raspberry tart with almond flour crust, chocolate ganache, and fresh raspberries.",
+      "support_dia_ids": [
+        "D21:11"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-41_q48",
+      "question": "What exercises has John done?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: done, john.",
+      "support_text": "John has also done weight training classes and found them challenging but peaceful.",
+      "gold_answer": "Weight training, Circuit training, Kickboxing, yoga",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q127",
+      "question": "What type of music does Deborah find helpful during her yoga practice?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: deborah, during, helpful, her.",
+      "support_text": "Deborah finds instrumental tracks with mellow melodies and rhythms helpful for creating a peaceful vibe during her practice.",
+      "gold_answer": "instrumental tracks with mellow melodies and rhythms",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q253",
+      "question": "What project is Nate working on in his notebook on November 9, 2022?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, nate, november.",
+      "support_text": "Joanna excitedly shared with Nate at 12:06 am on 11 November, 2022, that she was filming her own movie from a road-trip script.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q51",
+      "question": "What is a skill that Audrey learned to take care of her dogs?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, care, her, take.",
+      "support_text": "Audrey had an accident while playing with her pups at the park, making it tricky to take care of them with one arm.",
+      "gold_answer": "Grooming",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q135",
+      "question": "What is one of Tim's favorite fantasy TV shows, as mentioned on November 11, 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, november.",
+      "support_text": "Tim and John caught up at 10:22 am on 21 November 2023.",
+      "gold_answer": "\"That\"",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q130",
+      "question": "How did Andrew describe the dog he met at the pet store?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, dog, pet.",
+      "support_text": "Andrew is looking forward to bonding better with his pet dog, Toby, and seeks tips on taking care of him.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q67",
+      "question": "What does Melanie do with her family on hikes?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, her, melanie.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "gold_answer": "Roast marshmallows, tell stories",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q158",
+      "question": "What dessert did Joanna share a photo of that has an almond flour crust, chocolate ganache, and fresh raspberries?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: almond, chocolate, crust, flour.",
+      "support_text": "Joanna's favorite dairy-free sweet treat is a chocolate raspberry tart with almond flour crust, chocolate ganache, and fresh raspberries.",
+      "gold_answer": "chocolate raspberry tart",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q176",
+      "question": "What did Maria recently get promoted to?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: maria, recently.",
+      "support_text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    }
+  ]
+}

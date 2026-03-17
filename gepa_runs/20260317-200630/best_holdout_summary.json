@@ -1,0 +1,345 @@
+{
+  "aggregate_metrics": {
+    "query_count": 12,
+    "joint_answer_or_abstain_acc": 0.08333333333333333,
+    "abstain_precision": 0.125,
+    "abstain_recall": 1.0,
+    "answer_match_rate": 0.0,
+    "answer_evidence_recall": 0.3333333333333333,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.16666666666666666,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 0.0,
+    "false_abstain_penalty": 0.6363636363636364,
+    "false_confident_answer_penalty": 0.3333333333333333
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.0,
+    "abstain_precision": 0.125,
+    "abstain_recall": 1.0,
+    "false_abstain_penalty": 0.6363636363636364,
+    "false_confident_answer_penalty": 0.3333333333333333
+  },
+  "by_slice": {
+    "current": {
+      "count": 6,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.6666666666666666,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    },
+    "temporal": {
+      "count": 6,
+      "joint_acc": 0.16666666666666666,
+      "pred_abstain_rate": 0.6666666666666666,
+      "gold_abstain_rate": 0.16666666666666666,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 8,
+      "joint_acc": 0.125,
+      "pred_abstain_rate": 0.875,
+      "gold_abstain_rate": 0.125,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.375
+    },
+    "temporal": {
+      "count": 4,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.25,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.25
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 2,
+    "missing_evidence": 0,
+    "false_abstain": 7,
+    "multi_hop_failure": 0,
+    "attribute_mismatch": 3,
+    "entity_mismatch": 0,
+    "false_confident_answer": 6,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-42_q23",
+      "bucket": "false_abstain",
+      "question": "When did Joanna start writing her third screenplay?",
+      "gold_answer": "May 2022",
+      "predicted_answer": null,
+      "predicted_mode": "temporal",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: her, joanna, screenplay, writing.",
+      "support_text": "They discussed how nature inspires creativity, with Joanna mentioning how hiking has transformed her and Nate considering writing a screenplay.",
+      "support_dia_ids": [
+        "D11:3",
+        "D11:7",
+        "D11:9",
+        "D11:11",
+        "D11:13",
+        "D11:15",
+        "D11:4",
+        "D11:6",
+        "D11:10",
+        "D11:14",
+        "D11:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q32",
+      "bucket": "temporal_selection_error",
+      "question": "How long did it take for Jon to open his studio?",
+      "gold_answer": "six months",
+      "predicted_answer": "1 February 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about his, jon, open, studio. The supported answer is 1 February 2023.",
+      "support_text": "Jon is following his passion for dance and searching for a place to open his dance studio.",
+      "support_dia_ids": [
+        "D3:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q16",
+      "bucket": "false_abstain",
+      "question": "What activities does Melanie partake in?",
+      "gold_answer": "pottery, camping, painting, swimming",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: activities, melanie.",
+      "support_text": "Melanie shares her struggle with self-care but mentions that she is carving out time each day for activities that refresh her.",
+      "support_dia_ids": [
+        "D2:1",
+        "D2:3",
+        "D2:5",
+        "D2:7",
+        "D2:8",
+        "D2:12",
+        "D2:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q9",
+      "bucket": "false_confident_answer",
+      "question": "When was Jon in Paris?",
+      "gold_answer": "28 January 2023",
+      "predicted_answer": "29 January 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about jon, paris. The supported answer is 29 January 2023.",
+      "support_text": "Jon visited Paris recently",
+      "support_dia_ids": [
+        "D2:4"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q38",
+      "bucket": "false_confident_answer",
+      "question": "What events for veterans has John participated in?",
+      "gold_answer": "Petition, march, party, visiting veterans hospital, 5K charity run",
+      "predicted_answer": "support group",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about events, john, veterans. The supported answer is support group.",
+      "support_text": "John has organized events for causes other than helping veterans, like raising awareness and funds for victims of domestic abuse.",
+      "support_dia_ids": [
+        "D29:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q25",
+      "bucket": "false_abstain",
+      "question": "Where was John between August 11 and August 15 2023?",
+      "gold_answer": "Chicago",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, john.",
+      "support_text": "Tim and John caught up at 2:52 pm on 31 August, 2023.",
+      "support_dia_ids": [
+        "D10:1",
+        "D10:3",
+        "D10:9",
+        "D10:11",
+        "D10:2",
+        "D10:4",
+        "D10:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q29",
+      "bucket": "false_abstain",
+      "question": "What is something that Audrey often dresses up her dogs with?",
+      "gold_answer": "Hats",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, dogs, her.",
+      "support_text": "Audrey worries about her dogs when they are in new places but was relieved to see them well-behaved at the salon.",
+      "support_dia_ids": [
+        "D28:3"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q133",
+      "bucket": "false_abstain",
+      "question": "What does Jolene enjoy doing with her partner after a long day?",
+      "gold_answer": "Playing video games",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: day, her, jolene, long.",
+      "support_text": "Jolene spends time playing video games with her partner to relax after a long day.",
+      "support_dia_ids": [
+        "D12:6"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q7",
+      "bucket": "false_abstain",
+      "question": "Where has Maria made friends?",
+      "gold_answer": "homeless shelter, gym, church",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: friends, maria.",
+      "support_text": "Maria shared her hiking experience with church friends, mentioning the refreshing feeling of being surrounded by supportive people in nature.",
+      "support_dia_ids": [
+        "D25:1",
+        "D25:11",
+        "D25:13",
+        "D25:17",
+        "D25:2",
+        "D25:4",
+        "D25:8",
+        "D25:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q25",
+      "bucket": "temporal_selection_error",
+      "question": "When is Nate hosting a gaming party?",
+      "gold_answer": "The weekend after 3June, 2022.",
+      "predicted_answer": "24 June 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about gaming, nate, party. The supported answer is 24 June 2022.",
+      "support_text": "Nate hosted a successful gaming party with 7 attendees.",
+      "support_dia_ids": [
+        "D16:6"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q61",
+      "bucket": "false_abstain",
+      "question": "What games has John played with his friends at charity tournaments?",
+      "gold_answer": "CS:GO, Fortnite, Overwatch and Apex Legends",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: charity, friends, his, john.",
+      "support_text": "John mentioned organizing a CS:GO tournament with friends for charity, and James praised his efforts.",
+      "support_dia_ids": [
+        "D10:2",
+        "D10:4",
+        "D10:10",
+        "D10:12",
+        "D10:8"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-42_q23",
+      "question": "When did Joanna start writing her third screenplay?",
+      "predicted_mode": "temporal",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: her, joanna, screenplay, writing.",
+      "support_text": "They discussed how nature inspires creativity, with Joanna mentioning how hiking has transformed her and Nate considering writing a screenplay.",
+      "gold_answer": "May 2022",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q170",
+      "question": "What is John planning to do after receiving Samantha's phone number?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: john, receiving.",
+      "support_text": "John shared his new startup of portable smokers and a mobile game he created, while James talked about receiving positive feedback from the gaming community and his interest in John's game.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q16",
+      "question": "What activities does Melanie partake in?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: activities, melanie.",
+      "support_text": "Melanie shares her struggle with self-care but mentions that she is carving out time each day for activities that refresh her.",
+      "gold_answer": "pottery, camping, painting, swimming",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q25",
+      "question": "Where was John between August 11 and August 15 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, john.",
+      "support_text": "Tim and John caught up at 2:52 pm on 31 August, 2023.",
+      "gold_answer": "Chicago",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q29",
+      "question": "What is something that Audrey often dresses up her dogs with?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, dogs, her.",
+      "support_text": "Audrey worries about her dogs when they are in new places but was relieved to see them well-behaved at the salon.",
+      "gold_answer": "Hats",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q133",
+      "question": "What does Jolene enjoy doing with her partner after a long day?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: day, her, jolene, long.",
+      "support_text": "Jolene spends time playing video games with her partner to relax after a long day.",
+      "gold_answer": "Playing video games",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q7",
+      "question": "Where has Maria made friends?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: friends, maria.",
+      "support_text": "Maria shared her hiking experience with church friends, mentioning the refreshing feeling of being surrounded by supportive people in nature.",
+      "gold_answer": "homeless shelter, gym, church",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q61",
+      "question": "What games has John played with his friends at charity tournaments?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: charity, friends, his, john.",
+      "support_text": "John mentioned organizing a CS:GO tournament with friends for charity, and James praised his efforts.",
+      "gold_answer": "CS:GO, Fortnite, Overwatch and Apex Legends",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}

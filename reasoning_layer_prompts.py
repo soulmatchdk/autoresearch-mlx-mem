@@ -13,6 +13,13 @@ SEED_CANDIDATE = {
         "Everything else defaults to current. "
         "Flags: question_only_mode_routing, prefer_temporal_for_when, prefer_multihop_for_would_if."
     ),
+    "routing_bias_current_vs_temporal": (
+        "Default gently toward current, but switch to temporal when the question contains explicit time anchors, "
+        "relative time language, or direct date requests. "
+        "Do not route broad who/which questions to temporal unless the question clearly asks for time. "
+        "Flags: current_default_bias, temporal_on_time_anchor, temporal_on_relative_time, keep_who_which_non_temporal. "
+        "Settings: temporal_trigger=3, multi_hop_trigger=2, abstain_trigger=3, current_margin=1."
+    ),
     "current_policy": (
         "Use the frozen memory evidence only. Prefer direct lexical grounding over generic thematic overlap. "
         "For current answers, prefer the freshest direct snippet among top evidence, but do not discard older direct evidence when it is much more specific. "
@@ -25,6 +32,13 @@ SEED_CANDIDATE = {
         "Return a concrete temporal answer when one snippet is well grounded; otherwise abstain. "
         "Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required."
     ),
+    "temporal_evidence_policy": (
+        "For temporal selection, prefer evidence whose snippet text or session time matches the question's time anchor. "
+        "Allow indirect grounding from session time when a unique support snippet names the event but omits the explicit date. "
+        "Prefer one uniquely grounded temporal snippet over many vague snippets. "
+        "Flags: prefer_time_anchor_match, allow_session_time_temporal_backoff, prefer_unique_temporal_support. "
+        "Settings: temporal_top_k=6, time_anchor_bonus=3, time_anchor_penalty=2, temporal_backoff_directness=2."
+    ),
     "multi_hop_policy": (
         "For multi-hop questions, combine up to three evidence snippets before abstaining. "
         "Prefer grounded likely yes/no answers only when support snippets explicitly justify the conclusion. "
@@ -36,11 +50,29 @@ SEED_CANDIDATE = {
         "Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question. "
         "Flags: grounded_answer_beats_default_abstain, abstain_on_conflict, abstain_on_missing_grounding."
     ),
+    "generic_answer_guardrail": (
+        "Reject broad copied sentences, generic topic restatements, and long answers that fail to isolate the answer span. "
+        "Prefer abstaining over returning a sentence that only overlaps thematically with the question. "
+        "Flags: abstain_on_sentence_copy, require_specific_answer_span, abstain_on_long_generic_answers. "
+        "Settings: generic_span_tokens=8, max_specific_answer_tokens=10."
+    ),
+    "answer_style_policy": (
+        "Pick the smallest answer style that fits the question: compact span for who/which/what kind, temporal phrase for when/how long, "
+        "collection only when the question clearly asks for multiple items. "
+        "Prefer focused spans over narrative sentences. "
+        "Flags: prefer_focus_span_extraction, prefer_compact_value_span, collection_only_on_explicit_plural."
+    ),
     "answer_synthesis_policy": (
         "Keep answers short and directly supported by the evidence. "
         "Prefer the canonical phrase from the best snippet over paraphrasing. "
         "For collections, deduplicate and preserve a stable order. "
         "Flags: concise_grounded_answers, dedupe_collections."
+    ),
+    "confidence_policy": (
+        "Use low confidence when the answer relies on one weak snippet, medium for one grounded snippet, and high only for very strong support or multi-snippet agreement. "
+        "Let confidence stay conservative on temporal and multi-hop answers unless grounding is explicit. "
+        "Flags: medium_confidence_on_single_grounded, high_confidence_requires_strong_support. "
+        "Settings: medium_score_threshold=7, high_score_threshold=12."
     ),
     "explanation_policy": (
         "Explain the decision using the strongest one or two support snippets only. "

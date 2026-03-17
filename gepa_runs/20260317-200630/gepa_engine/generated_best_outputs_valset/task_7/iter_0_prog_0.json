@@ -1,0 +1,37 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, his, pets.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 8.8375,
+            "text": "Andrew considered getting another dog but decided to focus on his current pets first.",
+            "value": "Andrew considered getting another dog but decided to focus on his current pets first.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": null,
+            "dia_ids": [
+                "D27:1",
+                "D27:5",
+                "D27:7",
+                "D27:9",
+                "D27:15",
+                "D27:17",
+                "D27:2",
+                "D27:4",
+                "D27:6",
+                "D27:8",
+                "D27:10",
+                "D27:12",
+                "D27:14",
+                "D27:18"
+            ]
+        }
+    ],
+    "answer_style": "focused_span"
+}

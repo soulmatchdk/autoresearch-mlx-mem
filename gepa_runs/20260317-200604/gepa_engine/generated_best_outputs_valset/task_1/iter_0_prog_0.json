@@ -1,0 +1,24 @@
+{
+    "query_mode": "multi_hop",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+                "D26:5"
+            ]
+        }
+    ],
+    "answer_style": "focused_span"
+}

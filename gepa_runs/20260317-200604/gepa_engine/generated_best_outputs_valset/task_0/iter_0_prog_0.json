@@ -1,0 +1,24 @@
+{
+    "query_mode": "multi_hop",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+                "D31:2"
+            ]
+        }
+    ],
+    "answer_style": "numeric"
+}

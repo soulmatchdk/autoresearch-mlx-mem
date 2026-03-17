@@ -79,11 +79,16 @@ class EvaluationBatch:
 def validate_candidate(candidate: dict[str, str]) -> dict[str, str]:
     required = (
         "query_mode_rubric",
+        "routing_bias_current_vs_temporal",
         "current_policy",
         "temporal_policy",
+        "temporal_evidence_policy",
         "multi_hop_policy",
         "abstain_policy",
+        "generic_answer_guardrail",
+        "answer_style_policy",
         "answer_synthesis_policy",
+        "confidence_policy",
         "explanation_policy",
     )
     missing = [name for name in required if not isinstance(candidate.get(name), str) or not candidate[name].strip()]

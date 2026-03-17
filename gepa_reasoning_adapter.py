@@ -20,6 +20,7 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         queries_path: str = "locomo_adapted/queries.jsonl",
         metadata_path: str = "locomo_adapted/metadata.json",
         seed: int = 13,
+        active_components: list[str] | None = None,
     ):
         self.events_path = str(events_path)
         self.headers_path = str(headers_path)
@@ -33,6 +34,7 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         self.conversations = events_by_conversation(self.events)
         self.headers_by_conv = headers_by_conversation(self.headers)
         self._batch_summaries: dict[int, dict[str, Any]] = {}
+        self.active_components = tuple(active_components or [])
 
     def sample_batch(self, budget: int, seed: int | None = None) -> list[dict[str, Any]]:
         return sample_queries(self.queries, budget, self.seed if seed is None else seed)
@@ -79,6 +81,8 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
     ) -> dict[str, list[dict[str, Any]]]:
         validate_candidate(candidate)
         allowed = set(components_to_update or candidate.keys())
+        if self.active_components:
+            allowed &= set(self.active_components)
         dataset: dict[str, list[dict[str, Any]]] = defaultdict(list)
         for trajectory in eval_batch.trajectories or []:
             targets = self._reflection_targets(trajectory)
@@ -106,18 +110,28 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         failure_bucket = feedback.get("failure_bucket")
         if gold_mode and predicted_mode and gold_mode != predicted_mode:
             targets.append("query_mode_rubric")
+            targets.append("routing_bias_current_vs_temporal")
         if predicted_mode == "current":
             targets.append("current_policy")
         elif predicted_mode == "temporal":
             targets.append("temporal_policy")
+            targets.append("temporal_evidence_policy")
         elif predicted_mode == "multi_hop":
             targets.append("multi_hop_policy")
         else:
             targets.append("query_mode_rubric")
         if failure_bucket in {"false_abstain", "false_confident_answer"}:
             targets.append("abstain_policy")
+            targets.append("generic_answer_guardrail")
+            targets.append("confidence_policy")
+        if failure_bucket == "temporal_selection_error":
+            targets.append("temporal_policy")
+            targets.append("temporal_evidence_policy")
+            targets.append("answer_synthesis_policy")
         if feedback.get("explanation_quality") != "good":
             targets.append("explanation_policy")
+        if failure_bucket in {"false_confident_answer", "multi_hop_failure", "false_abstain"}:
+            targets.append("answer_style_policy")
         if generated.get("answer") is not None or failure_bucket == "false_confident_answer":
             targets.append("answer_synthesis_policy")
         seen = set()

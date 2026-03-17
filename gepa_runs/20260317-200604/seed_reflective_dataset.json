@@ -1,0 +1,3810 @@
+{
+  "query_mode_rubric": [
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-41_q63",
+      "Inputs": {
+        "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "two",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q80",
+      "Inputs": {
+        "question": "What is the name of the pup that was adopted by James?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.056451612903226,
+            "text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "value": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 5,
+            "session_time": "9:52 am on 12 April, 2022",
+            "dia_ids": [
+              "D5:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ned",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-43_q209",
+      "Inputs": {
+        "question": "Where did Tim capture the painting of the sunset over the mountain range?",
+        "entity": "speaker_a",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.656896551724138,
+            "text": "Tim feels that his passion for fantasy stuff brings him closer to people from all over the world.",
+            "value": "Tim feels that his passion for fantasy stuff brings him closer to people from all over the world.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": "1:50 pm on 13 October, 2023",
+            "dia_ids": [
+              "D13:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: over, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-42_q31",
+      "Inputs": {
+        "question": "What kind of writings does Joanna do?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+              "D26:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Screenplays,books, online blog posts, journal",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-41_q86",
+      "Inputs": {
+        "question": "What event did John volunteer at last weekend?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+              "D20:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "career fair at a local school",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q158",
+      "Inputs": {
+        "question": "What did the system John created help the illegal organization with?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.816129032258065,
+            "text": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "value": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "7:36 pm on 21 October, 2022",
+            "dia_ids": [
+              "D28:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: help, john.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-41_q84",
+      "Inputs": {
+        "question": "What areas is John particularly interested in for policymaking?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+              "D9:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "education and infrastructure",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-42_q245",
+      "Inputs": {
+        "question": "What does Joanna rely on for cheer and joy?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.76551724137931,
+            "text": "They discussed the joy of having extra cash, watching movies, and supporting each other's endeavors, with Nate even creating something special for Joanna.",
+            "value": "They discussed the joy of having extra cash, watching movies, and supporting each other's endeavors, with Nate even creating something special for Joanna.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:9",
+              "D22:19",
+              "D22:21",
+              "D22:2",
+              "D22:8",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: joanna, joy.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-41_q93",
+      "Inputs": {
+        "question": "How often does John work out with his family?",
+        "entity": "speaker_a",
+        "attribute": "occupation",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.740625,
+            "text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "value": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": "6:59 pm on 5 July, 2023",
+            "dia_ids": [
+              "D22:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Three times a week",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-42_q228",
+      "Inputs": {
+        "question": "What kind of impact does Joanna hope to have with her painting?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.717241379310344,
+            "text": "Joanna also talked about a touching moment when her writing had a positive impact on someone, making her realize the power of words.",
+            "value": "Joanna also talked about a touching moment when her writing had a positive impact on someone, making her realize the power of words.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": null,
+            "dia_ids": [
+              "D18:1",
+              "D18:3",
+              "D18:5",
+              "D18:7",
+              "D18:11",
+              "D18:13",
+              "D18:8",
+              "D18:10",
+              "D18:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.7172413793103445,
+            "text": "Joanna values the impact her writing has on others, mentioning that it keeps her going even on tough days.",
+            "value": "Joanna values the impact her writing has on others, mentioning that it keeps her going even on tough days.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": "6:12 pm on 14 August, 2022",
+            "dia_ids": [
+              "D18:7"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.85,
+            "text": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+            "value": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "12:06 am on 11 November, 2022",
+            "dia_ids": [
+              "D29:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "her writing had a positive impact on someone",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about her, impact, joanna. The supported answer is her writing had a positive impact on someone.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-50_q46",
+      "Inputs": {
+        "question": "What shared activities do Dave and Calvin have?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Working on cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q182",
+      "Inputs": {
+        "question": "What inspired James to create his painting?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.80483870967742,
+            "text": "The game 'Witcher 3' inspired James to create his own game, pushing him to make something special.",
+            "value": "game, pushing him to make something special",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "2:14 pm on 13 October, 2022",
+            "dia_ids": [
+              "D27:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: create, his, inspired, james.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-50_q107",
+      "Inputs": {
+        "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 16.198333333333334,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:5",
+              "D17:6",
+              "D17:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "San Francisco",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-42_q221",
+      "Inputs": {
+        "question": "Which superhero toy figure does Joanna share a photo of?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.741379310344827,
+            "text": "Joanna plans to share more recipes and seeks Nate's advice on dairy-free baking, to which Nate suggests substitutes like dairy-free margarine or coconut oil.",
+            "value": "Joanna plans to share more recipes and seeks Nate's advice on dairy-free baking, to which Nate suggests substitutes like dairy-free margarine or coconut oil.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": null,
+            "dia_ids": [
+              "D20:1",
+              "D20:10",
+              "D20:15",
+              "D20:17",
+              "D20:4",
+              "D20:6",
+              "D20:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: joanna, share, which.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    }
+  ],
+  "routing_bias_current_vs_temporal": [
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-41_q63",
+      "Inputs": {
+        "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "two",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-47_q80",
+      "Inputs": {
+        "question": "What is the name of the pup that was adopted by James?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.056451612903226,
+            "text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "value": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 5,
+            "session_time": "9:52 am on 12 April, 2022",
+            "dia_ids": [
+              "D5:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ned",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-43_q209",
+      "Inputs": {
+        "question": "Where did Tim capture the painting of the sunset over the mountain range?",
+        "entity": "speaker_a",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.656896551724138,
+            "text": "Tim feels that his passion for fantasy stuff brings him closer to people from all over the world.",
+            "value": "Tim feels that his passion for fantasy stuff brings him closer to people from all over the world.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": "1:50 pm on 13 October, 2023",
+            "dia_ids": [
+              "D13:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: over, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-42_q31",
+      "Inputs": {
+        "question": "What kind of writings does Joanna do?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+              "D26:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Screenplays,books, online blog posts, journal",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-41_q86",
+      "Inputs": {
+        "question": "What event did John volunteer at last weekend?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+              "D20:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "career fair at a local school",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-47_q158",
+      "Inputs": {
+        "question": "What did the system John created help the illegal organization with?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.816129032258065,
+            "text": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "value": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "7:36 pm on 21 October, 2022",
+            "dia_ids": [
+              "D28:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: help, john.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-41_q84",
+      "Inputs": {
+        "question": "What areas is John particularly interested in for policymaking?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+              "D9:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "education and infrastructure",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-42_q245",
+      "Inputs": {
+        "question": "What does Joanna rely on for cheer and joy?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.76551724137931,
+            "text": "They discussed the joy of having extra cash, watching movies, and supporting each other's endeavors, with Nate even creating something special for Joanna.",
+            "value": "They discussed the joy of having extra cash, watching movies, and supporting each other's endeavors, with Nate even creating something special for Joanna.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:9",
+              "D22:19",
+              "D22:21",
+              "D22:2",
+              "D22:8",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: joanna, joy.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-41_q93",
+      "Inputs": {
+        "question": "How often does John work out with his family?",
+        "entity": "speaker_a",
+        "attribute": "occupation",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.740625,
+            "text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "value": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": "6:59 pm on 5 July, 2023",
+            "dia_ids": [
+              "D22:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Three times a week",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-42_q228",
+      "Inputs": {
+        "question": "What kind of impact does Joanna hope to have with her painting?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.717241379310344,
+            "text": "Joanna also talked about a touching moment when her writing had a positive impact on someone, making her realize the power of words.",
+            "value": "Joanna also talked about a touching moment when her writing had a positive impact on someone, making her realize the power of words.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": null,
+            "dia_ids": [
+              "D18:1",
+              "D18:3",
+              "D18:5",
+              "D18:7",
+              "D18:11",
+              "D18:13",
+              "D18:8",
+              "D18:10",
+              "D18:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.7172413793103445,
+            "text": "Joanna values the impact her writing has on others, mentioning that it keeps her going even on tough days.",
+            "value": "Joanna values the impact her writing has on others, mentioning that it keeps her going even on tough days.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": "6:12 pm on 14 August, 2022",
+            "dia_ids": [
+              "D18:7"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.85,
+            "text": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+            "value": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "12:06 am on 11 November, 2022",
+            "dia_ids": [
+              "D29:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "her writing had a positive impact on someone",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about her, impact, joanna. The supported answer is her writing had a positive impact on someone.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-50_q46",
+      "Inputs": {
+        "question": "What shared activities do Dave and Calvin have?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Working on cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-47_q182",
+      "Inputs": {
+        "question": "What inspired James to create his painting?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.80483870967742,
+            "text": "The game 'Witcher 3' inspired James to create his own game, pushing him to make something special.",
+            "value": "game, pushing him to make something special",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "2:14 pm on 13 October, 2022",
+            "dia_ids": [
+              "D27:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: create, his, inspired, james.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-50_q107",
+      "Inputs": {
+        "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 16.198333333333334,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:5",
+              "D17:6",
+              "D17:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "San Francisco",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "routing_bias_current_vs_temporal",
+      "query_id": "locomo_conv-42_q221",
+      "Inputs": {
+        "question": "Which superhero toy figure does Joanna share a photo of?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.741379310344827,
+            "text": "Joanna plans to share more recipes and seeks Nate's advice on dairy-free baking, to which Nate suggests substitutes like dairy-free margarine or coconut oil.",
+            "value": "Joanna plans to share more recipes and seeks Nate's advice on dairy-free baking, to which Nate suggests substitutes like dairy-free margarine or coconut oil.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": null,
+            "dia_ids": [
+              "D20:1",
+              "D20:10",
+              "D20:15",
+              "D20:17",
+              "D20:4",
+              "D20:6",
+              "D20:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: joanna, share, which.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "routing_bias_current_vs_temporal",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    }
+  ],
+  "abstain_policy": [
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-41_q63",
+      "Inputs": {
+        "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "two",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-42_q177",
+      "Inputs": {
+        "question": "What did Joanna contribute to that was shown on the big screen on the Sunday before October 25, 2022?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.801724137931034,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, joanna, screen, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "movie script",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-47_q80",
+      "Inputs": {
+        "question": "What is the name of the pup that was adopted by James?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.056451612903226,
+            "text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "value": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 5,
+            "session_time": "9:52 am on 12 April, 2022",
+            "dia_ids": [
+              "D5:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ned",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-42_q31",
+      "Inputs": {
+        "question": "What kind of writings does Joanna do?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+              "D26:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Screenplays,books, online blog posts, journal",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-41_q23",
+      "Inputs": {
+        "question": "When did John go to a convention with colleagues?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "John attended a convention with colleagues who share his passion for using tech for good in the community.",
+            "value": "convention with colleagues who share his passion for using tech for good in the community",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": "7:34 pm on 18 April, 2023",
+            "dia_ids": [
+              "D12:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 April 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about colleagues, convention, john. The supported answer is 18 April 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "March 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-41_q86",
+      "Inputs": {
+        "question": "What event did John volunteer at last weekend?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+              "D20:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "career fair at a local school",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-48_q81",
+      "Inputs": {
+        "question": "Has Jolene tried surfing?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.838333333333333,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "no",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-41_q84",
+      "Inputs": {
+        "question": "What areas is John particularly interested in for policymaking?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+              "D9:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "education and infrastructure",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q47",
+      "Inputs": {
+        "question": "What is Dave's favorite activity?",
+        "entity": "speaker_b",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.826666666666666,
+            "text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "value": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Restoring cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-41_q93",
+      "Inputs": {
+        "question": "How often does John work out with his family?",
+        "entity": "speaker_a",
+        "attribute": "occupation",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.740625,
+            "text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "value": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": "6:59 pm on 5 July, 2023",
+            "dia_ids": [
+              "D22:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Three times a week",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q65",
+      "Inputs": {
+        "question": "What activities has Dave participated in with his friends?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.826666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.675,
+            "text": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "value": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": null,
+            "dia_ids": [
+              "D15:1",
+              "D15:2",
+              "D15:4",
+              "D15:5",
+              "D15:9",
+              "D15:13",
+              "D15:6",
+              "D15:10",
+              "D15:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "value": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:5",
+              "D30:9",
+              "D30:13",
+              "D30:17",
+              "D30:2",
+              "D30:4",
+              "D30:20",
+              "D30:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, friends, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "weekly visits to local parks, countryside roadtrip, celebration of the opening of his car maintenance shop, card-playing nights",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q46",
+      "Inputs": {
+        "question": "What shared activities do Dave and Calvin have?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Working on cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-49_q50",
+      "Inputs": {
+        "question": "Who was injured in Evan's family?",
+        "entity": "speaker_a",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.766,
+            "text": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "value": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "entity": "speaker_a",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:9",
+              "D19:11",
+              "D19:2",
+              "D19:4",
+              "D19:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan's, family.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Evan's son and Evan himself",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-26_q6",
+      "Inputs": {
+        "question": "When did Melanie run a charity race?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5,
+            "text": "Melanie ran a charity race for mental health last Saturday.",
+            "value": "Melanie ran a charity race for mental health last Saturday.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "1:14 pm on 25 May, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "20 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about charity, melanie, race. The supported answer is 20 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The sunday before 25 May 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q107",
+      "Inputs": {
+        "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 16.198333333333334,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:5",
+              "D17:6",
+              "D17:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "San Francisco",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    }
+  ],
+  "generic_answer_guardrail": [
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-41_q63",
+      "Inputs": {
+        "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "two",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-42_q177",
+      "Inputs": {
+        "question": "What did Joanna contribute to that was shown on the big screen on the Sunday before October 25, 2022?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.801724137931034,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, joanna, screen, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "movie script",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-47_q80",
+      "Inputs": {
+        "question": "What is the name of the pup that was adopted by James?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.056451612903226,
+            "text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "value": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 5,
+            "session_time": "9:52 am on 12 April, 2022",
+            "dia_ids": [
+              "D5:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ned",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-42_q31",
+      "Inputs": {
+        "question": "What kind of writings does Joanna do?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+              "D26:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Screenplays,books, online blog posts, journal",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-41_q23",
+      "Inputs": {
+        "question": "When did John go to a convention with colleagues?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "John attended a convention with colleagues who share his passion for using tech for good in the community.",
+            "value": "convention with colleagues who share his passion for using tech for good in the community",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": "7:34 pm on 18 April, 2023",
+            "dia_ids": [
+              "D12:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 April 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about colleagues, convention, john. The supported answer is 18 April 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "March 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-41_q86",
+      "Inputs": {
+        "question": "What event did John volunteer at last weekend?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+              "D20:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "career fair at a local school",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-48_q81",
+      "Inputs": {
+        "question": "Has Jolene tried surfing?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.838333333333333,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "no",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-41_q84",
+      "Inputs": {
+        "question": "What areas is John particularly interested in for policymaking?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+              "D9:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "education and infrastructure",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-50_q47",
+      "Inputs": {
+        "question": "What is Dave's favorite activity?",
+        "entity": "speaker_b",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.826666666666666,
+            "text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "value": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Restoring cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-41_q93",
+      "Inputs": {
+        "question": "How often does John work out with his family?",
+        "entity": "speaker_a",
+        "attribute": "occupation",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.740625,
+            "text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "value": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": "6:59 pm on 5 July, 2023",
+            "dia_ids": [
+              "D22:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Three times a week",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-50_q65",
+      "Inputs": {
+        "question": "What activities has Dave participated in with his friends?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.826666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.675,
+            "text": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "value": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": null,
+            "dia_ids": [
+              "D15:1",
+              "D15:2",
+              "D15:4",
+              "D15:5",
+              "D15:9",
+              "D15:13",
+              "D15:6",
+              "D15:10",
+              "D15:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "value": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:5",
+              "D30:9",
+              "D30:13",
+              "D30:17",
+              "D30:2",
+              "D30:4",
+              "D30:20",
+              "D30:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, friends, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "weekly visits to local parks, countryside roadtrip, celebration of the opening of his car maintenance shop, card-playing nights",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-50_q46",
+      "Inputs": {
+        "question": "What shared activities do Dave and Calvin have?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Working on cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-49_q50",
+      "Inputs": {
+        "question": "Who was injured in Evan's family?",
+        "entity": "speaker_a",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.766,
+            "text": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "value": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "entity": "speaker_a",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:9",
+              "D19:11",
+              "D19:2",
+              "D19:4",
+              "D19:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan's, family.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Evan's son and Evan himself",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-26_q6",
+      "Inputs": {
+        "question": "When did Melanie run a charity race?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5,
+            "text": "Melanie ran a charity race for mental health last Saturday.",
+            "value": "Melanie ran a charity race for mental health last Saturday.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "1:14 pm on 25 May, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "20 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about charity, melanie, race. The supported answer is 20 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The sunday before 25 May 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "generic_answer_guardrail",
+      "query_id": "locomo_conv-50_q107",
+      "Inputs": {
+        "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 16.198333333333334,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:5",
+              "D17:6",
+              "D17:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "San Francisco",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "generic_answer_guardrail",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    }
+  ],
+  "confidence_policy": [
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-41_q63",
+      "Inputs": {
+        "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.8390625,
+            "text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "value": "Maria recently adopted a cute pup named Shadow from a shelter.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "two",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-42_q177",
+      "Inputs": {
+        "question": "What did Joanna contribute to that was shown on the big screen on the Sunday before October 25, 2022?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.801724137931034,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, joanna, screen, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "movie script",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-47_q80",
+      "Inputs": {
+        "question": "What is the name of the pup that was adopted by James?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.056451612903226,
+            "text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "value": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 5,
+            "session_time": "9:52 am on 12 April, 2022",
+            "dia_ids": [
+              "D5:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ned",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-42_q31",
+      "Inputs": {
+        "question": "What kind of writings does Joanna do?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.813793103448276,
+            "text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "value": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:56 pm on 4 November, 2022",
+            "dia_ids": [
+              "D26:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Screenplays,books, online blog posts, journal",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-41_q23",
+      "Inputs": {
+        "question": "When did John go to a convention with colleagues?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "John attended a convention with colleagues who share his passion for using tech for good in the community.",
+            "value": "convention with colleagues who share his passion for using tech for good in the community",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": "7:34 pm on 18 April, 2023",
+            "dia_ids": [
+              "D12:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 April 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about colleagues, convention, john. The supported answer is 18 April 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "March 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-41_q86",
+      "Inputs": {
+        "question": "What event did John volunteer at last weekend?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.71875,
+            "text": "John recalls having a blast at a live music event with his family last week.",
+            "value": "John recalls having a blast at a live music event with his family last week.",
+            "entity": "speaker_a",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 20,
+            "session_time": "12:21 am on 27 June, 2023",
+            "dia_ids": [
+              "D20:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "career fair at a local school",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-48_q81",
+      "Inputs": {
+        "question": "Has Jolene tried surfing?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.838333333333333,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "no",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-41_q84",
+      "Inputs": {
+        "question": "What areas is John particularly interested in for policymaking?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+              "D9:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "education and infrastructure",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-50_q47",
+      "Inputs": {
+        "question": "What is Dave's favorite activity?",
+        "entity": "speaker_b",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.826666666666666,
+            "text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "value": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Restoring cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-41_q93",
+      "Inputs": {
+        "question": "How often does John work out with his family?",
+        "entity": "speaker_a",
+        "attribute": "occupation",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.740625,
+            "text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "value": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": "6:59 pm on 5 July, 2023",
+            "dia_ids": [
+              "D22:9"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Three times a week",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-50_q65",
+      "Inputs": {
+        "question": "What activities has Dave participated in with his friends?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.826666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.675,
+            "text": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "value": "Dave shared about his fun card night with friends, while Calvin excitedly revealed his ongoing collaboration with Frank Ocean.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": null,
+            "dia_ids": [
+              "D15:1",
+              "D15:2",
+              "D15:4",
+              "D15:5",
+              "D15:9",
+              "D15:13",
+              "D15:6",
+              "D15:10",
+              "D15:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "value": "Dave mentions his newfound love for photography, especially capturing nature scenes.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:5",
+              "D30:9",
+              "D30:13",
+              "D30:17",
+              "D30:2",
+              "D30:4",
+              "D30:20",
+              "D30:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, friends, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "weekly visits to local parks, countryside roadtrip, celebration of the opening of his car maintenance shop, card-playing nights",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-50_q46",
+      "Inputs": {
+        "question": "What shared activities do Dave and Calvin have?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "value": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Working on cars",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-49_q50",
+      "Inputs": {
+        "question": "Who was injured in Evan's family?",
+        "entity": "speaker_a",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.766,
+            "text": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "value": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+            "entity": "speaker_a",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:9",
+              "D19:11",
+              "D19:2",
+              "D19:4",
+              "D19:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan's, family.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Evan's son and Evan himself",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-26_q6",
+      "Inputs": {
+        "question": "When did Melanie run a charity race?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.5,
+            "text": "Melanie ran a charity race for mental health last Saturday.",
+            "value": "Melanie ran a charity race for mental health last Saturday.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "1:14 pm on 25 May, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "20 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about charity, melanie, race. The supported answer is 20 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The sunday before 25 May 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "confidence_policy",
+      "query_id": "locomo_conv-50_q107",
+      "Inputs": {
+        "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+        "entity": "speaker_b",
+        "attribute": "location",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 16.198333333333334,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:5",
+              "D17:6",
+              "D17:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "San Francisco",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "confidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    }
+  ]
+}
