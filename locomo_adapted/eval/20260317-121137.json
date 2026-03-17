@@ -1,0 +1,438 @@
+{
+  "metadata": {
+    "adapter_version": "locomo_adapter_v1",
+    "locomo_version": "locomo10_pinned_release_with_dec_2025_answer_fixes",
+    "source_path": "../data/locomo10.json",
+    "generated_at": "2026-03-17T12:08:04",
+    "git_commit": "d32b3a44f9862e22e0f976dba898988106cb5109",
+    "conversation_count": 10,
+    "event_count": 2541,
+    "header_count": 272,
+    "query_count": 1986,
+    "slot_taxonomy": [
+      "location",
+      "occupation",
+      "education",
+      "relationship",
+      "plan",
+      "preference",
+      "possession",
+      "health",
+      "event",
+      "date",
+      "other"
+    ],
+    "query_mode_counts": {
+      "adversarial": 400,
+      "current": 244,
+      "historical": 4,
+      "multi_hop": 888,
+      "temporal": 450
+    },
+    "attribute_counts": {
+      "date": 28,
+      "education": 13,
+      "event": 94,
+      "health": 7,
+      "location": 138,
+      "occupation": 109,
+      "other": 1508,
+      "plan": 102,
+      "possession": 319,
+      "preference": 166,
+      "relationship": 57
+    }
+  },
+  "headline": {
+    "query_count": 1986,
+    "joint_answer_or_abstain_acc": 0.21701913393756295,
+    "abstain_precision": 0.25206124852767964,
+    "abstain_recall": 0.963963963963964,
+    "answer_match_rate": 0.0015105740181268882,
+    "answer_evidence_recall": 0.019637462235649546,
+    "current_joint_acc": 0.004098360655737705,
+    "temporal_joint_acc": 0.08,
+    "multi_hop_joint_acc": 0.006756756756756757,
+    "abstain_like_acc": 0.963963963963964
+  },
+  "by_query_mode": {
+    "adversarial": {
+      "count": 400,
+      "joint_acc": 0.965,
+      "pred_abstain_rate": 0.97,
+      "gold_abstain_rate": 0.995,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.01
+    },
+    "current": {
+      "count": 244,
+      "joint_acc": 0.004098360655737705,
+      "pred_abstain_rate": 0.5368852459016393,
+      "gold_abstain_rate": 0.00819672131147541,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.02459016393442623
+    },
+    "historical": {
+      "count": 4,
+      "joint_acc": 0.5,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.5,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.0
+    },
+    "multi_hop": {
+      "count": 888,
+      "joint_acc": 0.006756756756756757,
+      "pred_abstain_rate": 0.9718468468468469,
+      "gold_abstain_rate": 0.0033783783783783786,
+      "answer_match_rate": 0.0033783783783783786,
+      "evidence_hit_rate": 0.02027027027027027
+    },
+    "temporal": {
+      "count": 450,
+      "joint_acc": 0.08,
+      "pred_abstain_rate": 0.6933333333333334,
+      "gold_abstain_rate": 0.08666666666666667,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.024444444444444446
+    }
+  },
+  "by_category": {
+    "1": {
+      "count": 282,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.5780141843971631,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.024822695035460994
+    },
+    "2": {
+      "count": 321,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.6199376947040498,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.028037383177570093
+    },
+    "3": {
+      "count": 96,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.96875,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.020833333333333332
+    },
+    "4": {
+      "count": 841,
+      "joint_acc": 0.0035671819262782403,
+      "pred_abstain_rate": 0.9667063020214031,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0035671819262782403,
+      "evidence_hit_rate": 0.020214030915576695
+    },
+    "5": {
+      "count": 446,
+      "joint_acc": 0.9596412556053812,
+      "pred_abstain_rate": 0.9641255605381166,
+      "gold_abstain_rate": 0.9955156950672646,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.008968609865470852
+    }
+  },
+  "focus_groups": {
+    "current": {
+      "count": 244,
+      "joint_acc": 0.004098360655737705,
+      "pred_abstain_rate": 0.5368852459016393,
+      "gold_abstain_rate": 0.00819672131147541,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.02459016393442623
+    },
+    "temporal": {
+      "count": 450,
+      "joint_acc": 0.08,
+      "pred_abstain_rate": 0.6933333333333334,
+      "gold_abstain_rate": 0.08666666666666667,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.024444444444444446
+    },
+    "multi_hop": {
+      "count": 888,
+      "joint_acc": 0.006756756756756757,
+      "pred_abstain_rate": 0.9718468468468469,
+      "gold_abstain_rate": 0.0033783783783783786,
+      "answer_match_rate": 0.0033783783783783786,
+      "evidence_hit_rate": 0.02027027027027027
+    },
+    "abstain_like": {
+      "count": 444,
+      "joint_acc": 0.963963963963964,
+      "pred_abstain_rate": 0.963963963963964,
+      "gold_abstain_rate": 1.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.009009009009009009
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 236,
+    "missing_evidence": 0,
+    "false_abstain": 1270,
+    "multi_hop_failure": 22,
+    "attribute_mismatch": 0,
+    "entity_mismatch": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-26_q1",
+      "query_mode": "temporal",
+      "bucket": "false_abstain",
+      "question": "When did Caroline go to the LGBTQ support group?",
+      "gold_answer": "7 May 2023",
+      "predicted_answer": null,
+      "support_value": null,
+      "support_dia_ids": [],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q2",
+      "query_mode": "temporal",
+      "bucket": "temporal_selection_error",
+      "question": "When did Melanie paint a sunrise?",
+      "gold_answer": "2022",
+      "predicted_answer": "Melanie ran a charity race for mental health last Saturday.",
+      "support_value": "Melanie ran a charity race for mental health last Saturday.",
+      "support_dia_ids": [
+        "D2:1"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q3",
+      "query_mode": "multi_hop",
+      "bucket": "false_abstain",
+      "question": "What fields would Caroline be likely to pursue in her educaton?",
+      "gold_answer": "Psychology, counseling certification",
+      "predicted_answer": null,
+      "support_value": "Caroline is planning to continue her education and explore career options in counseling or mental health to support those with similar issues.",
+      "support_dia_ids": [
+        "D1:9"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q4",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "What did Caroline research?",
+      "gold_answer": "Adoption agencies",
+      "predicted_answer": null,
+      "support_value": "Melanie is supportive and expresses happiness for Caroline finding her true self and helping others.",
+      "support_dia_ids": [
+        "D19:10"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q5",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "What is Caroline's identity?",
+      "gold_answer": "Transgender woman",
+      "predicted_answer": null,
+      "support_value": "Melanie is supportive and expresses happiness for Caroline finding her true self and helping others.",
+      "support_dia_ids": [
+        "D19:10"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q7",
+      "query_mode": "temporal",
+      "bucket": "temporal_selection_error",
+      "question": "When is Melanie planning on going camping?",
+      "gold_answer": "June 2023",
+      "predicted_answer": "Melanie ran a charity race for mental health last Saturday.",
+      "support_value": "Melanie ran a charity race for mental health last Saturday.",
+      "support_dia_ids": [
+        "D2:1"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q8",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "What is Caroline's relationship status?",
+      "gold_answer": "Single",
+      "predicted_answer": null,
+      "support_value": "Melanie is supportive and expresses happiness for Caroline finding her true self and helping others.",
+      "support_dia_ids": [
+        "D19:10"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q9",
+      "query_mode": "temporal",
+      "bucket": "false_abstain",
+      "question": "When did Caroline give a speech at a school?",
+      "gold_answer": "The week before 9 June 2023",
+      "predicted_answer": null,
+      "support_value": null,
+      "support_dia_ids": [],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q10",
+      "query_mode": "temporal",
+      "bucket": "false_abstain",
+      "question": "When did Caroline meet up with her friends, family, and mentors?",
+      "gold_answer": "The week before 9 June 2023",
+      "predicted_answer": null,
+      "support_value": null,
+      "support_dia_ids": [],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q11",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "How long has Caroline had her current group of friends for?",
+      "gold_answer": "4 years",
+      "predicted_answer": null,
+      "support_value": "family through adoption",
+      "support_dia_ids": [
+        "D19:1"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q12",
+      "query_mode": "current",
+      "bucket": "temporal_selection_error",
+      "question": "Where did Caroline move from 4 years ago?",
+      "gold_answer": "Sweden",
+      "predicted_answer": "Caroline received invaluable help from friends, family, and role models during the process of finding acceptance.",
+      "support_value": "Caroline received invaluable help from friends, family, and role models during the process of finding acceptance.",
+      "support_dia_ids": [
+        "D19:9"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q13",
+      "query_mode": "temporal",
+      "bucket": "false_abstain",
+      "question": "How long ago was Caroline's 18th birthday?",
+      "gold_answer": "10 years ago",
+      "predicted_answer": null,
+      "support_value": "LGBTQ support group recently and found the transgender stories inspiring",
+      "support_dia_ids": [
+        "D1:3"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q14",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "What career path has Caroline decided to persue?",
+      "gold_answer": "counseling or mental health for Transgender people",
+      "predicted_answer": null,
+      "support_value": "family through adoption",
+      "support_dia_ids": [
+        "D19:1"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q15",
+      "query_mode": "multi_hop",
+      "bucket": "false_abstain",
+      "question": "Would Caroline still want to pursue counseling as a career if she hadn't received support growing up?",
+      "gold_answer": "Likely no",
+      "predicted_answer": null,
+      "support_value": "Caroline is planning to continue her education and explore career options in counseling or mental health to support those with similar issues.",
+      "support_dia_ids": [
+        "D1:9"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q16",
+      "query_mode": "current",
+      "bucket": "temporal_selection_error",
+      "question": "What activities does Melanie partake in?",
+      "gold_answer": "pottery, camping, painting, swimming",
+      "predicted_answer": "Melanie values the mutual support they provide to each other and appreciates the encouragement of close ones.",
+      "support_value": "Melanie values the mutual support they provide to each other and appreciates the encouragement of close ones.",
+      "support_dia_ids": [
+        "D19:13"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q17",
+      "query_mode": "temporal",
+      "bucket": "temporal_selection_error",
+      "question": "When did Melanie sign up for a pottery class?",
+      "gold_answer": "2 July 2023",
+      "predicted_answer": "Melanie ran a charity race for mental health last Saturday.",
+      "support_value": "Melanie ran a charity race for mental health last Saturday.",
+      "support_dia_ids": [
+        "D2:1"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q18",
+      "query_mode": "temporal",
+      "bucket": "false_abstain",
+      "question": "When is Caroline going to the transgender conference?",
+      "gold_answer": "July 2023",
+      "predicted_answer": null,
+      "support_value": null,
+      "support_dia_ids": [],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q19",
+      "query_mode": "current",
+      "bucket": "false_abstain",
+      "question": "Where has Melanie camped?",
+      "gold_answer": "beach, mountains, forest",
+      "predicted_answer": null,
+      "support_value": "Melanie had a setback due to an injury that led her to take a break from pottery, which she uses for self-expression and peace.",
+      "support_dia_ids": [
+        "D17:8"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q20",
+      "query_mode": "current",
+      "bucket": "temporal_selection_error",
+      "question": "What do Melanie's kids like?",
+      "gold_answer": "dinosaurs, nature",
+      "predicted_answer": "painting inspired by sunsets and abstract art",
+      "support_value": "painting inspired by sunsets and abstract art",
+      "support_dia_ids": [
+        "D17:13"
+      ],
+      "failure_tags": []
+    },
+    {
+      "query_id": "locomo_conv-26_q21",
+      "query_mode": "temporal",
+      "bucket": "temporal_selection_error",
+      "question": "When did Melanie go to the museum?",
+      "gold_answer": "5 July 2023",
+      "predicted_answer": "Melanie ran a charity race for mental health last Saturday.",
+      "support_value": "Melanie ran a charity race for mental health last Saturday.",
+      "support_dia_ids": [
+        "D2:1"
+      ],
+      "failure_tags": []
+    }
+  ]
+}

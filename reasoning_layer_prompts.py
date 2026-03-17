@@ -1,0 +1,67 @@
+from __future__ import annotations
+
+import copy
+import json
+
+
+SEED_CANDIDATE = {
+    "query_mode_rubric": (
+        "Classify from the question text only. "
+        "Temporal questions usually start with when/how long/how long ago/what date/which year. "
+        "Multi-hop questions usually contain would/if/likely/how many or require combining several clues. "
+        "Abstain-like questions ask for missing or unsupported information. "
+        "Everything else defaults to current. "
+        "Flags: question_only_mode_routing, prefer_temporal_for_when, prefer_multihop_for_would_if."
+    ),
+    "current_policy": (
+        "Use the frozen memory evidence only. Prefer direct lexical grounding over generic thematic overlap. "
+        "For current answers, prefer the freshest direct snippet among top evidence, but do not discard older direct evidence when it is much more specific. "
+        "Allow list aggregation for activities, books, events, and places from up to four grounded snippets. "
+        "Flags: prefer_direct_match, blend_specificity_with_freshness, collection_top4."
+    ),
+    "temporal_policy": (
+        "For temporal questions, anchor relative phrases to session time when possible. "
+        "Accept direct dates, month-year, last week, last weekend, last weekday, yesterday, next month, last month, and recently when tied to a grounded event. "
+        "Return a concrete temporal answer when one snippet is well grounded; otherwise abstain. "
+        "Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required."
+    ),
+    "multi_hop_policy": (
+        "For multi-hop questions, combine up to three evidence snippets before abstaining. "
+        "Prefer grounded likely yes/no answers only when support snippets explicitly justify the conclusion. "
+        "Use collection aggregation when the question asks for multiple items. "
+        "Flags: combine_top3_multihop, prefer_grounded_likely_answers, allow_collection_union."
+    ),
+    "abstain_policy": (
+        "Abstain when there is no grounded support, when the top evidence conflicts sharply, or when the explanation would be weak. "
+        "Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question. "
+        "Flags: grounded_answer_beats_default_abstain, abstain_on_conflict, abstain_on_missing_grounding."
+    ),
+    "answer_synthesis_policy": (
+        "Keep answers short and directly supported by the evidence. "
+        "Prefer the canonical phrase from the best snippet over paraphrasing. "
+        "For collections, deduplicate and preserve a stable order. "
+        "Flags: concise_grounded_answers, dedupe_collections."
+    ),
+    "explanation_policy": (
+        "Explain the decision using the strongest one or two support snippets only. "
+        "For abstain, name the missing grounding or conflict. For answers, cite the direct support. "
+        "Avoid generic confidence language without evidence. "
+        "Flags: cite_support_terms, explain_abstain_reason, avoid_generic_confidence."
+    ),
+}
+
+
+SMOKE_RUN_CONFIG = {
+    "eval_budget": 96,
+    "max_proposals": 3,
+    "max_reflective_examples_per_component": 12,
+    "max_explanation_audit_examples": 12,
+}
+
+
+def candidate_to_json(candidate: dict[str, str]) -> str:
+    return json.dumps(candidate, indent=2, ensure_ascii=True, sort_keys=True)
+
+
+def clone_candidate(candidate: dict[str, str]) -> dict[str, str]:
+    return copy.deepcopy(candidate)
