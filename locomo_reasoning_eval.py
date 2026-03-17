@@ -131,10 +131,13 @@ def reflective_guidance(
 ) -> dict[str, str]:
     if bucket_name == "false_abstain":
         if reasoning.query_mode == "temporal":
-            if support and support.session_time and not support.text:
+            support_has_explicit_time = bool(support and support.text and any(token in support.text.lower() for token in ("yesterday", "last ", "next ", "recently", "ago")))
+            if support and support.text:
+                support_has_explicit_time = support_has_explicit_time or any(char.isdigit() for char in support.text)
+            if support and support.session_time and not support_has_explicit_time:
                 return {
                     "missed_evidence_type": "session_time_grounding",
-                    "bad_decision_pattern": "abstained because the snippet lacked an explicit date string",
+                    "bad_decision_pattern": "abstained because no explicit date token appeared in the snippet",
                     "should_have_done": "accept the grounded session timestamp when one support snippet uniquely names the event",
                     "minimal_fix_hint": "temporal_policy should allow indirect date grounding from session time when support is unique",
                 }

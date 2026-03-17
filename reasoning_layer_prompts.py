@@ -13,7 +13,7 @@ SEED_CANDIDATE = {
         "Everything else defaults to current. "
         "Flags: question_only_mode_routing, prefer_temporal_for_when, prefer_multihop_for_would_if."
     ),
-    "routing_bias_current_vs_temporal": (
+    "mode_routing_bias": (
         "Default gently toward current, but switch to temporal when the question contains explicit time anchors, "
         "relative time language, or direct date requests. "
         "Do not route broad who/which questions to temporal unless the question clearly asks for time. "
@@ -32,7 +32,7 @@ SEED_CANDIDATE = {
         "Return a concrete temporal answer when one snippet is well grounded; otherwise abstain. "
         "Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required."
     ),
-    "temporal_evidence_policy": (
+    "temporal_grounding_rule": (
         "For temporal selection, prefer evidence whose snippet text or session time matches the question's time anchor. "
         "Allow indirect grounding from session time when a unique support snippet names the event but omits the explicit date. "
         "Prefer one uniquely grounded temporal snippet over many vague snippets. "
@@ -45,12 +45,24 @@ SEED_CANDIDATE = {
         "Use collection aggregation when the question asks for multiple items. "
         "Flags: combine_top3_multihop, prefer_grounded_likely_answers, allow_collection_union."
     ),
+    "multi_hop_evidence_requirement": (
+        "For multi-hop answers, require a grounded evidence path rather than one vague thematic snippet. "
+        "Prefer combining two or three aligned support snippets before abstaining, but do not invent links between unrelated snippets. "
+        "Flags: combine_top3_multihop, require_grounded_support_path. "
+        "Settings: multihop_combine_k=3."
+    ),
     "abstain_policy": (
         "Abstain when there is no grounded support, when the top evidence conflicts sharply, or when the explanation would be weak. "
-        "Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question. "
-        "Flags: grounded_answer_beats_default_abstain, abstain_on_conflict, abstain_on_missing_grounding."
+        "Handle general abstention consistently and conservatively. "
+        "Flags: abstain_on_conflict, abstain_on_missing_grounding."
     ),
-    "generic_answer_guardrail": (
+    "abstain_guardrail_answerable": (
+        "Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question with a compact span. "
+        "Lower the abstain threshold when there is one clearly grounded answer path, but keep abstain on sharp conflict. "
+        "Flags: grounded_answer_beats_default_abstain, low_grounding_threshold. "
+        "Settings: answerable_grounding_threshold=1."
+    ),
+    "generic_answer_rejection_rule": (
         "Reject broad copied sentences, generic topic restatements, and long answers that fail to isolate the answer span. "
         "Prefer abstaining over returning a sentence that only overlaps thematically with the question. "
         "Flags: abstain_on_sentence_copy, require_specific_answer_span, abstain_on_long_generic_answers. "

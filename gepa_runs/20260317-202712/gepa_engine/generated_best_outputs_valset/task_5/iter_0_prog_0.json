@@ -1,0 +1,33 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: basketball, career, goals, his.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 15.132758620689655,
+            "text": "They discussed John's passion for basketball, his career goals, and plans for life after sports.",
+            "value": "They discussed John's passion for basketball, his career goals, and plans for life after sports.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 11,
+            "session_time": null,
+            "dia_ids": [
+                "D11:5",
+                "D11:7",
+                "D11:11",
+                "D11:15",
+                "D11:17",
+                "D11:19",
+                "D11:20",
+                "D11:10",
+                "D11:22",
+                "D11:24"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

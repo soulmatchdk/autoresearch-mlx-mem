@@ -79,13 +79,15 @@ class EvaluationBatch:
 def validate_candidate(candidate: dict[str, str]) -> dict[str, str]:
     required = (
         "query_mode_rubric",
-        "routing_bias_current_vs_temporal",
+        "mode_routing_bias",
         "current_policy",
         "temporal_policy",
-        "temporal_evidence_policy",
+        "temporal_grounding_rule",
         "multi_hop_policy",
+        "multi_hop_evidence_requirement",
         "abstain_policy",
-        "generic_answer_guardrail",
+        "abstain_guardrail_answerable",
+        "generic_answer_rejection_rule",
         "answer_style_policy",
         "answer_synthesis_policy",
         "confidence_policy",

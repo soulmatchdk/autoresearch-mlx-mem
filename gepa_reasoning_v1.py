@@ -58,17 +58,13 @@ TRACK_COMPONENTS = {
     "all": list(SEED_CANDIDATE.keys()),
     "mode_abstain": [
         "query_mode_rubric",
-        "routing_bias_current_vs_temporal",
-        "abstain_policy",
-        "generic_answer_guardrail",
-        "confidence_policy",
+        "abstain_guardrail_answerable",
+        "generic_answer_rejection_rule",
     ],
     "temporal_selection": [
         "temporal_policy",
-        "temporal_evidence_policy",
-        "answer_style_policy",
+        "temporal_grounding_rule",
         "answer_synthesis_policy",
-        "explanation_policy",
     ],
 }
 
@@ -150,6 +146,41 @@ def compare_candidates(left: dict[str, float], right: dict[str, float], toleranc
         ("multi_hop_joint_acc", True),
         ("false_confident_answer_penalty", False),
     ]
+    for key, higher_is_better in keys:
+        left_value = float(left.get(key, 0.0))
+        right_value = float(right.get(key, 0.0))
+        if higher_is_better:
+            if left_value > right_value + tolerance:
+                return 1
+            if left_value < right_value - tolerance:
+                return -1
+        else:
+            if left_value < right_value - tolerance:
+                return 1
+            if left_value > right_value + tolerance:
+                return -1
+    return 0
+
+
+def compare_candidates_for_track(track: str, left: dict[str, float], right: dict[str, float], tolerance: float = DECISION_TOLERANCE) -> int:
+    if track == "mode_abstain":
+        keys = [
+            ("answerable_accuracy", True),
+            ("abstain_precision", True),
+            ("abstain_recall", True),
+            ("false_abstain_penalty", False),
+            ("false_confident_answer_penalty", False),
+        ]
+    elif track == "temporal_selection":
+        keys = [
+            ("temporal_joint_acc", True),
+            ("answer_evidence_recall", True),
+            ("answerable_accuracy", True),
+            ("false_abstain_penalty", False),
+            ("false_confident_answer_penalty", False),
+        ]
+    else:
+        return compare_candidates(left, right, tolerance)
     for key, higher_is_better in keys:
         left_value = float(left.get(key, 0.0))
         right_value = float(right.get(key, 0.0))
@@ -257,20 +288,19 @@ def apply_component_tune(candidate: dict[str, str], component: str, iteration: i
     tuned = clone_candidate(candidate)
     if component == "temporal_policy":
         tuned["temporal_policy"] += " Extra rule: map recently to the supporting session date whenever the event is grounded."
-        tuned["abstain_policy"] += " Flags: low_grounding_threshold."
-    elif component == "temporal_evidence_policy":
-        tuned["temporal_evidence_policy"] += " Extra rule: one unique time-anchor match outranks several vague snippets. Flags: prefer_unique_temporal_support, prefer_time_anchor_match."
+    elif component == "temporal_grounding_rule":
+        tuned["temporal_grounding_rule"] += " Extra rule: one unique time-anchor match outranks several vague snippets. Flags: prefer_unique_temporal_support, prefer_time_anchor_match, allow_session_time_temporal_backoff."
     elif component == "current_policy":
         tuned["current_policy"] += " Extra rule: prefer attribute-matching snippets and compact value spans. Flags: prefer_attribute_match, prefer_compact_value_span, collection_top6."
     elif component == "multi_hop_policy":
         tuned["multi_hop_policy"] += " Extra rule: combine the top three grounded snippets before giving up on a likely answer."
-        tuned["abstain_policy"] += " Extra rule: avoid abstaining on answerable multi-hop cases when there is one grounded synthesis path."
-    elif component == "abstain_policy":
-        tuned["abstain_policy"] += " Extra rule: lower the grounding threshold when one snippet directly answers the question. Flags: low_grounding_threshold."
-    elif component == "generic_answer_guardrail":
-        tuned["generic_answer_guardrail"] += " Extra rule: abstain on copied narrative sentences and long vague spans. Flags: abstain_on_sentence_copy, require_specific_answer_span."
-    elif component == "answer_style_policy":
-        tuned["answer_style_policy"] += " Extra rule: prefer focused spans over narrative answers. Flags: prefer_focus_span_extraction, prefer_compact_value_span."
+        tuned["multi_hop_evidence_requirement"] += " Extra rule: require a grounded evidence path before abstaining or answering. Flags: require_grounded_support_path."
+    elif component == "multi_hop_evidence_requirement":
+        tuned["multi_hop_evidence_requirement"] += " Extra rule: combine up to three aligned snippets before giving up. Flags: combine_top3_multihop, require_grounded_support_path."
+    elif component == "abstain_guardrail_answerable":
+        tuned["abstain_guardrail_answerable"] += " Extra rule: lower the grounding threshold when one snippet directly answers the question. Flags: grounded_answer_beats_default_abstain, low_grounding_threshold."
+    elif component == "generic_answer_rejection_rule":
+        tuned["generic_answer_rejection_rule"] += " Extra rule: abstain on copied narrative sentences and long vague spans. Flags: abstain_on_sentence_copy, require_specific_answer_span."
     elif component == "answer_synthesis_policy":
         tuned["answer_synthesis_policy"] += " Extra rule: prefer compact grounded value spans over full-sentence restatements."
         tuned["current_policy"] += " Flags: prefer_compact_value_span."
@@ -280,8 +310,8 @@ def apply_component_tune(candidate: dict[str, str], component: str, iteration: i
         tuned["explanation_policy"] += " Extra rule: always echo one distinctive support term in the explanation."
     elif component == "query_mode_rubric":
         tuned["query_mode_rubric"] += " Extra rule: treat how long/how long ago as temporal and would/if/likely as multi-hop."
-    elif component == "routing_bias_current_vs_temporal":
-        tuned["routing_bias_current_vs_temporal"] += " Extra rule: explicit date anchors should override the current default bias. Flags: temporal_on_time_anchor, temporal_on_relative_time."
+    elif component == "mode_routing_bias":
+        tuned["mode_routing_bias"] += " Extra rule: explicit date anchors should override the current default bias. Flags: temporal_on_time_anchor, temporal_on_relative_time."
     tuned["query_mode_rubric"] += f" Iteration note: custom proposer step {iteration}."
     return tuned
 
@@ -367,11 +397,11 @@ def apply_reflective_tune(candidate: dict[str, str], component: str, rows: list[
             additions.append("Extra rule: temporal questions include when, how long, how long ago, and direct date/year lookups.")
         if additions:
             tuned["query_mode_rubric"] += " " + " ".join(additions)
-    elif component == "routing_bias_current_vs_temporal":
+    elif component == "mode_routing_bias":
         if gold_modes.get("temporal", 0) > gold_modes.get("current", 0):
-            tuned["routing_bias_current_vs_temporal"] += " Extra rule: time-bearing questions should flip to temporal more aggressively."
+            tuned["mode_routing_bias"] += " Extra rule: time-bearing questions should flip to temporal more aggressively."
         if missed_types.get("time_anchor_alignment", 0) > 0:
-            tuned["routing_bias_current_vs_temporal"] += " Extra rule: explicit dates and relative time phrases outweigh the current default bias."
+            tuned["mode_routing_bias"] += " Extra rule: explicit dates and relative time phrases outweigh the current default bias."
     elif component == "current_policy":
         if failures.get("temporal_selection_error", 0) > 0:
             tuned["current_policy"] += " Extra rule: heavily prefer evidence whose session date matches any explicit date or month in the question."
@@ -385,30 +415,30 @@ def apply_reflective_tune(candidate: dict[str, str], component: str, rows: list[
             tuned["temporal_policy"] = append_flags(tuned["temporal_policy"], "allow_session_time_temporal_backoff")
         if failures.get("temporal_selection_error", 0) > 0:
             tuned["temporal_policy"] += " Extra rule: preserve relative time phrasing when the evidence uses relative calendar language."
-    elif component == "temporal_evidence_policy":
+    elif component == "temporal_grounding_rule":
         if missed_types.get("time_anchor_alignment", 0) > 0:
-            tuned["temporal_evidence_policy"] += " Extra rule: favor evidence that matches the time anchor in the question over generic lexical overlap."
-            tuned["temporal_evidence_policy"] = append_flags(tuned["temporal_evidence_policy"], "prefer_time_anchor_match", "prefer_unique_temporal_support")
+            tuned["temporal_grounding_rule"] += " Extra rule: favor evidence that matches the time anchor in the question over generic lexical overlap."
+            tuned["temporal_grounding_rule"] = append_flags(tuned["temporal_grounding_rule"], "prefer_time_anchor_match", "prefer_unique_temporal_support")
         if missed_types.get("session_time_grounding", 0) > 0 or missed_types.get("temporal_grounding", 0) > 0:
-            tuned["temporal_evidence_policy"] += " Extra rule: allow session-time grounding when exactly one strong support snippet names the event."
-            tuned["temporal_evidence_policy"] = append_flags(tuned["temporal_evidence_policy"], "allow_session_time_temporal_backoff")
+            tuned["temporal_grounding_rule"] += " Extra rule: allow session-time grounding when exactly one strong support snippet names the event."
+            tuned["temporal_grounding_rule"] = append_flags(tuned["temporal_grounding_rule"], "allow_session_time_temporal_backoff")
     elif component == "multi_hop_policy":
         tuned["multi_hop_policy"] += " Extra rule: use the top grounded evidence items to synthesize compact, non-sentence answers before giving up."
         tuned["multi_hop_policy"] = append_flags(tuned["multi_hop_policy"], "combine_top3_multihop", "prefer_focus_span_extraction")
-    elif component == "abstain_policy":
+    elif component == "multi_hop_evidence_requirement":
+        if missed_types.get("multi_evidence_synthesis", 0) > 0:
+            tuned["multi_hop_evidence_requirement"] += " Extra rule: require an aligned support path and combine multiple grounded snippets before abstaining."
+            tuned["multi_hop_evidence_requirement"] = append_flags(tuned["multi_hop_evidence_requirement"], "combine_top3_multihop", "require_grounded_support_path")
+    elif component == "abstain_guardrail_answerable":
         if failures.get("false_confident_answer", 0) > 0:
-            tuned["abstain_policy"] += " Extra rule: abstain when the candidate answer is just a copied broad sentence rather than a specific span."
-            tuned["abstain_policy"] = append_flags(tuned["abstain_policy"], "abstain_on_sentence_copy", "require_specific_answer_span")
+            tuned["abstain_guardrail_answerable"] += " Extra rule: keep answerable overrides narrow and do not let weak sentence copies beat abstain."
         if failures.get("false_abstain", 0) > 0:
-            tuned["abstain_policy"] += " Extra rule: do not abstain when one grounded snippet directly answers the question with a compact span."
-            tuned["abstain_policy"] = append_flags(tuned["abstain_policy"], "grounded_answer_beats_default_abstain", "low_grounding_threshold")
-    elif component == "generic_answer_guardrail":
+            tuned["abstain_guardrail_answerable"] += " Extra rule: do not abstain when one grounded snippet directly answers the question with a compact span."
+            tuned["abstain_guardrail_answerable"] = append_flags(tuned["abstain_guardrail_answerable"], "grounded_answer_beats_default_abstain", "low_grounding_threshold")
+    elif component == "generic_answer_rejection_rule":
         if failures.get("false_confident_answer", 0) > 0 or missed_types.get("specific_answer_span", 0) > 0:
-            tuned["generic_answer_guardrail"] += " Extra rule: copied narrative sentences should be rejected unless a compact answer span is extracted."
-            tuned["generic_answer_guardrail"] = append_flags(tuned["generic_answer_guardrail"], "abstain_on_sentence_copy", "require_specific_answer_span", "abstain_on_long_generic_answers")
-    elif component == "answer_style_policy":
-        tuned["answer_style_policy"] += " Extra rule: favor focused spans for who/which/what kind questions and only use collection answers when plurality is explicit."
-        tuned["answer_style_policy"] = append_flags(tuned["answer_style_policy"], "prefer_focus_span_extraction", "prefer_compact_value_span", "collection_only_on_explicit_plural")
+            tuned["generic_answer_rejection_rule"] += " Extra rule: copied narrative sentences should be rejected unless a compact answer span is extracted."
+            tuned["generic_answer_rejection_rule"] = append_flags(tuned["generic_answer_rejection_rule"], "abstain_on_sentence_copy", "require_specific_answer_span", "abstain_on_long_generic_answers")
     elif component == "answer_synthesis_policy":
         tuned["answer_synthesis_policy"] += " Extra rule: return the smallest grounded span that answers the question, not the surrounding narrative sentence."
         tuned["answer_synthesis_policy"] = append_flags(tuned["answer_synthesis_policy"], "prefer_compact_value_span", "prefer_focus_span_extraction")
@@ -463,6 +493,38 @@ class FixedTrackModuleSelector:
         choice = available[self.idx % len(available)]
         self.idx += 1
         return [choice]
+
+
+def build_reflection_prompt_templates(track: str, components: list[str]) -> dict[str, str]:
+    common = (
+        "You are improving one text component of a reasoning system.\n\n"
+        "Current component text:\n```\n<curr_param>\n```\n\n"
+        "Here are reflective examples with Inputs, Generated Outputs, and Feedback:\n```\n<side_info>\n```\n\n"
+        "Make a small delta, not a rewrite. Use the feedback fields such as missed_evidence_type, bad_decision_pattern, "
+        "should_have_done, and minimal_fix_hint to repair one concrete failure mode.\n"
+        "Do not add broad restatements of the whole system. Keep the instruction terse, operational, and specific.\n"
+    )
+    prompts: dict[str, str] = {}
+    if track == "mode_abstain":
+        delta = (
+            "Goal: improve answerable questions and abstain balance.\n"
+            "Do not worsen abstain precision on abstain-like questions.\n"
+            "Focus only on routing to the right mode for answerable questions, letting compact grounded spans beat abstain, "
+            "or rejecting generic copied answers.\n"
+            "Return only the new text for this one component within ``` blocks."
+        )
+        for component in components:
+            prompts[component] = common + "\n" + delta
+    elif track == "temporal_selection":
+        delta = (
+            "Goal: improve temporal answer selection without increasing false abstain.\n"
+            "Focus only on indirect date grounding from session time, time-anchor alignment, and compact temporal answer synthesis.\n"
+            "Do not change current or multi-hop behavior, and do not make generic abstain rules stricter.\n"
+            "Return only the new text for this one component within ``` blocks."
+        )
+        for component in components:
+            prompts[component] = common + "\n" + delta
+    return prompts
 
 
 def markdown_table(headers: list[str], rows: list[list[Any]]) -> str:
@@ -659,6 +721,7 @@ def main():
     best_name = "seed"
     best_candidate = dict(SEED_CANDIDATE)
     result_dict = {"num_candidates": 0, "total_metric_calls": 0}
+    reflection_prompt_template = build_reflection_prompt_templates(args.track, components) if reflection_lm else None
 
     if leakage_report["passed"]:
         result = optimize(
@@ -667,6 +730,7 @@ def main():
             valset=valset,
             adapter=adapter,
             reflection_lm=reflection_lm,
+            reflection_prompt_template=reflection_prompt_template,
             custom_candidate_proposer=custom_candidate_proposer,
             candidate_selection_strategy="pareto",
             frontier_type="objective",
@@ -699,7 +763,7 @@ def main():
     if status != "benchmark_discard":
         comparison_seed = flatten_summary(seed_holdout_summary or seed_summary)
         comparison_best = flatten_summary(best_holdout_summary or best_summary)
-        status = "benchmark_win" if compare_candidates(comparison_best, comparison_seed) > 0 else "benchmark_candidate"
+        status = "benchmark_win" if compare_candidates_for_track(args.track, comparison_best, comparison_seed) > 0 else "benchmark_candidate"
 
     report = render_smoke_report(
         run_id,

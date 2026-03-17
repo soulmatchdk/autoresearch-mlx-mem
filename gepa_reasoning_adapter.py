@@ -110,29 +110,29 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         failure_bucket = feedback.get("failure_bucket")
         if gold_mode and predicted_mode and gold_mode != predicted_mode:
             targets.append("query_mode_rubric")
-            targets.append("routing_bias_current_vs_temporal")
+            targets.append("mode_routing_bias")
         if predicted_mode == "current":
             targets.append("current_policy")
         elif predicted_mode == "temporal":
             targets.append("temporal_policy")
-            targets.append("temporal_evidence_policy")
+            targets.append("temporal_grounding_rule")
         elif predicted_mode == "multi_hop":
             targets.append("multi_hop_policy")
+            targets.append("multi_hop_evidence_requirement")
         else:
             targets.append("query_mode_rubric")
         if failure_bucket in {"false_abstain", "false_confident_answer"}:
-            targets.append("abstain_policy")
-            targets.append("generic_answer_guardrail")
-            targets.append("confidence_policy")
+            targets.append("abstain_guardrail_answerable")
+            targets.append("generic_answer_rejection_rule")
         if failure_bucket == "temporal_selection_error":
             targets.append("temporal_policy")
-            targets.append("temporal_evidence_policy")
+            targets.append("temporal_grounding_rule")
             targets.append("answer_synthesis_policy")
         if feedback.get("explanation_quality") != "good":
             targets.append("explanation_policy")
-        if failure_bucket in {"false_confident_answer", "multi_hop_failure", "false_abstain"}:
+        if failure_bucket in {"false_confident_answer", "multi_hop_failure"}:
             targets.append("answer_style_policy")
-        if generated.get("answer") is not None or failure_bucket == "false_confident_answer":
+        if generated.get("answer") is not None or failure_bucket in {"false_confident_answer", "temporal_selection_error"}:
             targets.append("answer_synthesis_policy")
         seen = set()
         out = []

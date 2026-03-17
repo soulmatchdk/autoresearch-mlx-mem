@@ -1,0 +1,24 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "24 June 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about cream, her, ice, joanna. The supported answer is 24 June 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+                "D16:15"
+            ]
+        }
+    ],
+    "answer_style": "temporal"
+}

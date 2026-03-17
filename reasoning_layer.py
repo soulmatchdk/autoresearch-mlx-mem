@@ -182,11 +182,11 @@ def time_anchor_adjustment(question: str, item: MemoryEvidence, flags: set[str],
 
 def classify_query_mode(candidate: dict[str, str], question: str) -> str:
     _ = validate_candidate(candidate)
-    routing_flags = component_flags(candidate, "query_mode_rubric", "routing_bias_current_vs_temporal")
-    temporal_trigger = int(component_setting(candidate, "temporal_trigger", 3.0, "routing_bias_current_vs_temporal"))
-    multi_hop_trigger = int(component_setting(candidate, "multi_hop_trigger", 2.0, "routing_bias_current_vs_temporal"))
-    abstain_trigger = int(component_setting(candidate, "abstain_trigger", 3.0, "routing_bias_current_vs_temporal"))
-    current_margin = int(component_setting(candidate, "current_margin", 1.0, "routing_bias_current_vs_temporal"))
+    routing_flags = component_flags(candidate, "query_mode_rubric", "mode_routing_bias")
+    temporal_trigger = int(component_setting(candidate, "temporal_trigger", 3.0, "mode_routing_bias"))
+    multi_hop_trigger = int(component_setting(candidate, "multi_hop_trigger", 2.0, "mode_routing_bias"))
+    abstain_trigger = int(component_setting(candidate, "abstain_trigger", 3.0, "mode_routing_bias"))
+    current_margin = int(component_setting(candidate, "current_margin", 1.0, "mode_routing_bias"))
     lowered = f" {question.lower()} "
     temporal_score = 0
     multi_hop_score = 0
@@ -271,9 +271,9 @@ def directness_score(question: str, item: MemoryEvidence) -> float:
 
 def rank_support_items(candidate: dict[str, str], context: MemoryContext, query_mode: str) -> list[MemoryEvidence]:
     flags = candidate_flags(candidate)
-    temporal_flags = component_flags(candidate, "temporal_policy", "temporal_evidence_policy")
-    time_anchor_bonus = component_setting(candidate, "time_anchor_bonus", 2.0, "temporal_evidence_policy")
-    time_anchor_penalty = component_setting(candidate, "time_anchor_penalty", 2.0, "temporal_evidence_policy")
+    temporal_flags = component_flags(candidate, "temporal_policy", "temporal_grounding_rule")
+    time_anchor_bonus = component_setting(candidate, "time_anchor_bonus", 2.0, "temporal_grounding_rule")
+    time_anchor_penalty = component_setting(candidate, "time_anchor_penalty", 2.0, "temporal_grounding_rule")
     ranked = []
     for item in context.evidence_items:
         score = item.score
@@ -546,9 +546,9 @@ def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode:
         answer = aggregate_collection_answer(context.question, ranked[:top_k])
         return answer, ranked[:top_k]
     if query_mode == "temporal":
-        temporal_flags = component_flags(candidate, "temporal_policy", "temporal_evidence_policy")
-        temporal_top_k = int(component_setting(candidate, "temporal_top_k", 6.0, "temporal_evidence_policy"))
-        backoff_directness = component_setting(candidate, "temporal_backoff_directness", 2.0, "temporal_evidence_policy")
+        temporal_flags = component_flags(candidate, "temporal_policy", "temporal_grounding_rule")
+        temporal_top_k = int(component_setting(candidate, "temporal_top_k", 6.0, "temporal_grounding_rule"))
+        backoff_directness = component_setting(candidate, "temporal_backoff_directness", 2.0, "temporal_grounding_rule")
         for item in ranked[: max(1, temporal_top_k)]:
             local_flags = set(temporal_flags)
             if "allow_session_time_temporal_backoff" in local_flags and directness_score(context.question, item) < backoff_directness:
@@ -558,12 +558,14 @@ def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode:
                 return answer, [item]
         return None, ranked[:1]
     if query_mode == "multi_hop":
+        multihop_flags = component_flags(candidate, "multi_hop_policy", "multi_hop_evidence_requirement")
+        combine_k = int(component_setting(candidate, "multihop_combine_k", 3.0, "multi_hop_evidence_requirement"))
         if answer_style == "counterfactual":
-            combine_k = 3 if "combine_top3_multihop" in flags else 2
+            combine_k = max(2, combine_k) if "combine_top3_multihop" in multihop_flags else 2
             answer = counterfactual_answer(context.question, ranked[:combine_k])
             if answer:
                 return answer, ranked[:combine_k]
-        combine_k = 3 if "combine_top3_multihop" in flags else 2
+        combine_k = max(2, combine_k) if "combine_top3_multihop" in multihop_flags else 2
         for item in ranked[:combine_k]:
             answer = current_answer_from_item(context.question, item, answer_style)
             if answer:
@@ -610,18 +612,19 @@ def make_explanation(candidate: dict[str, str], question: str, query_mode: str, 
 
 def should_abstain(candidate: dict[str, str], query_mode: str, answer_style: str, answer: str | None, support_items: list[MemoryEvidence]) -> bool:
     flags = candidate_flags(candidate)
-    guardrail_flags = component_flags(candidate, "generic_answer_guardrail")
+    answerable_flags = component_flags(candidate, "abstain_policy", "abstain_guardrail_answerable")
+    guardrail_flags = component_flags(candidate, "generic_answer_rejection_rule")
     if query_mode == "abstain_like":
         return True
     if not answer or not support_items:
         return True
     top = support_items[0]
     threshold = 2.0
-    if "low_grounding_threshold" in flags:
-        threshold = 1.0
+    if "low_grounding_threshold" in answerable_flags:
+        threshold = component_setting(candidate, "answerable_grounding_threshold", 1.0, "abstain_guardrail_answerable")
     if "high_grounding_threshold" in flags:
         threshold = 3.5
-    if top.score < threshold and "grounded_answer_beats_default_abstain" not in flags:
+    if top.score < threshold and "grounded_answer_beats_default_abstain" not in answerable_flags:
         return True
     if "require_time_anchor_match" in flags and extract_time_terms(top.text + " " + (top.session_time or "")) and extract_time_terms(support_items[0].text + " " + (support_items[0].session_time or "")):
         if not (extract_time_terms(top.text + " " + (top.session_time or "")) & extract_time_terms(answer or "")):
@@ -629,8 +632,8 @@ def should_abstain(candidate: dict[str, str], query_mode: str, answer_style: str
                 return True
     support_norm = normalize_text(top.text)
     answer_norm = normalize_text(answer)
-    generic_span_tokens = int(component_setting(candidate, "generic_span_tokens", 8.0, "generic_answer_guardrail"))
-    max_specific_answer_tokens = int(component_setting(candidate, "max_specific_answer_tokens", 10.0, "generic_answer_guardrail"))
+    generic_span_tokens = int(component_setting(candidate, "generic_span_tokens", 8.0, "generic_answer_rejection_rule"))
+    max_specific_answer_tokens = int(component_setting(candidate, "max_specific_answer_tokens", 10.0, "generic_answer_rejection_rule"))
     if "abstain_on_sentence_copy" in guardrail_flags and answer_norm and support_norm.startswith(answer_norm):
         if answer_style in {"single", "focused_span", "numeric", "frequency", "emotion", "boolean"} and len(answer_norm.split()) >= generic_span_tokens:
             return True
@@ -638,7 +641,7 @@ def should_abstain(candidate: dict[str, str], query_mode: str, answer_style: str
         return True
     if "abstain_on_long_generic_answers" in guardrail_flags and len((answer or "").split()) > max_specific_answer_tokens:
         return True
-    if query_mode in {"current", "temporal"} and "grounded_answer_beats_default_abstain" in flags:
+    if query_mode in {"current", "temporal"} and "grounded_answer_beats_default_abstain" in answerable_flags:
         return False
     return False
 

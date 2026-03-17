@@ -1,0 +1,13 @@
+Iteration 0: Base program full valset score: -0.45499999999999996 over 10 / 10 examples
+Iteration 1: Selected program 0 score: -0.45499999999999996
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 1: Proposed new text for temporal_policy: For temporal questions, first identify any temporal anchor in the question (e.g., yesterday, last week, last month, next month, etc.). If an anchor is present, map it to an absolute date using the session time; only accept evidence whose date matches that mapped anchor (or the closest match if exact not found). Accept direct dates, month‑year, last week, last weekend, last weekday, yesterday, next month, last month, and recently only when tied to a grounded event that satisfies the anchor alignment. Return a compact temporal answer (a direct date expression, not a narrative sentence) when one snippet is well grounded and anchor‑aligned; otherwise abstain. Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required.
+Iteration 1: New subsample score -1.95 is not better than old score -1.95, skipping
