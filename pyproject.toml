@@ -1,7 +1,7 @@
 [project]
 name = "autoresearch-mlx"
 version = "0.1.0"
-description = "Apple Silicon MLX port of Karpathy's autoresearch"
+description = "Apple Silicon MLX autoresearch-style repo with a UCMD V3.1 memory baseline"
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 dependencies = [

@@ -1,6 +1,3 @@
-commit	val_bpb	memory_gb	status	description
-383abb4	2.667000	26.9	keep	baseline (AdamW, default config)
-c67ad2a	2.695369	26.9	discard	lower weight decay to 0.1
-909dd59	2.588904	26.9	keep	halve total batch size to 2^16
-4161af3	2.533728	26.9	keep	increase matrix LR to 0.04
-5efc7aa	1.807902	20.7	keep	reduce depth from 8 to 4
+run_id	samples	epochs	joint_answer_or_abstain_acc	abstain_accuracy	abstain_precision	raw_recall_at_k	false_merge_rate	unnecessary_branch_rate	header_fake_fact_rate	avg_headers_used	avg_retrieval_latency_ms	description
+20260316-175135	1000	5	0.260000	0.950000	0.000000	1.000000	0.232687	0.138760	0.588333	3.990	13.237	ucmd_v31_baseline
+20260316-182254	1000	5	0.720000	0.750000	0.083333	1.000000	0.267313	0.123034	0.230000	4.000	13.035	ucmd_v31_baseline

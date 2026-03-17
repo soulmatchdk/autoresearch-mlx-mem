@@ -1,526 +1,1823 @@
 """
-Autoresearch pretraining script. Single-device, single-file.
-Apple Silicon MLX port of karpathy/autoresearch.
-Usage: uv run train.py
+UCMD V3.1 baseline for the autoresearch-mlx repo.
+
+This keeps the repo in the same Apple Silicon / MLX / agent-loop spirit,
+but replaces the baseline algorithm with a single-file UCMD memory system.
+
+What this file does:
+- builds a small synthetic dataset in memory (or loads/dumps it outside the repo)
+- trains only small MLX-native MLP modules and heads
+- exposes a real Memory API for agent use
+- reports UCMD metrics and appends a summary row to results.tsv
 """
 
-import gc
+import json
 import math
 import os
+import random
+import tempfile
 import time
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 import mlx.core as mx
 import mlx.nn as nn
+import mlx.optimizers as optim
 from mlx.utils import tree_flatten, tree_map
+import numpy as np
 
-from prepare import MAX_SEQ_LEN, TIME_BUDGET, Tokenizer, evaluate_bpb, make_dataloader
 
-os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+SEED = 42
+random.seed(SEED)
+mx.random.seed(SEED)
 
 
 @dataclass
-class GPTConfig:
-    sequence_len: int = 2048
-    vocab_size: int = 32768
-    n_layer: int = 12
-    n_head: int = 6
-    n_kv_head: int = 6
-    n_embd: int = 768
-    window_pattern: str = "SSSL"
+class Config:
+    dataset_path: str = os.getenv("UCMD_DATA", "")
+    results_path: str = os.getenv("UCMD_RESULTS", "results.tsv")
+    run_note: str = os.getenv("UCMD_RUN_NOTE", "ucmd_v31_baseline")
+
+    n_samples: int = int(os.getenv("UCMD_SAMPLES", 1000))
+    min_events: int = int(os.getenv("UCMD_MIN_EVENTS", 10))
+    max_events: int = int(os.getenv("UCMD_MAX_EVENTS", 14))
+
+    d_field: int = int(os.getenv("UCMD_D_FIELD", 16))
+    d_model: int = int(os.getenv("UCMD_D_MODEL", 64))
+    d_hidden: int = int(os.getenv("UCMD_D_HIDDEN", 128))
+
+    h_max: int = int(os.getenv("UCMD_H_MAX", 12))
+    n_hot: int = int(os.getenv("UCMD_N_HOT", 384))
+    k_scope: int = int(os.getenv("UCMD_K_SCOPE", 32))
+    k_rerank: int = int(os.getenv("UCMD_K_RERANK", 8))
+
+    epochs: int = int(os.getenv("UCMD_EPOCHS", 8))
+    batch_size: int = int(os.getenv("UCMD_BATCH_SIZE", 16))
+    lr: float = float(os.getenv("UCMD_LR", 3e-4))
+    wd: float = float(os.getenv("UCMD_WD", 1e-4))
+    grad_clip_norm: float = float(os.getenv("UCMD_GRAD_CLIP", 1.0))
+
+    lambda_answer: float = 1.0
+    lambda_abstain: float = 0.5
+    lambda_branch: float = 0.3
+    lambda_scope: float = 0.2
+    lambda_retrieval: float = 0.3
+
+    semantic_beta: float = float(os.getenv("UCMD_SEM_BETA", 0.01))
+    quality_tau: float = float(os.getenv("UCMD_QUALITY_TAU", 0.60))
+    abstain_tau: float = float(os.getenv("UCMD_ABSTAIN_TAU", 0.65))
+    abstain_evidence_floor: float = float(os.getenv("UCMD_ABS_EVIDENCE_FLOOR", 0.15))
+    abstain_gap_floor: float = float(os.getenv("UCMD_ABS_GAP_FLOOR", 0.20))
+    abstain_conflict_ceiling: float = float(os.getenv("UCMD_ABS_CONFLICT_CEILING", 0.35))
+    abstain_time_evidence_relief: float = float(os.getenv("UCMD_ABS_TIME_EVIDENCE_RELIEF", 0.06))
+    abstain_time_gap_relief: float = float(os.getenv("UCMD_ABS_TIME_GAP_RELIEF", 0.08))
+    abstain_time_conflict_relief: float = float(os.getenv("UCMD_ABS_TIME_CONFLICT_RELIEF", 0.10))
+    abstain_time_bonus_cap: float = float(os.getenv("UCMD_ABS_TIME_BONUS_CAP", 0.08))
+    abstain_time_strong_evidence_gain: float = float(os.getenv("UCMD_ABS_TIME_STRONG_EVIDENCE_GAIN", 0.10))
+    abstain_time_strong_gap_gain: float = float(os.getenv("UCMD_ABS_TIME_STRONG_GAP_GAIN", 0.04))
+    abstain_time_strong_conflict_gain: float = float(os.getenv("UCMD_ABS_TIME_STRONG_CONFLICT_GAIN", 0.10))
+    scope_attr_penalty: float = float(os.getenv("UCMD_SCOPE_ATTR_PENALTY", 2.0))
+    scope_regime_penalty: float = float(os.getenv("UCMD_SCOPE_REGIME_PENALTY", 1.5))
+    scope_time_penalty_near: float = float(os.getenv("UCMD_SCOPE_TIME_PENALTY_NEAR", 0.35))
+    scope_time_penalty_mid: float = float(os.getenv("UCMD_SCOPE_TIME_PENALTY_MID", 0.85))
+    scope_time_penalty_far: float = float(os.getenv("UCMD_SCOPE_TIME_PENALTY_FAR", 1.0))
+    scope_hard_filter_attr: bool = os.getenv("UCMD_SCOPE_HARD_FILTER_ATTR", "1") == "1"
+    scope_hard_filter_regime: bool = os.getenv("UCMD_SCOPE_HARD_FILTER_REGIME", "1") == "1"
+    branch_tau_0: float = float(os.getenv("UCMD_BRANCH_TAU_0", 0.55))
+    branch_target_rate: float = float(os.getenv("UCMD_BRANCH_TARGET_RATE", 0.08))
+    branch_tau_gain: float = float(os.getenv("UCMD_BRANCH_TAU_GAIN", 0.50))
+    value_mismatch_branch_boost: float = float(os.getenv("UCMD_VALUE_BRANCH_BOOST", 1.5))
+    value_mismatch_update_scale: float = float(os.getenv("UCMD_VALUE_UPDATE_SCALE", 0.25))
+    debug_failure_examples: int = int(os.getenv("UCMD_DEBUG_FAILURES", 20))
+    sleep_every_n_steps: int = int(os.getenv("UCMD_SLEEP_EVERY", 50))
 
 
-def norm(x):
-    return x * mx.rsqrt(mx.mean(x * x, axis=-1, keepdims=True) + 1e-5)
+cfg = Config()
 
 
-def has_ve(layer_idx, n_layer):
-    """Returns True if layer should have Value Embedding (alternating, last always included)."""
-    return layer_idx % 2 == (n_layer - 1) % 2
+ENTITIES = ["anna", "bob", "cara", "dave", "emma", "finn", "gina", "hugo"]
+ATTRS = {
+    "city": ["copenhagen", "aarhus", "odense", "aalborg"],
+    "role": ["engineer", "designer", "manager", "researcher"],
+    "status": ["active", "paused", "busy", "offline"],
+}
+REGIMES = ["work", "home", "travel", "weekend"]
+SOURCES = ["chat", "email", "crm", "calendar"]
+TIME_BUCKETS = ["current", "same_day", "same_week", "historical"]
+
+RESULTS_HEADER = [
+    "run_id",
+    "samples",
+    "epochs",
+    "joint_answer_or_abstain_acc",
+    "abstain_accuracy",
+    "abstain_precision",
+    "raw_recall_at_k",
+    "false_merge_rate",
+    "unnecessary_branch_rate",
+    "header_fake_fact_rate",
+    "avg_headers_used",
+    "avg_retrieval_latency_ms",
+    "description",
+]
 
 
-def create_additive_causal_mask(seq_len, dtype=mx.float32):
-    indices = mx.arange(seq_len)
-    blocked = indices[None, :] > indices[:, None]
-    return mx.where(blocked, mx.array(float("-inf"), dtype=dtype), mx.array(0.0, dtype=dtype))
+def scalar(x) -> float:
+    mx.eval(x)
+    return float(x.item())
 
 
-def create_sliding_window_mask(seq_len, window_size, dtype=mx.float32):
-    indices = mx.arange(seq_len)
-    causal = indices[None, :] > indices[:, None]
-    too_far = (indices[:, None] - indices[None, :]) >= window_size
-    blocked = causal | too_far
-    return mx.where(blocked, mx.array(float("-inf"), dtype=dtype), mx.array(0.0, dtype=dtype))
+def zeros(d: int):
+    return mx.zeros((d,), dtype=mx.float32)
 
 
-def get_peak_memory_mb():
-    return mx.get_peak_memory() / 1024 / 1024
+def sigmoid(x):
+    return 1.0 / (1.0 + mx.exp(-x))
 
 
-class CausalSelfAttention(nn.Module):
-    def __init__(self, config, layer_idx):
-        super().__init__()
-        self.n_head = config.n_head
-        self.n_kv_head = config.n_kv_head
-        self.n_embd = config.n_embd
-        self.head_dim = self.n_embd // self.n_head
-        assert self.n_embd % self.n_head == 0
-        assert self.n_kv_head <= self.n_head and self.n_head % self.n_kv_head == 0
-        self.c_q = nn.Linear(self.n_embd, self.n_head * self.head_dim, bias=False)
-        self.c_k = nn.Linear(self.n_embd, self.n_kv_head * self.head_dim, bias=False)
-        self.c_v = nn.Linear(self.n_embd, self.n_kv_head * self.head_dim, bias=False)
-        self.c_proj = nn.Linear(self.n_embd, self.n_embd, bias=False)
-        self.ve_gate_channels = 32
-        self.ve_gate = (
-            nn.Linear(self.ve_gate_channels, self.n_kv_head, bias=False)
-            if has_ve(layer_idx, config.n_layer)
-            else None
-        )
-        self.rope = nn.RoPE(self.head_dim, traditional=True, base=10000)
-
-    def __call__(self, x, ve, mask):
-        batch_size, seq_len, _ = x.shape
-        q = self.c_q(x).reshape(batch_size, seq_len, self.n_head, self.head_dim)
-        k = self.c_k(x).reshape(batch_size, seq_len, self.n_kv_head, self.head_dim)
-        v = self.c_v(x).reshape(batch_size, seq_len, self.n_kv_head, self.head_dim)
-
-        if ve is not None and self.ve_gate is not None:
-            ve = ve.reshape(batch_size, seq_len, self.n_kv_head, self.head_dim)
-            gate = 2 * mx.sigmoid(self.ve_gate(x[..., : self.ve_gate_channels]))
-            v = v + mx.expand_dims(gate, axis=-1) * ve
-
-        q = q.transpose(0, 2, 1, 3)
-        k = k.transpose(0, 2, 1, 3)
-        v = v.transpose(0, 2, 1, 3)
-
-        q = norm(self.rope(q))
-        k = norm(self.rope(k))
-
-        scale = 1.0 / math.sqrt(self.head_dim)
-        y = mx.fast.scaled_dot_product_attention(q, k, v, scale=scale, mask=mask)
-        y = y.transpose(0, 2, 1, 3).reshape(batch_size, seq_len, -1)
-        return self.c_proj(y)
+def l2norm(x, eps: float = 1e-6):
+    return x / (mx.sqrt(mx.sum(x * x)) + eps)
 
 
-class MLP(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        self.c_fc = nn.Linear(config.n_embd, 4 * config.n_embd, bias=False)
-        self.c_proj = nn.Linear(4 * config.n_embd, config.n_embd, bias=False)
-
-    def __call__(self, x):
-        x = self.c_fc(x)
-        x = mx.maximum(x, 0) ** 2
-        return self.c_proj(x)
+def softmax1d(x):
+    x = x - mx.max(x)
+    ex = mx.exp(x)
+    return ex / mx.sum(ex)
 
 
-class Block(nn.Module):
-    def __init__(self, config, layer_idx):
-        super().__init__()
-        self.attn = CausalSelfAttention(config, layer_idx)
-        self.mlp = MLP(config)
-
-    def __call__(self, x, ve, mask):
-        x = x + self.attn(norm(x), ve, mask)
-        x = x + self.mlp(norm(x))
-        return x
+def bce_with_logits(logit, target: float):
+    t = mx.array(target, dtype=mx.float32)
+    return mx.maximum(logit, 0.0) - logit * t + mx.log1p(mx.exp(-mx.abs(logit)))
 
 
-class GPT(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        self.config = config
-        self.window_sizes = self._compute_window_sizes(config)
-        self.wte = nn.Embedding(config.vocab_size, config.n_embd)
-        self.blocks = [Block(config, i) for i in range(config.n_layer)]
-        self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
-        self.resid_lambdas = mx.ones((config.n_layer,), dtype=mx.float32)
-        self.x0_lambdas = mx.zeros((config.n_layer,), dtype=mx.float32)
-        head_dim = config.n_embd // config.n_head
-        kv_dim = config.n_kv_head * head_dim
-        self.value_embeds = {
-            str(i): nn.Embedding(config.vocab_size, kv_dim)
-            for i in range(config.n_layer)
-            if has_ve(i, config.n_layer)
-        }
-        self._mask_cache = {}
-
-    def init_weights(self):
-        n_embd = self.config.n_embd
-        scale = 3**0.5 * n_embd**-0.5
-
-        self.wte.weight = (mx.random.normal(self.wte.weight.shape) * 1.0).astype(mx.bfloat16)
-        self.lm_head.weight = (mx.random.normal(self.lm_head.weight.shape) * 0.001).astype(mx.bfloat16)
-
-        for block in self.blocks:
-            block.attn.c_q.weight = mx.random.uniform(-scale, scale, block.attn.c_q.weight.shape).astype(mx.bfloat16)
-            block.attn.c_k.weight = mx.random.uniform(-scale, scale, block.attn.c_k.weight.shape).astype(mx.bfloat16)
-            block.attn.c_v.weight = mx.random.uniform(-scale, scale, block.attn.c_v.weight.shape).astype(mx.bfloat16)
-            block.attn.c_proj.weight = mx.zeros_like(block.attn.c_proj.weight).astype(mx.bfloat16)
-            block.mlp.c_fc.weight = mx.random.uniform(-scale, scale, block.mlp.c_fc.weight.shape).astype(mx.bfloat16)
-            block.mlp.c_proj.weight = mx.zeros_like(block.mlp.c_proj.weight).astype(mx.bfloat16)
-            if block.attn.ve_gate is not None:
-                block.attn.ve_gate.weight = mx.zeros_like(block.attn.ve_gate.weight).astype(mx.bfloat16)
-
-        self.resid_lambdas = mx.ones((self.config.n_layer,), dtype=mx.float32)
-        self.x0_lambdas = mx.full((self.config.n_layer,), 0.1, dtype=mx.float32)
-
-        for ve in self.value_embeds.values():
-            ve.weight = mx.random.uniform(-scale, scale, ve.weight.shape).astype(mx.bfloat16)
-
-    def _compute_window_sizes(self, config):
-        pattern = config.window_pattern.upper()
-        assert all(char in "SL" for char in pattern)
-        long_window = config.sequence_len
-        short_window = long_window // 2
-        char_to_window = {"L": long_window, "S": short_window}
-        window_sizes = []
-        for layer_idx in range(config.n_layer):
-            char = pattern[layer_idx % len(pattern)]
-            window_sizes.append(char_to_window[char])
-        window_sizes[-1] = long_window
-        return window_sizes
-
-    def _get_masks(self, seq_len):
-        unique_windows = set(self.window_sizes)
-        for window_size in unique_windows:
-            key = (seq_len, window_size)
-            if key not in self._mask_cache:
-                if window_size >= seq_len:
-                    self._mask_cache[key] = create_additive_causal_mask(seq_len)
-                else:
-                    self._mask_cache[key] = create_sliding_window_mask(seq_len, window_size)
-        return [self._mask_cache[(seq_len, window_size)] for window_size in self.window_sizes]
-
-    def __call__(self, idx, targets=None, reduction="mean"):
-        _, seq_len = idx.shape
-        masks = self._get_masks(seq_len)
-
-        x = self.wte(idx)
-        x = norm(x)
-        x0 = x
-        for i, block in enumerate(self.blocks):
-            x = self.resid_lambdas[i] * x + self.x0_lambdas[i] * x0
-            ve = self.value_embeds[str(i)](idx) if str(i) in self.value_embeds else None
-            x = block(x, ve, masks[i])
-        x = norm(x)
-
-        logits = self.lm_head(x).astype(mx.float32)
-        logits = 15.0 * mx.tanh(logits / 15.0)
-
-        if targets is None:
-            return logits
-
-        valid = targets != -1
-        targets_safe = mx.where(valid, targets, mx.zeros_like(targets))
-        ce = nn.losses.cross_entropy(logits, targets_safe, reduction="none")
-        ce = ce * valid
-        if reduction == "none":
-            return ce
-        denom = mx.maximum(mx.sum(valid), 1)
-        return mx.sum(ce) / denom
+def cross_entropy(logits, target: int):
+    log_probs = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
+    return -log_probs[target]
 
 
-class AdamW:
-    def __init__(self, model, unembedding_lr, embedding_lr, matrix_lr, weight_decay, adam_betas, scalar_lr):
-        self.param_config = {}
-        self.adam_state = {}
+def topk_by_score(items: List, score_fn, k: int):
+    scored = [(score_fn(x), i, x) for i, x in enumerate(items)]
+    scored.sort(key=lambda item: item[0], reverse=True)
+    return [x for _, _, x in scored[:k]]
 
-        model_dim = model.config.n_embd
-        dmodel_lr_scale = (model_dim / 768) ** -0.5
 
-        flat_params = tree_flatten(model.parameters())
-        for path, param in flat_params:
-            if "blocks" in path and param.ndim == 2:
-                self.param_config[path] = {
-                    "lr": matrix_lr,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": weight_decay,
-                }
-            elif "wte" in path:
-                self.param_config[path] = {
-                    "lr": embedding_lr * dmodel_lr_scale,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
-            elif "value_embeds" in path:
-                self.param_config[path] = {
-                    "lr": embedding_lr * dmodel_lr_scale,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
-            elif "lm_head" in path:
-                self.param_config[path] = {
-                    "lr": unembedding_lr * dmodel_lr_scale,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
-            elif "resid_lambdas" in path:
-                self.param_config[path] = {
-                    "lr": scalar_lr * 0.01,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
-            elif "x0_lambdas" in path:
-                self.param_config[path] = {
-                    "lr": scalar_lr,
-                    "betas": (0.96, 0.95),
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
-            else:
-                self.param_config[path] = {
-                    "lr": unembedding_lr * dmodel_lr_scale,
-                    "betas": adam_betas,
-                    "eps": 1e-10,
-                    "weight_decay": 0.0,
-                }
+def grad_global_norm(grads):
+    total = mx.array(0.0, dtype=mx.float32)
+    for _, leaf in tree_flatten(grads):
+        if leaf is None:
+            continue
+        total = total + mx.sum(leaf * leaf)
+    return mx.sqrt(total)
 
-        self.initial_lrs = {path: config["lr"] for path, config in self.param_config.items()}
 
-    def _set_path_value(self, model, path, value):
-        parts = path.split(".")
-        obj = model
-        for part in parts[:-1]:
-            if isinstance(obj, list):
-                obj = obj[int(part)]
-            elif isinstance(obj, dict):
-                obj = obj[part]
-            else:
-                obj = getattr(obj, part)
-        last = parts[-1]
-        if isinstance(obj, dict):
-            obj[last] = value
-        else:
-            setattr(obj, last, value)
+def clip_grad_norm(grads, max_norm: float, eps: float = 1e-6):
+    grad_norm = grad_global_norm(grads)
+    scale = mx.minimum(
+        mx.array(1.0, dtype=mx.float32),
+        mx.array(max_norm, dtype=mx.float32) / (grad_norm + eps),
+    )
+    clipped = tree_map(lambda leaf: leaf if leaf is None else leaf * scale, grads)
+    return clipped, grad_norm
 
-    def _step(self, path, grad, param, config):
-        grad_f32 = grad.astype(mx.float32)
-        param_f32 = param.astype(mx.float32)
-        lr = config["lr"]
-        beta1, beta2 = config["betas"]
-        eps = config["eps"]
-        weight_decay = config["weight_decay"]
 
-        if path not in self.adam_state:
-            self.adam_state[path] = {
-                "m": mx.zeros_like(grad_f32),
-                "v": mx.zeros_like(grad_f32),
-                "t": 0,
-            }
+def score_to_mass_scalar(score, limit: float = 20.0):
+    return math.exp(max(min(scalar(score), limit), -limit))
 
-        state = self.adam_state[path]
-        state["t"] += 1
-        state["m"] = beta1 * state["m"] + (1 - beta1) * grad_f32
-        state["v"] = beta2 * state["v"] + (1 - beta2) * (grad_f32 * grad_f32)
 
-        bias1 = 1 - beta1 ** state["t"]
-        bias2 = 1 - beta2 ** state["t"]
-        denom = mx.sqrt(state["v"] / bias2) + eps
-        step_size = lr / bias1
+def value_vote_logits(ds: "SynthDataset", raw_items: List[dict], raw_scores):
+    floor = mx.array(-8.0, dtype=mx.float32)
+    if not raw_items:
+        return mx.full((len(ds.values),), -8.0, dtype=mx.float32)
 
-        param_f32 = param_f32 * (1 - lr * weight_decay)
-        param_f32 = param_f32 - step_size * (state["m"] / denom)
-        return param_f32.astype(param.dtype)
-
-    def update(self, model, grads):
-        flat_grads = dict(tree_flatten(grads))
-        flat_params = dict(tree_flatten(model.parameters()))
-        for path, grad in flat_grads.items():
-            if path not in self.param_config:
+    logits = []
+    for value_id in range(len(ds.values)):
+        mass = mx.array(0.0, dtype=mx.float32)
+        for raw, score in zip(raw_items, raw_scores):
+            if raw["event"]["value"] != value_id:
                 continue
-            config = self.param_config[path]
-            param = flat_params[path]
-            new_param = self._step(path, grad, param, config)
-            self._set_path_value(model, path, new_param)
-
-    def set_lr_multiplier(self, multiplier):
-        for path, config in self.param_config.items():
-            config["lr"] = self.initial_lrs[path] * multiplier
-
-    @property
-    def state(self):
-        arrays = []
-        for state in self.adam_state.values():
-            arrays.extend([state["m"], state["v"]])
-        return arrays
+            clipped = mx.minimum(mx.maximum(score, -20.0), 20.0)
+            mass = mass + mx.exp(clipped)
+        logits.append(mx.maximum(mx.log(mass + 1e-8), floor))
+    return mx.stack(logits)
 
 
-# ---------------------------------------------------------------------------
-# Hyperparameters (edit these directly, no CLI flags needed)
-# ---------------------------------------------------------------------------
+def value_mass_stats(ds: "SynthDataset", raw_items: List[dict], raw_scores):
+    masses = [0.0] * len(ds.values)
+    for raw, score in zip(raw_items, raw_scores):
+        value_id = raw["event"]["value"]
+        masses[value_id] += score_to_mass_scalar(score)
 
-# Model architecture
-ASPECT_RATIO = 64
-HEAD_DIM = 128
-WINDOW_PATTERN = "SSSL"
-
-# v0.1: AdamW only. Muon port is future work.
-TOTAL_BATCH_SIZE = 2**16
-EMBEDDING_LR = 0.6
-UNEMBEDDING_LR = 0.004
-MATRIX_LR = 0.04
-SCALAR_LR = 0.5
-WEIGHT_DECAY = 0.2
-ADAM_BETAS = (0.8, 0.95)
-WARMUP_RATIO = 0.0
-WARMDOWN_RATIO = 0.5
-FINAL_LR_FRAC = 0.0
-
-# Model size
-DEPTH = 4
-DEVICE_BATCH_SIZE = 16
-FINAL_EVAL_BATCH_SIZE = 256
-STARTUP_EXCLUDE_STEPS = 1
+    ordered = sorted(masses, reverse=True)
+    top1 = ordered[0] if ordered else 0.0
+    top2 = ordered[1] if len(ordered) > 1 else 0.0
+    gap = top1 - top2
+    total = sum(masses) + 1e-8
+    conflict_mass = top2 / total
+    return top1, gap, conflict_mass, masses
 
 
-def get_lr_multiplier(progress):
-    if progress < WARMUP_RATIO:
-        return progress / WARMUP_RATIO if WARMUP_RATIO > 0 else 1.0
-    if progress < 1.0 - WARMDOWN_RATIO:
-        return 1.0
-    cooldown = (1.0 - progress) / WARMDOWN_RATIO
-    return cooldown * 1.0 + (1 - cooldown) * FINAL_LR_FRAC
+def scope_filtered_raw_candidates(raw_candidates: List[dict], query: dict):
+    filtered = list(raw_candidates)
+    if cfg.scope_hard_filter_attr:
+        attr_filtered = [raw for raw in filtered if raw["event"]["attribute"] == query["attribute"]]
+        if attr_filtered:
+            filtered = attr_filtered
+    if cfg.scope_hard_filter_regime:
+        regime_filtered = [raw for raw in filtered if raw["event"]["regime"] == query["regime"]]
+        if regime_filtered:
+            filtered = regime_filtered
+    return filtered
 
 
-t_start = time.time()
-mx.random.seed(42)
+def time_bucket_name(thing: dict) -> Optional[str]:
+    raw = thing.get("raw")
+    if isinstance(raw, dict) and "time_bucket" in raw:
+        return raw["time_bucket"]
+    return None
 
-tokenizer = Tokenizer.from_directory()
-vocab_size = tokenizer.get_vocab_size()
-train_loader = make_dataloader(tokenizer, DEVICE_BATCH_SIZE, MAX_SEQ_LEN, "train")
-x, y, epoch = next(train_loader)
-t_data = time.time()
-print(f"Data/tokenizer loaded in {t_data - t_start:.1f}s")
 
-model_dim = ((DEPTH * ASPECT_RATIO + HEAD_DIM - 1) // HEAD_DIM) * HEAD_DIM
-config = GPTConfig(
-    sequence_len=MAX_SEQ_LEN,
-    vocab_size=vocab_size,
-    n_layer=DEPTH,
-    n_head=model_dim // HEAD_DIM,
-    n_kv_head=model_dim // HEAD_DIM,
-    n_embd=model_dim,
-    window_pattern=WINDOW_PATTERN,
-)
+def time_bucket_penalty(query_thing: dict, raw_thing: dict) -> float:
+    rank = {
+        "historical": 0,
+        "same_week": 1,
+        "same_day": 2,
+        "current": 3,
+    }
+    query_bucket = time_bucket_name(query_thing)
+    raw_bucket = time_bucket_name(raw_thing)
+    if query_bucket not in rank or raw_bucket not in rank:
+        return 0.0
+    distance = abs(rank[query_bucket] - rank[raw_bucket])
+    if distance <= 0:
+        return 0.0
+    if distance == 1:
+        return cfg.scope_time_penalty_near
+    if distance == 2:
+        return cfg.scope_time_penalty_mid
+    return cfg.scope_time_penalty_far
 
-model = GPT(config)
-model.init_weights()
-mx.eval(model.parameters())
-num_params = sum(param.size for _, param in tree_flatten(model.parameters()))
 
-tokens_per_fwdbwd = DEVICE_BATCH_SIZE * MAX_SEQ_LEN
-assert TOTAL_BATCH_SIZE % tokens_per_fwdbwd == 0
-grad_accum_steps = TOTAL_BATCH_SIZE // tokens_per_fwdbwd
+def scope_penalty(query: dict, raw_event: dict) -> float:
+    penalty = 0.0
+    if raw_event["attribute"] != query["attribute"]:
+        penalty += cfg.scope_attr_penalty
+    if raw_event["regime"] != query["regime"]:
+        penalty += cfg.scope_regime_penalty
+    penalty += time_bucket_penalty(query, raw_event)
+    return penalty
 
-optimizer = AdamW(
-    model,
-    unembedding_lr=UNEMBEDDING_LR,
-    embedding_lr=EMBEDDING_LR,
-    matrix_lr=MATRIX_LR,
-    weight_decay=WEIGHT_DECAY,
-    adam_betas=ADAM_BETAS,
-    scalar_lr=SCALAR_LR,
-)
 
-loss_grad_fn = nn.value_and_grad(model, lambda model, inputs, targets: model(inputs, targets=targets))
+def scope_penalized_score(score, query: dict, raw_event: dict):
+    penalty = scope_penalty(query, raw_event)
+    if penalty == 0.0:
+        return score
+    return score - mx.array(penalty, dtype=mx.float32)
 
-print(f"Time budget: {TIME_BUDGET}s")
-print(f"Gradient accumulation steps: {grad_accum_steps}")
 
-smooth_train_loss = 0.0
-total_training_time = 0.0
-step = 0
-t_compiled = None
-
-while True:
-    t0 = time.time()
-    accum_grads = None
-    train_loss = None
-
-    for _ in range(grad_accum_steps):
-        loss, grads = loss_grad_fn(model, x, y)
-        mx.eval(loss, grads)
-        if t_compiled is None:
-            t_compiled = time.time()
-            print(f"Model compiled in {t_compiled - t_data:.1f}s")
-        train_loss = loss
-        if accum_grads is None:
-            accum_grads = grads
-        else:
-            accum_grads = tree_map(lambda lhs, rhs: lhs + rhs, accum_grads, grads)
-        x, y, epoch = next(train_loader)
-
-    if grad_accum_steps > 1:
-        accum_grads = tree_map(lambda grad: grad * (1.0 / grad_accum_steps), accum_grads)
-
-    progress = min(total_training_time / TIME_BUDGET, 1.0)
-    lrm = get_lr_multiplier(progress)
-    optimizer.set_lr_multiplier(lrm)
-    optimizer.update(model, accum_grads)
-    mx.eval(model.parameters(), *optimizer.state)
-
-    train_loss_f = float(train_loss.item())
-    if train_loss_f > 100:
-        print("FAIL")
-        raise SystemExit(1)
-
-    dt = time.time() - t0
-    if step >= STARTUP_EXCLUDE_STEPS:
-        total_training_time += dt
-
-    ema_beta = 0.9
-    smooth_train_loss = ema_beta * smooth_train_loss + (1 - ema_beta) * train_loss_f
-    debiased_smooth_loss = smooth_train_loss / (1 - ema_beta ** (step + 1))
-    pct_done = 100 * progress
-    tok_per_sec = int(TOTAL_BATCH_SIZE / dt) if dt > 0 else 0
-    remaining = max(0.0, TIME_BUDGET - total_training_time)
-
-    print(
-        f"\rstep {step:05d} ({pct_done:.1f}%) | loss: {debiased_smooth_loss:.6f} | "
-        f"lrm: {lrm:.2f} | dt: {dt*1000:.0f}ms | tok/sec: {tok_per_sec:,} | "
-        f"epoch: {epoch} | remaining: {remaining:.0f}s    ",
-        end="",
-        flush=True,
+def calibrated_abstain_thresholds(evidence_strength: float, gap: float, conflict_mass: float, top_time_penalty: float):
+    evidence_floor = max(0.0, cfg.abstain_evidence_floor - cfg.abstain_time_evidence_relief * top_time_penalty)
+    gap_floor = max(0.0, cfg.abstain_gap_floor - cfg.abstain_time_gap_relief * top_time_penalty)
+    conflict_ceiling = min(
+        0.99,
+        cfg.abstain_conflict_ceiling + cfg.abstain_time_conflict_relief * top_time_penalty,
     )
 
-    if step == 0:
-        gc.collect()
-        gc.freeze()
-        gc.disable()
-    elif (step + 1) % 5000 == 0:
-        gc.collect()
+    time_scale = min(1.0, top_time_penalty / max(cfg.scope_time_penalty_far, 1e-8)) if top_time_penalty > 0.0 else 0.0
+    if time_scale > 0.0:
+        strong_evidence = max(0.0, evidence_strength - 0.45)
+        strong_gap = max(0.0, gap - 0.30)
+        low_conflict = max(0.0, 0.30 - conflict_mass)
+        extra_relief = min(
+            cfg.abstain_time_bonus_cap,
+            time_scale
+            * (
+                cfg.abstain_time_strong_evidence_gain * strong_evidence
+                + cfg.abstain_time_strong_gap_gain * strong_gap
+                + cfg.abstain_time_strong_conflict_gain * low_conflict
+            ),
+        )
+        evidence_floor = max(0.0, evidence_floor - extra_relief)
+        gap_floor = max(0.0, gap_floor - 0.5 * extra_relief)
+        conflict_ceiling = min(0.99, conflict_ceiling + 0.5 * extra_relief)
 
-    step += 1
-    if step >= STARTUP_EXCLUDE_STEPS and total_training_time >= TIME_BUDGET:
-        break
+    return evidence_floor, gap_floor, conflict_ceiling
 
-print()
-t_train = time.time()
-print(f"Training completed in {t_train - t_compiled:.1f}s")
 
-total_tokens = step * TOTAL_BATCH_SIZE
-print("Starting final eval...")
-print(f"Final eval batch size: {FINAL_EVAL_BATCH_SIZE}")
-val_bpb = evaluate_bpb(model, tokenizer, FINAL_EVAL_BATCH_SIZE)
-t_eval = time.time()
-print(f"Final eval completed in {t_eval - t_train:.1f}s")
+def same_answer_scope(raw_event: dict, query: dict) -> bool:
+    return (
+        raw_event["entity"] == query["entity"]
+        and raw_event["attribute"] == query["attribute"]
+        and raw_event["regime"] == query["regime"]
+    )
 
-steady_state_mfu = 0.0
-peak_vram_mb = get_peak_memory_mb()
 
-print("---")
-print(f"val_bpb:          {val_bpb:.6f}")
-print(f"training_seconds: {total_training_time:.1f}")
-print(f"total_seconds:    {t_eval - t_start:.1f}")
-print(f"peak_vram_mb:     {peak_vram_mb:.1f}")
-print(f"mfu_percent:      {steady_state_mfu:.2f}")
-print(f"total_tokens_M:   {total_tokens / 1e6:.1f}")
-print(f"num_steps:        {step}")
-print(f"num_params_M:     {num_params / 1e6:.1f}")
-print(f"depth:            {DEPTH}")
+def select_answer_evidence(query: dict, raw_items: List[dict], raw_scores):
+    scoped = [
+        (raw, score)
+        for raw, score in zip(raw_items, raw_scores)
+        if same_answer_scope(raw["event"], query)
+    ]
+    if not scoped:
+        return [], []
+
+    query_bucket = time_bucket_name(query)
+    if query_bucket == "current":
+        latest_t = max(raw["event"]["timestamp"] for raw, _ in scoped)
+        selected = [(raw, score) for raw, score in scoped if raw["event"]["timestamp"] == latest_t]
+    elif query_bucket == "same_day":
+        selected = [
+            (raw, score)
+            for raw, score in scoped
+            if time_bucket_name(raw["event"]) in {"current", "same_day"}
+        ]
+    elif query_bucket == "same_week":
+        selected = [
+            (raw, score)
+            for raw, score in scoped
+            if time_bucket_name(raw["event"]) in {"current", "same_day", "same_week"}
+        ]
+    else:
+        selected = scoped
+
+    if not selected:
+        selected = scoped
+
+    selected.sort(key=lambda item: scalar(item[1]), reverse=True)
+    return [raw for raw, _ in selected], [score for _, score in selected]
+
+
+def time_bucket_from_step(step: int, total: int) -> str:
+    if step >= total - 2:
+        return "current"
+    if step >= total - 4:
+        return "same_day"
+    if step >= total - 7:
+        return "same_week"
+    return "historical"
+
+
+def latest_resolution(events: List[dict], entity: str, attr: str, regime: str):
+    scoped = [
+        event
+        for event in events
+        if event["entity"] == entity
+        and event["attribute"] == attr
+        and event["regime"] == regime
+    ]
+    if not scoped:
+        return None, 1, []
+    latest_t = max(event["timestamp"] for event in scoped)
+    latest = [event for event in scoped if event["timestamp"] == latest_t]
+    values = sorted({event["value"] for event in latest})
+    if len(values) == 1:
+        positive_ids = [event["id"] for event in latest if event["value"] == values[0]]
+        return values[0], 0, positive_ids
+    return None, 1, [event["id"] for event in latest]
+
+
+def make_sample(idx: int, min_events: int, max_events: int) -> dict:
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    values = ATTRS[attr]
+    n_events = random.randint(min_events, max_events)
+    n_shifts = random.choice([3, 4])
+
+    current_regime = random.choice(REGIMES)
+    current_value = random.choice(values)
+    shift_positions = sorted(random.sample(range(1, n_events - 1), n_shifts))
+    conflict_count = random.choice([1, 2])
+    conflict_positions = set(random.sample(range(2, n_events - 1), conflict_count))
+
+    events = []
+    next_id = 0
+    timestamp = 0
+
+    for step in range(n_events):
+        timestamp += random.choice([1, 1, 2])
+        branch_target = 0
+
+        if step in shift_positions:
+            if random.random() < 0.5:
+                current_regime = random.choice([item for item in REGIMES if item != current_regime])
+                current_value = random.choice(values)
+            else:
+                current_value = random.choice([item for item in values if item != current_value])
+            branch_target = 1
+        elif random.random() >= 0.75:
+            current_value = random.choice([item for item in values if item != current_value])
+            branch_target = 1
+
+        event = {
+            "id": f"s{idx}_e{next_id}",
+            "entity": entity,
+            "attribute": attr,
+            "value": current_value,
+            "regime": current_regime,
+            "timestamp": timestamp,
+            "time_bucket": None,
+            "source": random.choice(SOURCES),
+            "text": f"{entity} {attr} is {current_value} under {current_regime}",
+            "provenance": {"kind": "observation", "tool": None, "actor": "synthetic"},
+            "branch_target": branch_target,
+            "note": "main",
+        }
+        next_id += 1
+        events.append(event)
+
+        if random.random() < 0.35:
+            d_entity = random.choice([item for item in ENTITIES if item != entity])
+            d_attr = random.choice(sorted(ATTRS.keys()))
+            d_value = random.choice(ATTRS[d_attr])
+            distractor = {
+                "id": f"s{idx}_e{next_id}",
+                "entity": d_entity,
+                "attribute": d_attr,
+                "value": d_value,
+                "regime": random.choice(REGIMES),
+                "timestamp": timestamp,
+                "time_bucket": None,
+                "source": random.choice(SOURCES),
+                "text": f"{d_entity} {d_attr} is {d_value}",
+                "provenance": {"kind": "observation", "tool": None, "actor": "synthetic"},
+                "branch_target": 0,
+                "note": "distractor",
+            }
+            next_id += 1
+            events.append(distractor)
+
+        if step in conflict_positions:
+            alt_value = random.choice([item for item in values if item != current_value])
+            conflict = {
+                "id": f"s{idx}_e{next_id}",
+                "entity": entity,
+                "attribute": attr,
+                "value": alt_value,
+                "regime": current_regime,
+                "timestamp": timestamp,
+                "time_bucket": None,
+                "source": random.choice(SOURCES),
+                "text": f"Conflict: {entity} {attr} may be {alt_value} under {current_regime}",
+                "provenance": {"kind": "observation", "tool": None, "actor": "synthetic"},
+                "branch_target": 1,
+                "note": "conflict",
+            }
+            next_id += 1
+            events.append(conflict)
+
+    events.sort(key=lambda item: (item["timestamp"], item["id"]))
+    total_steps = len(events)
+    for i, event in enumerate(events):
+        event["time_bucket"] = time_bucket_from_step(i, total_steps)
+
+    query_regime = random.choice(
+        sorted(
+            {
+                event["regime"]
+                for event in events
+                if event["entity"] == entity and event["attribute"] == attr
+            }
+        )
+    )
+    answer, abstain, positive_ids = latest_resolution(events, entity, attr, query_regime)
+    return {
+        "events": events,
+        "query": {
+            "entity": entity,
+            "attribute": attr,
+            "regime": query_regime,
+            "time_bucket": "current",
+            "text": f"What is {entity}'s {attr} in regime {query_regime}?",
+        },
+        "answer": answer,
+        "abstain": abstain,
+        "positive_raw_ids": positive_ids,
+    }
+
+
+def load_samples_from_path(path: str) -> List[dict]:
+    with open(path) as handle:
+        return [json.loads(line) for line in handle if line.strip()]
+
+
+def dump_samples_to_path(path: str, samples: List[dict]) -> None:
+    directory = os.path.dirname(path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+    with open(path, "w") as handle:
+        for sample in samples:
+            handle.write(json.dumps(sample) + "\n")
+
+
+def build_samples(config: Config) -> List[dict]:
+    if config.dataset_path and os.path.exists(config.dataset_path):
+        return load_samples_from_path(config.dataset_path)
+
+    samples = [make_sample(i, config.min_events, config.max_events) for i in range(config.n_samples)]
+    if config.dataset_path:
+        dump_samples_to_path(config.dataset_path, samples)
+    return samples
+
+
+class SynthDataset:
+    def __init__(self, samples: List[dict]):
+        self.samples = list(samples)
+        random.shuffle(self.samples)
+
+        self.entities = sorted(ENTITIES)
+        self.attrs = sorted(ATTRS.keys())
+        self.values = sorted({value for items in ATTRS.values() for value in items})
+        self.regimes = sorted(REGIMES)
+        self.sources = sorted(SOURCES)
+        self.time_buckets = sorted(TIME_BUCKETS)
+
+        self.entity2id = {item: i for i, item in enumerate(self.entities)}
+        self.attr2id = {item: i for i, item in enumerate(self.attrs)}
+        self.value2id = {item: i for i, item in enumerate(self.values)}
+        self.regime2id = {item: i for i, item in enumerate(self.regimes)}
+        self.source2id = {item: i for i, item in enumerate(self.sources)}
+        self.time_bucket2id = {item: i for i, item in enumerate(self.time_buckets)}
+
+    def vocab_payload(self) -> dict:
+        return {
+            "entities": self.entities,
+            "attributes": self.attrs,
+            "values": self.values,
+            "regimes": self.regimes,
+            "sources": self.sources,
+            "time_buckets": self.time_buckets,
+        }
+
+    def encode_event(self, event: dict) -> dict:
+        return {
+            "id": event["id"],
+            "entity": self.entity2id[event["entity"]],
+            "attribute": self.attr2id[event["attribute"]],
+            "value": self.value2id[event["value"]],
+            "regime": self.regime2id[event["regime"]],
+            "source": self.source2id[event["source"]],
+            "time_bucket": self.time_bucket2id[event["time_bucket"]],
+            "timestamp": event["timestamp"],
+            "branch_target": int(event.get("branch_target", 0)),
+            "raw": event,
+        }
+
+    def encode_query(self, query: dict) -> dict:
+        return {
+            "entity": self.entity2id[query["entity"]],
+            "attribute": self.attr2id[query["attribute"]],
+            "regime": self.regime2id[query["regime"]],
+            "time_bucket": self.time_bucket2id[query["time_bucket"]],
+            "raw": query,
+        }
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx: int) -> dict:
+        sample = self.samples[idx]
+        answer = -1 if sample["answer"] is None else self.value2id[sample["answer"]]
+        return {
+            "events": [self.encode_event(event) for event in sample["events"]],
+            "query": self.encode_query(sample["query"]),
+            "answer": answer,
+            "abstain": sample["abstain"],
+            "positive_raw_ids": sample["positive_raw_ids"],
+            "raw": sample,
+        }
+
+
+def batch_iter(indices: List[int], batch_size: int, shuffle: bool = True):
+    order = list(indices)
+    if shuffle:
+        random.shuffle(order)
+    for i in range(0, len(order), batch_size):
+        yield order[i:i + batch_size]
+
+
+class FixedFeatureCodec:
+    def __init__(self, ds: SynthDataset, d_field: int):
+        self.ds = ds
+        self.d_field = d_field
+        self.tables = {
+            "entity": self._make_table(len(ds.entities), d_field, 11),
+            "attribute": self._make_table(len(ds.attrs), d_field, 13),
+            "value": self._make_table(len(ds.values), d_field, 17),
+            "regime": self._make_table(len(ds.regimes), d_field, 19),
+            "source": self._make_table(len(ds.sources), d_field, 23),
+            "time_bucket": self._make_table(len(ds.time_buckets), d_field, 29),
+        }
+        self.event_dim = 6 * d_field + 2
+        self.scope_dim = 4 * d_field
+
+    def _make_table(self, n: int, d: int, seed: int):
+        rng = random.Random(SEED + seed)
+        rows = []
+        for _ in range(n):
+            rows.append([rng.gauss(0.0, 1.0 / math.sqrt(d)) for _ in range(d)])
+        return mx.array(rows, dtype=mx.float32)
+
+    def _time_features(self, timestamp: int):
+        x = float(timestamp)
+        return mx.array([math.sin(x / 7.0), math.cos(x / 7.0)], dtype=mx.float32)
+
+    def event_features(self, event: dict):
+        parts = [
+            self.tables["entity"][event["entity"]],
+            self.tables["attribute"][event["attribute"]],
+            self.tables["value"][event["value"]],
+            self.tables["regime"][event["regime"]],
+            self.tables["source"][event["source"]],
+            self.tables["time_bucket"][event["time_bucket"]],
+            self._time_features(event["timestamp"]),
+        ]
+        return mx.concatenate(parts, axis=0)
+
+    def scope_features(self, thing: dict):
+        parts = [
+            self.tables["entity"][thing["entity"]],
+            self.tables["attribute"][thing["attribute"]],
+            self.tables["regime"][thing["regime"]],
+            self.tables["time_bucket"][thing["time_bucket"]],
+        ]
+        return mx.concatenate(parts, axis=0)
+
+
+class TwoLayerMLP(nn.Module):
+    def __init__(self, din: int, dh: int, dout: int):
+        super().__init__()
+        self.l1 = nn.Linear(din, dh)
+        self.l2 = nn.Linear(dh, dout)
+
+    def __call__(self, x):
+        return self.l2(nn.gelu(self.l1(x)))
+
+
+class UCMDv31(nn.Module):
+    def __init__(self, codec: FixedFeatureCodec, ds: SynthDataset):
+        super().__init__()
+        D = cfg.d_model
+        H = cfg.d_hidden
+        self.codec = codec
+        self.ds = ds
+        self.d_model = D
+
+        self.event_mlp = TwoLayerMLP(codec.event_dim, H, D)
+        self.scope_mlp = TwoLayerMLP(codec.scope_dim, H, D)
+        self.query_mlp = TwoLayerMLP(codec.scope_dim, H, D)
+
+        pair_dim = 6 * D
+        self.conflict_mlp = TwoLayerMLP(pair_dim, H, 1)
+        self.update_mlp = TwoLayerMLP(pair_dim, H, 1)
+        self.branch_mlp = TwoLayerMLP(5, H, 1)
+        self.rerank_mlp = TwoLayerMLP(pair_dim, H, 1)
+        self.fuse_mlp = TwoLayerMLP(4 * D + 1, H, D)
+        self.answer_head = nn.Linear(D, len(ds.values))
+        self.abstain_mlp = TwoLayerMLP(D + 1, H, 1)
+
+        self.scope_entity = nn.Linear(D, len(ds.entities))
+        self.scope_attr = nn.Linear(D, len(ds.attrs))
+        self.scope_regime = nn.Linear(D, len(ds.regimes))
+        self.scope_time = nn.Linear(D, len(ds.time_buckets))
+
+    def encode_event(self, event: dict):
+        return l2norm(self.event_mlp(self.codec.event_features(event)))
+
+    def encode_scope(self, thing: dict):
+        return l2norm(self.scope_mlp(self.codec.scope_features(thing)))
+
+    def encode_query(self, query: dict):
+        return l2norm(self.query_mlp(self.codec.scope_features(query)))
+
+    def pair_features(self, a, b, ua, ub):
+        return mx.concatenate([a, b, mx.abs(a - b), ua, ub, mx.abs(ua - ub)], axis=0)
+
+    def conflict_score(self, e, h, u, hu):
+        return sigmoid(self.conflict_mlp(self.pair_features(e, h, u, hu))[0])
+
+    def update_gate(self, e, h, u, hu):
+        return sigmoid(self.update_mlp(self.pair_features(e, h, u, hu))[0])
+
+    def branch_logits(self, conflict_score, match_score, budget_pressure, support_norm, quality):
+        fixed = mx.array(
+            [match_score, budget_pressure, support_norm, quality],
+            dtype=mx.float32,
+        )
+        x = mx.concatenate([mx.reshape(conflict_score, (1,)), fixed], axis=0)
+        return self.branch_mlp(x)[0]
+
+    def branch_score(self, conflict_score, match_score, budget_pressure, support_norm, quality):
+        return sigmoid(
+            self.branch_logits(conflict_score, match_score, budget_pressure, support_norm, quality)
+        )
+
+    def rerank_score(self, q, e, uq, u):
+        return self.rerank_mlp(self.pair_features(q, e, uq, u))[0]
+
+    def fuse(self, q, r_raw, r_hdr, r_sem, evidence_strength):
+        x = mx.concatenate([q, r_raw, r_hdr, r_sem, mx.array([evidence_strength], dtype=mx.float32)], axis=0)
+        return self.fuse_mlp(x)
+
+    def abstain_logit(self, z, evidence_strength):
+        x = mx.concatenate([z, mx.array([evidence_strength], dtype=mx.float32)], axis=0)
+        return self.abstain_mlp(x)[0]
+
+    def abstain_prob(self, z, evidence_strength):
+        return sigmoid(self.abstain_logit(z, evidence_strength))
+
+    def scope_loss(self, u_vec, thing: dict):
+        return (
+            cross_entropy(self.scope_entity(u_vec), thing["entity"])
+            + cross_entropy(self.scope_attr(u_vec), thing["attribute"])
+            + cross_entropy(self.scope_regime(u_vec), thing["regime"])
+            + cross_entropy(self.scope_time(u_vec), thing["time_bucket"])
+        ) / 4.0
+
+
+def scope_key(thing: dict) -> Tuple[int, int, int, int]:
+    return (thing["entity"], thing["attribute"], thing["regime"], thing["time_bucket"])
+
+
+def relaxed_scope_keys(thing: dict):
+    entity = thing["entity"]
+    attribute = thing["attribute"]
+    regime = thing["regime"]
+    time_bucket = thing["time_bucket"]
+    return [
+        (entity, attribute, regime, time_bucket),
+        (entity, attribute, regime, -1),
+        (entity, attribute, -1, -1),
+    ]
+
+
+def new_state(d_model: int):
+    return {
+        "raw_hot": [],
+        "raw_cold": [],
+        "raw_lookup": {},
+        "cold_scope_index": {},
+        "headers": [],
+        "semantic_state": zeros(d_model),
+        "branch_rate_ema": 0.0,
+        "step": 0,
+    }
+
+
+def header_quality(header: dict):
+    support = math.log(1.0 + header["support_count"])
+    conflict = header["conflict_count"]
+    variance = header["variance"]
+    x = 1.2 * support - 1.5 * conflict - 1.0 * variance
+    return 1.0 / (1.0 + math.exp(-x))
+
+
+def update_header_stats(header: dict, e, conflict_prob: float):
+    old_h = header["h"]
+    header["variance"] = 0.95 * header["variance"] + 0.05 * abs(scalar(mx.mean(mx.abs(e - old_h))))
+    header["conflict_count"] += float(conflict_prob > 0.5)
+    header["quality"] = header_quality(header)
+
+
+def semantic_from_headers(state: dict):
+    mature = [header for header in state["headers"] if header["quality"] >= cfg.quality_tau]
+    if not mature:
+        return state["semantic_state"]
+
+    total = sum(header["quality"] for header in mature) + 1e-8
+    pooled = zeros(state["semantic_state"].shape[0])
+    for header in mature:
+        pooled = pooled + (header["quality"] / total) * header["h"]
+    return (1.0 - cfg.semantic_beta) * state["semantic_state"] + cfg.semantic_beta * pooled
+
+
+def adaptive_branch_tau(state: dict):
+    return cfg.branch_tau_0 + cfg.branch_tau_gain * (
+        state["branch_rate_ema"] - cfg.branch_target_rate
+    )
+
+
+def register_cold_item(state: dict, raw_item: dict):
+    for key in relaxed_scope_keys(raw_item["event"]):
+        bucket = state["cold_scope_index"].setdefault(key, [])
+        bucket.append(raw_item["raw_id"])
+
+
+def find_best_header(headers: List[dict], e, u):
+    if not headers:
+        return None, 0.0, None
+
+    best = None
+    best_score = -1e9
+    best_idx = None
+    for i, header in enumerate(headers):
+        score = scalar(mx.sum(e * header["h"]) + 0.5 * mx.sum(u * header["u"]))
+        if not math.isfinite(score):
+            score = -1e9
+        if best is None or score > best_score:
+            best = header
+            best_score = score
+            best_idx = i
+    scaled_score = best_score
+    scaled_score = max(min(scaled_score, 30.0), -30.0)
+    match_score = 1.0 / (1.0 + math.exp(-scaled_score))
+    return best_idx, match_score, best
+
+
+def make_header(header_id: str, e, u, raw_id: str, conflict_prob: float, value_id: int):
+    value_id = int(value_id)
+    header = {
+        "header_id": header_id,
+        "h": e,
+        "u": u,
+        "support_count": 1,
+        "conflict_count": float(conflict_prob > 0.5),
+        "variance": 0.0,
+        "quality": 0.55,
+        "backlinks": [raw_id],
+        "value_hist": {value_id: 1},
+        "dominant_value": value_id,
+    }
+    header["quality"] = header_quality(header)
+    return header
+
+
+def add_observation_to_state(model: UCMDv31, state: dict, event: dict, teacher_force: bool = False):
+    e_live = model.encode_event(event)
+    u_live = model.encode_scope(event)
+    scope_loss = model.scope_loss(u_live, event)
+    e = mx.stop_gradient(e_live)
+    u = mx.stop_gradient(u_live)
+
+    raw_item = {
+        "raw_id": event["id"],
+        "event": event,
+        "e": e,
+        "u": u,
+    }
+    state["raw_hot"].append(raw_item)
+    state["raw_lookup"][raw_item["raw_id"]] = raw_item
+
+    if len(state["raw_hot"]) > cfg.n_hot:
+        moved = state["raw_hot"].pop(0)
+        state["raw_cold"].append(moved)
+        register_cold_item(state, moved)
+
+    if not state["headers"]:
+        header_id = "hdr_0"
+        state["headers"].append(make_header(header_id, e, u, event["id"], 1.0, event["value"]))
+        state["branch_rate_ema"] = 0.95 * state["branch_rate_ema"] + 0.05 * 1.0
+        state["step"] += 1
+        return {
+            "scope_loss": scope_loss,
+            "branch_loss": bce_with_logits(mx.array(6.0, dtype=mx.float32), 1.0),
+            "conflict_score": mx.array(1.0, dtype=mx.float32),
+            "branch_prob": mx.array(1.0, dtype=mx.float32),
+            "branched": True,
+            "header_id": header_id,
+        }
+
+    best_idx, match_score, best = find_best_header(state["headers"], e_live, u_live)
+    conflict = model.conflict_score(e_live, best["h"], u_live, best["u"])
+    budget = len(state["headers"]) / float(cfg.h_max)
+    support_norm = min(1.0, best["support_count"] / 8.0)
+    quality = best["quality"]
+    incoming_value = int(event["value"])
+    dominant_value = int(best.get("dominant_value", -1))
+    value_mismatch = float(dominant_value >= 0 and incoming_value != dominant_value)
+    branch_logit = model.branch_logits(conflict, match_score, budget, support_norm, quality)
+    branch_logit = branch_logit + cfg.value_mismatch_branch_boost * mx.array(value_mismatch, dtype=mx.float32)
+    branch_prob = sigmoid(branch_logit)
+    branch_loss = bce_with_logits(branch_logit, float(event["branch_target"]))
+
+    should_branch = bool(event["branch_target"]) if teacher_force else bool(
+        scalar(branch_prob) > adaptive_branch_tau(state)
+    )
+
+    header_id = best["header_id"]
+    if should_branch:
+        header_id = f"hdr_{state['step']}"
+        new_header = make_header(header_id, e, u, event["id"], scalar(conflict), incoming_value)
+        if len(state["headers"]) < cfg.h_max:
+            state["headers"].append(new_header)
+        else:
+            replace_idx = min(range(len(state["headers"])), key=lambda i: state["headers"][i]["quality"])
+            state["headers"][replace_idx] = new_header
+        state["branch_rate_ema"] = 0.95 * state["branch_rate_ema"] + 0.05 * 1.0
+    else:
+        alpha = model.update_gate(e_live, best["h"], u_live, best["u"])
+        if value_mismatch:
+            alpha = alpha * cfg.value_mismatch_update_scale
+        best["h"] = mx.stop_gradient(l2norm((1.0 - alpha) * best["h"] + alpha * e))
+        best["u"] = mx.stop_gradient(l2norm((1.0 - alpha) * best["u"] + alpha * u))
+        best["support_count"] += 1
+        best["backlinks"].append(event["id"])
+        best.setdefault("value_hist", {})
+        best["value_hist"][incoming_value] = best["value_hist"].get(incoming_value, 0) + 1
+        best["dominant_value"] = max(best["value_hist"], key=best["value_hist"].get)
+        update_header_stats(best, e, scalar(conflict))
+        state["branch_rate_ema"] = 0.95 * state["branch_rate_ema"] + 0.05 * 0.0
+
+    state["step"] += 1
+    return {
+        "scope_loss": scope_loss,
+        "branch_loss": branch_loss,
+        "conflict_score": conflict,
+        "branch_prob": branch_prob,
+        "branched": should_branch,
+        "header_id": header_id,
+    }
+
+
+def pool_vectors(weights, vectors, d_model: int):
+    if not vectors:
+        return zeros(d_model)
+    matrix = mx.stack(vectors, axis=0)
+    return mx.sum(weights[:, None] * matrix, axis=0)
+
+
+def retrieve_from_state(model: UCMDv31, state: dict, query: dict, positive_raw_ids: Optional[List[str]] = None):
+    q = model.encode_query(query)
+    uq = model.encode_scope(query)
+
+    hot_candidates = topk_by_score(
+        state["raw_hot"],
+        lambda raw: scalar(mx.sum(uq * raw["u"])),
+        cfg.k_scope,
+    )
+
+    header_candidates = topk_by_score(
+        state["headers"],
+        lambda header: scalar(mx.sum(q * header["h"]) + 0.5 * mx.sum(uq * header["u"])),
+        min(4, len(state["headers"])),
+    )
+
+    cold_ids = []
+    seen_ids = set()
+    for key in relaxed_scope_keys(query):
+        for raw_id in state["cold_scope_index"].get(key, []):
+            if raw_id not in seen_ids:
+                seen_ids.add(raw_id)
+                cold_ids.append(raw_id)
+
+    for header in header_candidates:
+        for raw_id in header["backlinks"]:
+            if raw_id in state["raw_lookup"] and raw_id not in seen_ids:
+                seen_ids.add(raw_id)
+                cold_ids.append(raw_id)
+
+    cold_candidates = [state["raw_lookup"][raw_id] for raw_id in cold_ids if raw_id in state["raw_lookup"]]
+    cold_candidates = topk_by_score(
+        cold_candidates,
+        lambda raw: scalar(mx.sum(uq * raw["u"])),
+        cfg.k_scope,
+    )
+
+    raw_candidates = []
+    merged_seen = set()
+    for raw in hot_candidates + cold_candidates:
+        if raw["raw_id"] not in merged_seen:
+            merged_seen.add(raw["raw_id"])
+            raw_candidates.append(raw)
+    raw_candidates = scope_filtered_raw_candidates(raw_candidates, query)
+
+    if raw_candidates:
+        raw_base_scores = [model.rerank_score(q, raw["e"], uq, raw["u"]) for raw in raw_candidates]
+        raw_scores = [
+            scope_penalized_score(score, query, raw["event"])
+            for raw, score in zip(raw_candidates, raw_base_scores)
+        ]
+        order = sorted(
+            range(len(raw_candidates)),
+            key=lambda idx: scalar(raw_scores[idx]),
+            reverse=True,
+        )[: cfg.k_rerank]
+        raw_final = [raw_candidates[idx] for idx in order]
+        final_score_list = [raw_scores[idx] for idx in order]
+        final_score_values = [scalar(score) for score in final_score_list]
+        final_scores = mx.stack(final_score_list)
+        weights = softmax1d(final_scores)
+        r_raw = pool_vectors(weights, [raw["e"] for raw in raw_final], model.d_model)
+    else:
+        raw_final = []
+        final_score_list = []
+        final_score_values = []
+        final_scores = None
+        r_raw = zeros(model.d_model)
+
+    if header_candidates:
+        header_scores = mx.stack(
+            [mx.sum(q * header["h"]) + 0.5 * mx.sum(uq * header["u"]) for header in header_candidates]
+        )
+        header_weights = softmax1d(header_scores)
+        r_hdr = pool_vectors(header_weights, [header["h"] for header in header_candidates], model.d_model)
+    else:
+        r_hdr = zeros(model.d_model)
+
+    answer_raw, answer_score_list = select_answer_evidence(query, raw_candidates, raw_scores if raw_candidates else [])
+    answer_score_values = [scalar(score) for score in answer_score_list]
+    value_logits = value_vote_logits(model.ds, answer_raw, answer_score_list)
+    top_mass, gap, conflict_mass, value_masses = value_mass_stats(model.ds, answer_raw, answer_score_list)
+    total_mass = sum(value_masses) + 1e-8
+    evidence_strength = top_mass / total_mass
+    top_time_penalty = (
+        time_bucket_penalty(query, answer_raw[0]["event"])
+        if answer_raw
+        else 0.0
+    )
+    evidence_floor, gap_floor, conflict_ceiling = calibrated_abstain_thresholds(
+        evidence_strength,
+        gap,
+        conflict_mass,
+        top_time_penalty,
+    )
+    rule_abstain = (
+        evidence_strength < evidence_floor
+        or gap < gap_floor
+        or conflict_mass > conflict_ceiling
+    )
+
+    r_sem = semantic_from_headers(state)
+    z = model.fuse(q, r_raw, r_hdr, r_sem, evidence_strength)
+    latent_answer_logits = model.answer_head(z)
+    abstain_logit = model.abstain_logit(z, evidence_strength)
+    abstain_prob = sigmoid(abstain_logit)
+    final_abstain = rule_abstain or bool(scalar(abstain_prob) > cfg.abstain_tau)
+
+    retrieval_loss = None
+    if positive_raw_ids and raw_candidates:
+        pos_ids = set(positive_raw_ids)
+        raw_logits = mx.stack(raw_scores)
+        pos_idx = next((i for i, raw in enumerate(raw_candidates) if raw["raw_id"] in pos_ids), None)
+        if pos_idx is not None:
+            retrieval_loss = cross_entropy(raw_logits, pos_idx)
+
+    return {
+        "raw": raw_final,
+        "raw_score_values": final_score_values,
+        "answer_raw": answer_raw,
+        "answer_score_values": answer_score_values,
+        "headers": header_candidates,
+        "semantic": r_sem,
+        "answer_logits": value_logits,
+        "value_logits": value_logits,
+        "latent_answer_logits": latent_answer_logits,
+        "abstain_logit": abstain_logit,
+        "abstain_prob": abstain_prob,
+        "rule_abstain": rule_abstain,
+        "abstain": final_abstain,
+        "evidence_strength": evidence_strength,
+        "mass_gap": gap,
+        "conflict_mass": conflict_mass,
+        "top_time_penalty": top_time_penalty,
+        "evidence_floor": evidence_floor,
+        "gap_floor": gap_floor,
+        "conflict_ceiling": conflict_ceiling,
+        "value_masses": value_masses,
+        "retrieval_loss": retrieval_loss,
+    }
+
+
+def sample_loss(model: UCMDv31, sample: dict, return_parts: bool = False):
+    state = new_state(model.d_model)
+    branch_terms = []
+    scope_terms = []
+
+    for event in sample["events"]:
+        aux = add_observation_to_state(model, state, event, teacher_force=True)
+        branch_terms.append(aux["branch_loss"])
+        scope_terms.append(aux["scope_loss"])
+
+    out = retrieve_from_state(model, state, sample["query"], sample["positive_raw_ids"])
+
+    answer_loss = mx.array(0.0, dtype=mx.float32)
+    if sample["abstain"] == 0 and sample["answer"] >= 0:
+        answer_loss = cross_entropy(out["value_logits"], sample["answer"])
+
+    abstain_loss = bce_with_logits(out["abstain_logit"], float(sample["abstain"]))
+
+    branch_loss = mx.mean(mx.stack(branch_terms)) if branch_terms else mx.array(0.0, dtype=mx.float32)
+    scope_loss = mx.mean(mx.stack(scope_terms)) if scope_terms else mx.array(0.0, dtype=mx.float32)
+    retrieval_loss = out["retrieval_loss"] if out["retrieval_loss"] is not None else mx.array(0.0, dtype=mx.float32)
+
+    parts = {
+        "answer_loss": answer_loss,
+        "abstain_loss": abstain_loss,
+        "branch_loss": branch_loss,
+        "scope_loss": scope_loss,
+        "retrieval_loss": retrieval_loss,
+    }
+    parts["total_loss"] = (
+        cfg.lambda_answer * answer_loss
+        + cfg.lambda_abstain * abstain_loss
+        + cfg.lambda_branch * branch_loss
+        + cfg.lambda_scope * scope_loss
+        + cfg.lambda_retrieval * retrieval_loss
+    )
+    if return_parts:
+        return parts
+    return parts["total_loss"]
+
+
+def batch_loss(model: UCMDv31, batch: List[dict]):
+    totals = [sample_loss(model, sample) for sample in batch]
+    return mx.mean(mx.stack(totals)) if totals else mx.array(0.0, dtype=mx.float32)
+
+
+def batch_loss_parts(model: UCMDv31, batch: List[dict]):
+    keys = [
+        "total_loss",
+        "answer_loss",
+        "abstain_loss",
+        "branch_loss",
+        "scope_loss",
+        "retrieval_loss",
+    ]
+    buckets = {key: [] for key in keys}
+    for sample in batch:
+        parts = sample_loss(model, sample, return_parts=True)
+        for key in keys:
+            buckets[key].append(parts[key])
+
+    return {
+        key: (mx.mean(mx.stack(values)) if values else mx.array(0.0, dtype=mx.float32))
+        for key, values in buckets.items()
+    }
+
+
+class Memory:
+    def __init__(self, model: UCMDv31, ds: SynthDataset):
+        self.model = model
+        self.ds = ds
+        self.state = new_state(model.d_model)
+
+    def add_observation(self, event: dict, provenance: Optional[dict] = None) -> dict:
+        if provenance is not None:
+            event = dict(event)
+            event["provenance"] = provenance
+        encoded = self.ds.encode_event(event)
+        aux = add_observation_to_state(self.model, self.state, encoded, teacher_force=False)
+        return {
+            "raw_id": encoded["id"],
+            "header_id": aux["header_id"],
+            "branched": aux["branched"],
+            "conflict_score": scalar(aux["conflict_score"]),
+            "branch_score": scalar(aux["branch_prob"]),
+        }
+
+    def retrieve(self, query: dict, k: int = 8) -> dict:
+        _ = k
+        encoded_query = self.ds.encode_query(query)
+        out = retrieve_from_state(self.model, self.state, encoded_query, None)
+        answer_id = int(mx.argmax(out["value_logits"]).item())
+        return {
+            "raw": [raw["event"]["raw"] for raw in out["raw"]],
+            "answer_raw": [raw["event"]["raw"] for raw in out["answer_raw"]],
+            "headers": [
+                {
+                    "header_id": header["header_id"],
+                    "support_count": header["support_count"],
+                    "quality": header["quality"],
+                    "dominant_value": self.ds.values[header["dominant_value"]] if header.get("dominant_value", -1) >= 0 else None,
+                    "backlinks": list(header["backlinks"]),
+                }
+                for header in out["headers"]
+            ],
+            "semantic": out["semantic"].tolist(),
+            "answer": self.ds.values[answer_id],
+            "answer_logits": out["value_logits"].tolist(),
+            "latent_answer_logits": out["latent_answer_logits"].tolist(),
+            "abstain_prob": scalar(out["abstain_prob"]),
+            "rule_abstain": out["rule_abstain"],
+            "abstain": out["abstain"],
+            "evidence_strength": out["evidence_strength"],
+            "mass_gap": out["mass_gap"],
+            "conflict_mass": out["conflict_mass"],
+            "top_time_penalty": out["top_time_penalty"],
+            "evidence_floor": out["evidence_floor"],
+            "gap_floor": out["gap_floor"],
+            "conflict_ceiling": out["conflict_ceiling"],
+            "value_masses": list(out["value_masses"]),
+        }
+
+    def decide_after_abstain(self, query: dict, retrieval_result: dict, high_risk: bool = False) -> dict:
+        _ = query
+        top_time_penalty = retrieval_result.get("top_time_penalty", 0.0)
+        evidence_floor, gap_floor, conflict_ceiling = calibrated_abstain_thresholds(
+            retrieval_result.get("evidence_strength", 0.0),
+            retrieval_result.get("mass_gap", 0.0),
+            retrieval_result.get("conflict_mass", 0.0),
+            top_time_penalty,
+        )
+        if retrieval_result.get("conflict_mass", 0.0) > conflict_ceiling:
+            return {"action": "ask_human" if high_risk else "reflect_and_retry"}
+        if retrieval_result.get("evidence_strength", 0.0) < evidence_floor:
+            return {"action": "ask_human" if high_risk else "use_tool"}
+        if retrieval_result.get("mass_gap", 0.0) < gap_floor:
+            return {"action": "reflect_and_retry"}
+        abstain_prob = retrieval_result["abstain_prob"]
+        if abstain_prob > 0.80:
+            return {"action": "ask_human" if high_risk else "use_tool"}
+        if abstain_prob > cfg.abstain_tau:
+            return {"action": "reflect_and_retry"}
+        return {"action": "defer"}
+
+    def consolidate(self, force: bool = False) -> dict:
+        _ = force
+        for header in self.state["headers"]:
+            header["quality"] = header_quality(header)
+        self.state["semantic_state"] = semantic_from_headers(self.state)
+        return {
+            "num_headers": len(self.state["headers"]),
+            "num_raw_hot": len(self.state["raw_hot"]),
+            "num_raw_cold": len(self.state["raw_cold"]),
+        }
+
+    def save(self, path: str) -> None:
+        base = Path(path)
+        base.mkdir(parents=True, exist_ok=True)
+
+        meta = {
+            "version": "ucmd_v3_2_baseline",
+            "step": self.state["step"],
+            "d_model": self.model.d_model,
+            "H_max": cfg.h_max,
+            "N_hot": cfg.n_hot,
+        }
+        (base / "meta.json").write_text(json.dumps(meta, indent=2))
+
+        with open(base / "raw_hot.jsonl", "w") as handle:
+            for raw in self.state["raw_hot"]:
+                handle.write(json.dumps(raw["event"]["raw"]) + "\n")
+
+        with open(base / "raw_cold.jsonl", "w") as handle:
+            for raw in self.state["raw_cold"]:
+                handle.write(json.dumps(raw["event"]["raw"]) + "\n")
+
+        header_count = len(self.state["headers"])
+        if header_count:
+            h_matrix = np.stack([np.array(header["h"].tolist(), dtype=np.float32) for header in self.state["headers"]])
+            u_matrix = np.stack([np.array(header["u"].tolist(), dtype=np.float32) for header in self.state["headers"]])
+        else:
+            h_matrix = np.zeros((0, self.model.d_model), dtype=np.float32)
+            u_matrix = np.zeros((0, self.model.d_model), dtype=np.float32)
+
+        np.savez(
+            base / "headers.npz",
+            h=h_matrix,
+            u=u_matrix,
+            support_counts=np.array([header["support_count"] for header in self.state["headers"]], dtype=np.int32),
+            conflict_counts=np.array([header["conflict_count"] for header in self.state["headers"]], dtype=np.float32),
+            variances=np.array([header["variance"] for header in self.state["headers"]], dtype=np.float32),
+            qualities=np.array([header["quality"] for header in self.state["headers"]], dtype=np.float32),
+            header_ids=np.array([header["header_id"] for header in self.state["headers"]], dtype=object),
+            backlinks=np.array([json.dumps(header["backlinks"]) for header in self.state["headers"]], dtype=object),
+            dominant_values=np.array([header.get("dominant_value", -1) for header in self.state["headers"]], dtype=np.int32),
+            value_hists=np.array(
+                [json.dumps({str(k): int(v) for k, v in header.get("value_hist", {}).items()}) for header in self.state["headers"]],
+                dtype=object,
+            ),
+        )
+        np.save(base / "semantic.npy", np.array(self.state["semantic_state"].tolist(), dtype=np.float32))
+        (base / "vocab.json").write_text(json.dumps(self.ds.vocab_payload(), indent=2))
+
+    @classmethod
+    def load(cls, path: str, model: UCMDv31, ds: SynthDataset):
+        memory = cls(model, ds)
+        base = Path(path)
+        if not base.exists():
+            return memory
+
+        memory.state = new_state(model.d_model)
+        meta_path = base / "meta.json"
+        if meta_path.exists():
+            meta = json.loads(meta_path.read_text())
+            memory.state["step"] = int(meta.get("step", 0))
+
+        for filename, target in [("raw_hot.jsonl", "raw_hot"), ("raw_cold.jsonl", "raw_cold")]:
+            file_path = base / filename
+            if not file_path.exists():
+                continue
+            with open(file_path) as handle:
+                for line in handle:
+                    if not line.strip():
+                        continue
+                    raw_event = json.loads(line)
+                    encoded = ds.encode_event(raw_event)
+                    raw_item = {
+                        "raw_id": encoded["id"],
+                        "event": encoded,
+                        "e": mx.stop_gradient(model.encode_event(encoded)),
+                        "u": mx.stop_gradient(model.encode_scope(encoded)),
+                    }
+                    memory.state[target].append(raw_item)
+                    memory.state["raw_lookup"][raw_item["raw_id"]] = raw_item
+                    if target == "raw_cold":
+                        register_cold_item(memory.state, raw_item)
+
+        headers_path = base / "headers.npz"
+        if headers_path.exists():
+            headers_blob = np.load(headers_path, allow_pickle=True)
+            has_dominant_values = "dominant_values" in headers_blob.files
+            has_value_hists = "value_hists" in headers_blob.files
+            for idx, header_id in enumerate(headers_blob["header_ids"].tolist()):
+                value_hist = {}
+                if has_value_hists:
+                    raw_hist = json.loads(headers_blob["value_hists"][idx])
+                    value_hist = {int(k): int(v) for k, v in raw_hist.items()}
+                backlinks = json.loads(headers_blob["backlinks"][idx])
+                if not value_hist:
+                    for raw_id in backlinks:
+                        raw_item = memory.state["raw_lookup"].get(raw_id)
+                        if raw_item is None:
+                            continue
+                        value_id = int(raw_item["event"]["value"])
+                        value_hist[value_id] = value_hist.get(value_id, 0) + 1
+                dominant_value = int(headers_blob["dominant_values"][idx]) if has_dominant_values else -1
+                if dominant_value < 0 and value_hist:
+                    dominant_value = max(value_hist, key=value_hist.get)
+                memory.state["headers"].append(
+                    {
+                        "header_id": header_id,
+                        "h": mx.array(headers_blob["h"][idx]),
+                        "u": mx.array(headers_blob["u"][idx]),
+                        "support_count": int(headers_blob["support_counts"][idx]),
+                        "conflict_count": float(headers_blob["conflict_counts"][idx]),
+                        "variance": float(headers_blob["variances"][idx]),
+                        "quality": float(headers_blob["qualities"][idx]),
+                        "backlinks": backlinks,
+                        "value_hist": value_hist,
+                        "dominant_value": dominant_value,
+                    }
+                )
+
+        semantic_path = base / "semantic.npy"
+        if semantic_path.exists():
+            memory.state["semantic_state"] = mx.array(np.load(semantic_path))
+
+        return memory
+
+
+def header_fake_fact_rate(state: dict):
+    mature_headers = [header for header in state["headers"] if header["quality"] >= cfg.quality_tau]
+    if not mature_headers:
+        return 0.0
+
+    fake_headers = 0
+    for header in mature_headers:
+        values = set()
+        for raw_id in header["backlinks"]:
+            raw = state["raw_lookup"].get(raw_id)
+            if raw is None:
+                continue
+            values.add(raw["event"]["raw"]["value"])
+        fake_headers += int(len(values) > 1)
+    return fake_headers / len(mature_headers)
+
+
+def header_value_purity(header: dict, state: dict):
+    counts = {}
+    total = 0
+    for raw_id in header["backlinks"]:
+        raw = state["raw_lookup"].get(raw_id)
+        if raw is None:
+            continue
+        value = raw["event"]["raw"]["value"]
+        counts[value] = counts.get(value, 0) + 1
+        total += 1
+    if total == 0:
+        return 0.0
+    return max(counts.values()) / total
+
+
+def top_supporting_raw(raw_items: List[dict], raw_score_values: List[float], value_id: Optional[int] = None):
+    best = None
+    best_score = -1e9
+    for raw, score in zip(raw_items, raw_score_values):
+        if value_id is not None and raw["event"]["value"] != value_id:
+            continue
+        if score > best_score:
+            best = raw
+            best_score = score
+    if best is not None:
+        return best
+    if raw_items:
+        return raw_items[0]
+    return None
+
+
+def failure_record(ds: SynthDataset, sample: dict, out: dict, state: dict, pred_abs: int, pred_answer: int):
+    gold_abs = int(sample["abstain"])
+    gold_answer = sample["answer"]
+    if gold_abs == 1 and pred_abs == 0:
+        bucket = "wrong_answer_should_abstain"
+    elif gold_abs == 0 and pred_abs == 1:
+        bucket = "false_abstain"
+    elif gold_abs == 0 and pred_abs == 0 and pred_answer != gold_answer:
+        bucket = "wrong_answer_should_answer"
+    else:
+        return None
+
+    support_pool = out["answer_raw"] if out["answer_raw"] else out["raw"]
+    support_scores = out["answer_score_values"] if out["answer_raw"] else out["raw_score_values"]
+    support = top_supporting_raw(support_pool, support_scores, None if pred_abs else pred_answer)
+    tags = []
+    mature_headers = [header for header in state["headers"] if header["quality"] >= cfg.quality_tau]
+    contaminated = any(header_value_purity(header, state) < 0.999 for header in mature_headers)
+    if contaminated:
+        tags.append("header_contamination")
+    if support is not None:
+        support_event = support["event"]
+        if support_event["regime"] != sample["query"]["regime"]:
+            tags.append("regime_mismatch")
+        if support_event["time_bucket"] != sample["query"]["time_bucket"]:
+            tags.append("time_bucket_mismatch")
+        if support_event["attribute"] != sample["query"]["attribute"]:
+            tags.append("attribute_mismatch")
+    return {
+        "bucket": bucket,
+        "tags": tags,
+        "gold": "ABSTAIN" if gold_abs else ds.values[gold_answer],
+        "pred": "ABSTAIN" if pred_abs else ds.values[pred_answer],
+        "query": sample["query"]["raw"],
+        "support": support["event"]["raw"] if support is not None else None,
+        "evidence_strength": out["evidence_strength"],
+        "mass_gap": out["mass_gap"],
+        "conflict_mass": out["conflict_mass"],
+        "top_time_penalty": out["top_time_penalty"],
+        "evidence_floor": out["evidence_floor"],
+        "gap_floor": out["gap_floor"],
+        "conflict_ceiling": out["conflict_ceiling"],
+        "rule_abstain": out["rule_abstain"],
+        "abstain_prob": scalar(out["abstain_prob"]),
+    }
+
+
+def print_eval_debug(metrics: dict):
+    debug = metrics.get("debug")
+    if not debug:
+        return
+
+    print("\n--- eval debug ---")
+    print(
+        "abstain confusion:"
+        f" tp={debug['abstain_tp']}"
+        f" fp={debug['abstain_fp']}"
+        f" tn={debug['abstain_tn']}"
+        f" fn={debug['abstain_fn']}"
+    )
+    print(
+        "failure buckets:"
+        f" wrong_answer_should_abstain={debug['failure_buckets']['wrong_answer_should_abstain']}"
+        f" wrong_answer_should_answer={debug['failure_buckets']['wrong_answer_should_answer']}"
+        f" false_abstain={debug['failure_buckets']['false_abstain']}"
+    )
+    print(
+        "failure tags:"
+        f" header_contamination={debug['failure_tags']['header_contamination']}"
+        f" regime_mismatch={debug['failure_tags']['regime_mismatch']}"
+        f" time_bucket_mismatch={debug['failure_tags']['time_bucket_mismatch']}"
+        f" attribute_mismatch={debug['failure_tags']['attribute_mismatch']}"
+    )
+    print(
+        "mature headers:"
+        f" count={debug['mature_header_count']}"
+        f" samples_with_mature_headers={debug['samples_with_mature_headers']}"
+    )
+
+    if not debug["failure_examples"]:
+        return
+
+    print("\n--- failure examples ---")
+    for idx, item in enumerate(debug["failure_examples"], start=1):
+        tag_text = ", ".join(item["tags"]) if item["tags"] else "none"
+        print(
+            f"{idx:2d}. {item['bucket']} | gold={item['gold']} | pred={item['pred']} "
+            f"| evidence={item['evidence_strength']:.3f} | gap={item['mass_gap']:.3f} "
+            f"| conflict={item['conflict_mass']:.3f} | time_pen={item['top_time_penalty']:.3f} | tags={tag_text}"
+        )
+        print(
+            f"    thresholds: evidence>={item['evidence_floor']:.3f} "
+            f"gap>={item['gap_floor']:.3f} conflict<={item['conflict_ceiling']:.3f}"
+        )
+        print(f"    query: {item['query']}")
+        if item["support"] is not None:
+            print(f"    support: {item['support']}")
+
+
+def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_failure_examples: int = 20):
+    metrics = {
+        "joint_answer_or_abstain_acc": 0.0,
+        "abstain_accuracy": 0.0,
+        "abstain_precision": 0.0,
+        "abstain_recall": 0.0,
+        "raw_recall_at_k": 0.0,
+        "false_merge_rate": 0.0,
+        "unnecessary_branch_rate": 0.0,
+        "header_fake_fact_rate": 0.0,
+        "avg_header_value_purity": 0.0,
+        "avg_headers_used": 0.0,
+        "avg_retrieval_latency_ms": 0.0,
+    }
+
+    total = 0
+    abstain_tp = 0
+    abstain_pred = 0
+    abstain_gold = 0
+    abstain_fp = 0
+    abstain_tn = 0
+    abstain_fn = 0
+    branch_positive = 0
+    branch_negative = 0
+    false_merges = 0
+    unnecessary_branches = 0
+    mature_header_count = 0
+    mature_header_samples = 0
+    purity_sum = 0.0
+    fake_headers = 0
+    debug = {
+        "abstain_tp": 0,
+        "abstain_fp": 0,
+        "abstain_tn": 0,
+        "abstain_fn": 0,
+        "mature_header_count": 0,
+        "samples_with_mature_headers": 0,
+        "failure_buckets": {
+            "wrong_answer_should_abstain": 0,
+            "wrong_answer_should_answer": 0,
+            "false_abstain": 0,
+        },
+        "failure_tags": {
+            "header_contamination": 0,
+            "regime_mismatch": 0,
+            "time_bucket_mismatch": 0,
+            "attribute_mismatch": 0,
+        },
+        "failure_examples": [],
+    }
+
+    for sample in data:
+        state = new_state(model.d_model)
+        for event in sample["events"]:
+            aux = add_observation_to_state(model, state, event, teacher_force=False)
+            if event["branch_target"]:
+                branch_positive += 1
+                false_merges += int(not aux["branched"])
+            else:
+                branch_negative += 1
+                unnecessary_branches += int(aux["branched"])
+
+        t0 = time.perf_counter()
+        out = retrieve_from_state(model, state, sample["query"], sample["positive_raw_ids"])
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+
+        pred_abs = int(out["abstain"])
+        gold_abs = int(sample["abstain"])
+        abstain_tp += int(pred_abs == 1 and gold_abs == 1)
+        abstain_pred += int(pred_abs == 1)
+        abstain_gold += int(gold_abs == 1)
+        abstain_fp += int(pred_abs == 1 and gold_abs == 0)
+        abstain_tn += int(pred_abs == 0 and gold_abs == 0)
+        abstain_fn += int(pred_abs == 0 and gold_abs == 1)
+        metrics["abstain_accuracy"] += int(pred_abs == gold_abs)
+        metrics["avg_retrieval_latency_ms"] += latency_ms
+        metrics["avg_headers_used"] += len(out["headers"])
+        mature_headers = [header for header in state["headers"] if header["quality"] >= cfg.quality_tau]
+        if mature_headers:
+            mature_header_samples += 1
+            debug["samples_with_mature_headers"] += 1
+        for header in mature_headers:
+            purity = header_value_purity(header, state)
+            purity_sum += purity
+            mature_header_count += 1
+            debug["mature_header_count"] += 1
+            fake_headers += int(purity < 0.999)
+
+        pred_answer = -1 if pred_abs else int(mx.argmax(out["value_logits"]).item())
+        if gold_abs == 1:
+            metrics["joint_answer_or_abstain_acc"] += int(pred_abs == 1)
+        else:
+            metrics["joint_answer_or_abstain_acc"] += int(pred_abs == 0 and pred_answer == sample["answer"])
+
+        if sample["positive_raw_ids"]:
+            positive_set = set(sample["positive_raw_ids"])
+            metrics["raw_recall_at_k"] += int(any(raw["raw_id"] in positive_set for raw in out["raw"]))
+
+        if collect_debug:
+            debug["abstain_tp"] = abstain_tp
+            debug["abstain_fp"] = abstain_fp
+            debug["abstain_tn"] = abstain_tn
+            debug["abstain_fn"] = abstain_fn
+            record = failure_record(model.ds, sample, out, state, pred_abs, pred_answer)
+            if record is not None:
+                debug["failure_buckets"][record["bucket"]] += 1
+                for tag in record["tags"]:
+                    debug["failure_tags"][tag] += 1
+                if len(debug["failure_examples"]) < max_failure_examples:
+                    debug["failure_examples"].append(record)
+
+        total += 1
+
+    metrics["joint_answer_or_abstain_acc"] /= max(1, total)
+    metrics["abstain_accuracy"] /= max(1, total)
+    metrics["abstain_precision"] = abstain_tp / max(1, abstain_pred)
+    metrics["abstain_recall"] = abstain_tp / max(1, abstain_gold)
+    metrics["raw_recall_at_k"] /= max(1, total)
+    metrics["false_merge_rate"] = false_merges / max(1, branch_positive)
+    metrics["unnecessary_branch_rate"] = unnecessary_branches / max(1, branch_negative)
+    metrics["header_fake_fact_rate"] = fake_headers / max(1, mature_header_count)
+    metrics["avg_header_value_purity"] = purity_sum / max(1, mature_header_count)
+    metrics["avg_headers_used"] /= max(1, total)
+    metrics["avg_retrieval_latency_ms"] /= max(1, total)
+    metrics["mature_header_count"] = mature_header_count
+    metrics["samples_with_mature_headers"] = mature_header_samples
+    metrics["abstain_tp"] = abstain_tp
+    metrics["abstain_fp"] = abstain_fp
+    metrics["abstain_tn"] = abstain_tn
+    metrics["abstain_fn"] = abstain_fn
+    if collect_debug:
+        metrics["debug"] = debug
+    return metrics
+
+
+def ensure_results_header(path: str):
+    parent = Path(path).parent
+    if str(parent) not in ("", "."):
+        parent.mkdir(parents=True, exist_ok=True)
+    header_line = "\t".join(RESULTS_HEADER)
+    if not os.path.exists(path):
+        Path(path).write_text(header_line + "\n")
+        return
+
+    with open(path) as handle:
+        first_line = handle.readline().rstrip("\n")
+
+    if first_line != header_line:
+        with open(path, "w") as handle:
+            handle.write(header_line + "\n")
+
+
+def append_results_row(path: str, metrics: dict, description: str):
+    ensure_results_header(path)
+    run_id = time.strftime("%Y%m%d-%H%M%S")
+    row = [
+        run_id,
+        str(cfg.n_samples),
+        str(cfg.epochs),
+        f"{metrics['joint_answer_or_abstain_acc']:.6f}",
+        f"{metrics['abstain_accuracy']:.6f}",
+        f"{metrics['abstain_precision']:.6f}",
+        f"{metrics['raw_recall_at_k']:.6f}",
+        f"{metrics['false_merge_rate']:.6f}",
+        f"{metrics['unnecessary_branch_rate']:.6f}",
+        f"{metrics['header_fake_fact_rate']:.6f}",
+        f"{metrics['avg_headers_used']:.3f}",
+        f"{metrics['avg_retrieval_latency_ms']:.3f}",
+        description,
+    ]
+    with open(path, "a") as handle:
+        handle.write("\t".join(row) + "\n")
+
+
+def default_dataset_path():
+    return os.path.join(tempfile.gettempdir(), "ucmd_v31_synth.jsonl")
+
+
+def main():
+    if not cfg.dataset_path and os.getenv("UCMD_WRITE_DATA", "0") == "1":
+        cfg.dataset_path = default_dataset_path()
+
+    samples = build_samples(cfg)
+    ds = SynthDataset(samples)
+    codec = FixedFeatureCodec(ds, cfg.d_field)
+    model = UCMDv31(codec, ds)
+    optimizer = optim.AdamW(learning_rate=cfg.lr, weight_decay=cfg.wd)
+    mx.eval(model.parameters())
+
+    indices = list(range(len(ds)))
+    split = int(0.9 * len(indices))
+    train_idx = indices[:split]
+    test_idx = indices[split:]
+    train_data = [ds[idx] for idx in train_idx]
+    test_data = [ds[idx] for idx in test_idx]
+    train_abstain_rate = sum(sample["abstain"] for sample in train_data) / max(1, len(train_data))
+    test_abstain_rate = sum(sample["abstain"] for sample in test_data) / max(1, len(test_data))
+
+    loss_and_grad = nn.value_and_grad(model, batch_loss)
+
+    print(f"samples: {len(ds)} | train: {len(train_data)} | test: {len(test_data)}")
+    print(f"d_model: {cfg.d_model} | h_max: {cfg.h_max} | n_hot: {cfg.n_hot}")
+    print(f"train abstain rate: {train_abstain_rate:.3f} | test abstain rate: {test_abstain_rate:.3f}")
+    print("training only the small MLP modules and heads; field features are fixed")
+
+    train_probe = train_data[: min(cfg.batch_size, len(train_data))]
+    encountered_non_finite = False
+    for epoch in range(cfg.epochs):
+        running = 0.0
+        steps = 0
+        for batch_indices in batch_iter(train_idx, cfg.batch_size, shuffle=True):
+            batch = [ds[idx] for idx in batch_indices]
+            loss, grads = loss_and_grad(model, batch)
+            loss_value = scalar(loss)
+            grad_norm = grad_global_norm(grads)
+            grad_norm_value = scalar(grad_norm)
+
+            if not math.isfinite(loss_value) or not math.isfinite(grad_norm_value):
+                print("non-finite loss encountered; stopping training early")
+                print(f"loss: {loss_value} | grad_norm: {grad_norm_value}")
+                debug_parts = batch_loss_parts(model, batch)
+                print(
+                    "loss parts: "
+                    f"answer={scalar(debug_parts['answer_loss']):.4f} "
+                    f"abstain={scalar(debug_parts['abstain_loss']):.4f} "
+                    f"branch={scalar(debug_parts['branch_loss']):.4f} "
+                    f"scope={scalar(debug_parts['scope_loss']):.4f} "
+                    f"retrieval={scalar(debug_parts['retrieval_loss']):.4f}"
+                )
+                encountered_non_finite = True
+                break
+
+            grads, _ = clip_grad_norm(grads, cfg.grad_clip_norm)
+            optimizer.update(model, grads)
+            mx.eval(model.parameters(), optimizer.state, loss)
+            running += loss_value
+            steps += 1
+
+        if encountered_non_finite:
+            break
+
+        metrics = evaluate(model, test_data[: min(128, len(test_data))])
+        probe_parts = batch_loss_parts(model, train_probe)
+        print(
+            f"epoch {epoch + 1:2d} | train loss {running / max(1, steps):.4f} "
+            f"| joint acc {metrics['joint_answer_or_abstain_acc']:.3f} "
+            f"| abstain acc {metrics['abstain_accuracy']:.3f} "
+            f"| purity {metrics['avg_header_value_purity']:.3f} "
+            f"| answer {scalar(probe_parts['answer_loss']):.4f} "
+            f"| abstain {scalar(probe_parts['abstain_loss']):.4f} "
+            f"| branch {scalar(probe_parts['branch_loss']):.4f} "
+            f"| scope {scalar(probe_parts['scope_loss']):.4f} "
+            f"| retrieval {scalar(probe_parts['retrieval_loss']):.4f}"
+        )
+
+    if encountered_non_finite:
+        return
+
+    final_metrics = evaluate(
+        model,
+        test_data,
+        collect_debug=True,
+        max_failure_examples=cfg.debug_failure_examples,
+    )
+    append_results_row(cfg.results_path, final_metrics, cfg.run_note)
+
+    print("\n--- summary ---")
+    print(f"joint_answer_or_abstain_acc: {final_metrics['joint_answer_or_abstain_acc']:.4f}")
+    print(f"abstain_accuracy:           {final_metrics['abstain_accuracy']:.4f}")
+    print(f"abstain_precision:          {final_metrics['abstain_precision']:.4f}")
+    print(f"abstain_recall:             {final_metrics['abstain_recall']:.4f}")
+    print(
+        "abstain_confusion:         "
+        f"tp={final_metrics['abstain_tp']} "
+        f"fp={final_metrics['abstain_fp']} "
+        f"tn={final_metrics['abstain_tn']} "
+        f"fn={final_metrics['abstain_fn']}"
+    )
+    print(f"raw_recall_at_{cfg.k_rerank}:            {final_metrics['raw_recall_at_k']:.4f}")
+    print(f"false_merge_rate:           {final_metrics['false_merge_rate']:.4f}")
+    print(f"unnecessary_branch_rate:    {final_metrics['unnecessary_branch_rate']:.4f}")
+    print(f"header_fake_fact_rate:      {final_metrics['header_fake_fact_rate']:.4f}")
+    print(f"avg_header_value_purity:    {final_metrics['avg_header_value_purity']:.4f}")
+    print(f"mature_header_count:        {final_metrics['mature_header_count']}")
+    print(f"samples_with_mature_headers:{final_metrics['samples_with_mature_headers']}")
+    print(f"avg_headers_used:           {final_metrics['avg_headers_used']:.2f}")
+    print(f"avg_retrieval_latency_ms:   {final_metrics['avg_retrieval_latency_ms']:.2f}")
+    print_eval_debug(final_metrics)
+
+    mem = Memory(model, ds)
+    sample = test_data[0]
+    for event in sample["events"]:
+        mem.add_observation(event["raw"], provenance=event["raw"]["provenance"])
+    result = mem.retrieve(sample["query"]["raw"])
+
+    gold = "ABSTAIN" if sample["abstain"] else ds.values[sample["answer"]]
+    pred = "ABSTAIN" if result["abstain"] else result["answer"]
+
+    print("\n--- demo ---")
+    print("query:", sample["query"]["raw"])
+    print("gold:", gold)
+    print("pred:", pred)
+    print("abstain_prob:", round(result["abstain_prob"], 4))
+    print("evidence_strength:", round(result["evidence_strength"], 4))
+    print("mass_gap:", round(result["mass_gap"], 4))
+    print("conflict_mass:", round(result["conflict_mass"], 4))
+    print("top_time_penalty:", round(result["top_time_penalty"], 4))
+    print("headers used:", len(result["headers"]))
+    print("raw evidence returned:", len(result["raw"]))
+
+    if result["abstain"]:
+        action = mem.decide_after_abstain(sample["query"]["raw"], result, high_risk=False)
+        print("after abstain:", action)
+
+
+if __name__ == "__main__":
+    main()
