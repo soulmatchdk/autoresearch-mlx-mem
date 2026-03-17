@@ -1,14 +1,14 @@
 """
-UCMD V3.1 baseline for the autoresearch-mlx repo.
+UCMD V3.6 baseline for the autoresearch-mlx repo.
 
 This keeps the repo in the same Apple Silicon / MLX / agent-loop spirit,
-but replaces the baseline algorithm with a single-file UCMD memory system.
+with a single-file UCMD memory baseline centered on freshness-first answer selection.
 
 What this file does:
 - builds a small synthetic dataset in memory (or loads/dumps it outside the repo)
 - trains only small MLX-native MLP modules and heads
 - exposes a real Memory API for agent use
-- reports UCMD metrics and appends a summary row to results.tsv
+- reports UCMD metrics for the wrapper loop and direct inspection
 """
 
 import json
@@ -36,10 +36,10 @@ mx.random.seed(SEED)
 @dataclass
 class Config:
     dataset_path: str = os.getenv("UCMD_DATA", "")
-    results_path: str = os.getenv("UCMD_RESULTS", "results.tsv")
-    run_note: str = os.getenv("UCMD_RUN_NOTE", "ucmd_v31_baseline")
+    results_path: str = str(Path(__file__).with_name("results.tsv"))
 
     n_samples: int = int(os.getenv("UCMD_SAMPLES", 1000))
+    hard_eval_samples: int = int(os.getenv("UCMD_HARD_EVAL_SAMPLES", 180))
     min_events: int = int(os.getenv("UCMD_MIN_EVENTS", 10))
     max_events: int = int(os.getenv("UCMD_MAX_EVENTS", 14))
 
@@ -108,24 +108,61 @@ TIME_BUCKETS = ["current", "same_day", "same_week", "historical"]
 
 RESULTS_HEADER = [
     "run_id",
+    "git_commit",
+    "git_parent_commit",
+    "description",
+    "status",
+    "decision_reason",
     "samples",
     "epochs",
     "joint_answer_or_abstain_acc",
     "abstain_accuracy",
     "abstain_precision",
+    "abstain_recall",
     "raw_recall_at_k",
+    "latest_slice_recall",
+    "latest_slice_conflict_accuracy",
+    "regime_mismatch",
+    "time_bucket_mismatch",
+    "attribute_mismatch",
+    "wrong_answer_should_abstain",
+    "wrong_answer_should_answer",
+    "false_abstain",
     "false_merge_rate",
     "unnecessary_branch_rate",
     "header_fake_fact_rate",
+    "avg_header_value_purity",
     "avg_headers_used",
     "avg_retrieval_latency_ms",
-    "description",
+    "hard_joint_answer_or_abstain_acc",
+    "hard_abstain_accuracy",
+    "hard_abstain_precision",
+    "hard_abstain_recall",
+    "hard_raw_recall_at_k",
+    "hard_latest_slice_recall",
+    "hard_latest_slice_conflict_accuracy",
+    "hard_regime_mismatch",
+    "hard_time_bucket_mismatch",
+    "hard_attribute_mismatch",
+    "hard_wrong_answer_should_abstain",
+    "hard_wrong_answer_should_answer",
+    "hard_false_abstain",
+    "hard_false_merge_rate",
+    "hard_unnecessary_branch_rate",
+    "hard_header_fake_fact_rate",
+    "hard_avg_header_value_purity",
+    "hard_avg_headers_used",
+    "hard_avg_retrieval_latency_ms",
 ]
 
 
 def scalar(x) -> float:
     mx.eval(x)
     return float(x.item())
+
+
+def tsv_safe(text: str) -> str:
+    return " ".join(text.replace("\t", " ").splitlines()).strip()
 
 
 def zeros(d: int):
@@ -376,6 +413,203 @@ def latest_resolution(events: List[dict], entity: str, attr: str, regime: str):
     return None, 1, [event["id"] for event in latest]
 
 
+def random_other(items: List[str], avoid: str) -> str:
+    return random.choice([item for item in items if item != avoid])
+
+
+def make_synth_event(
+    sample_idx: int,
+    event_idx: int,
+    entity: str,
+    attr: str,
+    value: str,
+    regime: str,
+    timestamp: int,
+    branch_target: int = 0,
+    note: str = "main",
+):
+    text = f"{entity} {attr} is {value} under {regime}"
+    if note == "conflict":
+        text = f"Conflict: {entity} {attr} may be {value} under {regime}"
+    return {
+        "id": f"s{sample_idx}_e{event_idx}",
+        "entity": entity,
+        "attribute": attr,
+        "value": value,
+        "regime": regime,
+        "timestamp": timestamp,
+        "time_bucket": None,
+        "source": random.choice(SOURCES),
+        "text": text,
+        "provenance": {"kind": "observation", "tool": None, "actor": "synthetic"},
+        "branch_target": int(branch_target),
+        "note": note,
+    }
+
+
+def finalize_sample(events: List[dict], entity: str, attr: str, query_regime: str, scenario: str):
+    events.sort(key=lambda item: (item["timestamp"], item["id"]))
+    total_steps = len(events)
+    for i, event in enumerate(events):
+        event["time_bucket"] = time_bucket_from_step(i, total_steps)
+
+    answer, abstain, positive_ids = latest_resolution(events, entity, attr, query_regime)
+    return {
+        "events": events,
+        "query": {
+            "entity": entity,
+            "attribute": attr,
+            "regime": query_regime,
+            "time_bucket": "current",
+            "text": f"What is {entity}'s {attr} in regime {query_regime}?",
+        },
+        "answer": answer,
+        "abstain": abstain,
+        "positive_raw_ids": positive_ids,
+        "scenario": scenario,
+    }
+
+
+def make_hard_temporal_override_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    stale_value, fresh_value = random.sample(ATTRS[attr], 2)
+    other_regime = random_other(REGIMES, query_regime)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 6):
+        events.append(make_synth_event(idx, event_idx, entity, attr, stale_value, query_regime, timestamp, 0))
+        event_idx += 1
+    for timestamp in range(6, 9):
+        noise_entity = random_other(ENTITIES, entity)
+        noise_attr = random.choice(sorted(ATTRS.keys()))
+        noise_value = random.choice(ATTRS[noise_attr])
+        noise_regime = random.choice(REGIMES)
+        events.append(make_synth_event(idx, event_idx, noise_entity, noise_attr, noise_value, noise_regime, timestamp, 0, "distractor"))
+        event_idx += 1
+    events.append(make_synth_event(idx, event_idx, entity, attr, stale_value, other_regime, 9, 1, "cross_regime"))
+    event_idx += 1
+    events.append(make_synth_event(idx, event_idx, entity, attr, fresh_value, query_regime, 10, 1))
+    return finalize_sample(events, entity, attr, query_regime, "temporal_override")
+
+
+def make_hard_latest_conflict_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    base_value, alt_value = random.sample(ATTRS[attr], 2)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 6):
+        events.append(make_synth_event(idx, event_idx, entity, attr, base_value, query_regime, timestamp, 0))
+        event_idx += 1
+    events.append(make_synth_event(idx, event_idx, entity, attr, base_value, query_regime, 10, 1, "conflict"))
+    event_idx += 1
+    events.append(make_synth_event(idx, event_idx, entity, attr, alt_value, query_regime, 10, 1, "conflict"))
+    return finalize_sample(events, entity, attr, query_regime, "latest_conflict")
+
+
+def make_hard_missing_recent_scope_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    target_value = random.choice(ATTRS[attr])
+    other_regime = random_other(REGIMES, query_regime)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 4):
+        events.append(make_synth_event(idx, event_idx, entity, attr, target_value, query_regime, timestamp, 0))
+        event_idx += 1
+    for timestamp in range(4, 11):
+        if timestamp % 2 == 0:
+            noise_value = random_other(ATTRS[attr], target_value)
+            events.append(make_synth_event(idx, event_idx, entity, attr, noise_value, other_regime, timestamp, 1, "cross_regime"))
+        else:
+            noise_entity = random_other(ENTITIES, entity)
+            noise_attr = random.choice(sorted(ATTRS.keys()))
+            noise_value = random.choice(ATTRS[noise_attr])
+            noise_regime = random.choice(REGIMES)
+            events.append(make_synth_event(idx, event_idx, noise_entity, noise_attr, noise_value, noise_regime, timestamp, 0, "distractor"))
+        event_idx += 1
+    return finalize_sample(events, entity, attr, query_regime, "missing_recent_scope")
+
+
+def make_hard_near_regime_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    alt_regime = random_other(REGIMES, query_regime)
+    target_value, alt_value = random.sample(ATTRS[attr], 2)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 6):
+        events.append(make_synth_event(idx, event_idx, entity, attr, target_value, query_regime, timestamp, 0))
+        event_idx += 1
+    for timestamp in range(6, 11):
+        branch_target = 1 if timestamp == 6 else 0
+        events.append(make_synth_event(idx, event_idx, entity, attr, alt_value, alt_regime, timestamp, branch_target, "cross_regime"))
+        event_idx += 1
+    return finalize_sample(events, entity, attr, query_regime, "near_regime")
+
+
+def make_hard_no_scope_evidence_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    alt_regime = random_other(REGIMES, query_regime)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 6):
+        value = random.choice(ATTRS[attr])
+        events.append(make_synth_event(idx, event_idx, entity, attr, value, alt_regime, timestamp, 1, "cross_regime"))
+        event_idx += 1
+    for timestamp in range(6, 11):
+        noise_attr = random_other(sorted(ATTRS.keys()), attr)
+        noise_value = random.choice(ATTRS[noise_attr])
+        events.append(make_synth_event(idx, event_idx, entity, noise_attr, noise_value, query_regime, timestamp, 0, "near_miss"))
+        event_idx += 1
+    return finalize_sample(events, entity, attr, query_regime, "no_scope_evidence")
+
+
+def make_hard_thin_latest_slice_sample(idx: int):
+    entity = random.choice(ENTITIES)
+    attr = random.choice(sorted(ATTRS.keys()))
+    query_regime = random.choice(REGIMES)
+    stale_value, latest_value = random.sample(ATTRS[attr], 2)
+    events = []
+    event_idx = 0
+
+    for timestamp in range(1, 8):
+        events.append(make_synth_event(idx, event_idx, entity, attr, stale_value, query_regime, timestamp, 0))
+        event_idx += 1
+    events.append(make_synth_event(idx, event_idx, entity, attr, latest_value, query_regime, 9, 1))
+    event_idx += 1
+    for timestamp in range(10, 13):
+        noise_entity = random_other(ENTITIES, entity)
+        noise_attr = random.choice(sorted(ATTRS.keys()))
+        noise_value = random.choice(ATTRS[noise_attr])
+        noise_regime = random.choice(REGIMES)
+        events.append(make_synth_event(idx, event_idx, noise_entity, noise_attr, noise_value, noise_regime, timestamp, 0, "distractor"))
+        event_idx += 1
+    return finalize_sample(events, entity, attr, query_regime, "thin_latest_slice")
+
+
+HARD_SCENARIO_BUILDERS = [
+    make_hard_temporal_override_sample,
+    make_hard_latest_conflict_sample,
+    make_hard_missing_recent_scope_sample,
+    make_hard_near_regime_sample,
+    make_hard_no_scope_evidence_sample,
+    make_hard_thin_latest_slice_sample,
+]
+
+
 def make_sample(idx: int, min_events: int, max_events: int) -> dict:
     entity = random.choice(ENTITIES)
     attr = random.choice(sorted(ATTRS.keys()))
@@ -509,6 +743,17 @@ def dump_samples_to_path(path: str, samples: List[dict]) -> None:
             handle.write(json.dumps(sample) + "\n")
 
 
+def build_hard_eval_samples(config: Config) -> List[dict]:
+    if config.hard_eval_samples <= 0:
+        return []
+
+    samples = []
+    for idx in range(config.hard_eval_samples):
+        builder = HARD_SCENARIO_BUILDERS[idx % len(HARD_SCENARIO_BUILDERS)]
+        samples.append(builder(10_000 + idx))
+    return samples
+
+
 def build_samples(config: Config) -> List[dict]:
     if config.dataset_path and os.path.exists(config.dataset_path):
         return load_samples_from_path(config.dataset_path)
@@ -571,11 +816,7 @@ class SynthDataset:
             "raw": query,
         }
 
-    def __len__(self):
-        return len(self.samples)
-
-    def __getitem__(self, idx: int) -> dict:
-        sample = self.samples[idx]
+    def encode_sample(self, sample: dict) -> dict:
         answer = -1 if sample["answer"] is None else self.value2id[sample["answer"]]
         return {
             "events": [self.encode_event(event) for event in sample["events"]],
@@ -585,6 +826,12 @@ class SynthDataset:
             "positive_raw_ids": sample["positive_raw_ids"],
             "raw": sample,
         }
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx: int) -> dict:
+        return self.encode_sample(self.samples[idx])
 
 
 def batch_iter(indices: List[int], batch_size: int, shuffle: bool = True):
@@ -1434,6 +1681,7 @@ def failure_record(ds: SynthDataset, sample: dict, out: dict, state: dict, pred_
         if support_event["attribute"] != sample["query"]["attribute"]:
             tags.append("attribute_mismatch")
     return {
+        "scenario": sample["raw"].get("scenario", "standard"),
         "bucket": bucket,
         "tags": tags,
         "gold": "ABSTAIN" if gold_abs else ds.values[gold_answer],
@@ -1483,6 +1731,14 @@ def print_eval_debug(metrics: dict):
         f" count={debug['mature_header_count']}"
         f" samples_with_mature_headers={debug['samples_with_mature_headers']}"
     )
+    if debug["scenario_breakdown"]:
+        print("scenario breakdown:")
+        for scenario, stats in sorted(debug["scenario_breakdown"].items()):
+            joint_acc = stats["joint_correct"] / max(1, stats["count"])
+            print(
+                f"  {scenario}: count={stats['count']} joint_acc={joint_acc:.3f} "
+                f"abstain_gold={stats['abstain_gold']}"
+            )
 
     if not debug["failure_examples"]:
         return
@@ -1491,7 +1747,7 @@ def print_eval_debug(metrics: dict):
     for idx, item in enumerate(debug["failure_examples"], start=1):
         tag_text = ", ".join(item["tags"]) if item["tags"] else "none"
         print(
-            f"{idx:2d}. {item['bucket']} | gold={item['gold']} | pred={item['pred']} "
+            f"{idx:2d}. {item['scenario']} | {item['bucket']} | gold={item['gold']} | pred={item['pred']} "
             f"| evidence={item['evidence_strength']:.3f} | gap={item['mass_gap']:.3f} "
             f"| conflict={item['conflict_mass']:.3f} | time_pen={item['top_time_penalty']:.3f} | tags={tag_text}"
         )
@@ -1511,6 +1767,8 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
         "abstain_precision": 0.0,
         "abstain_recall": 0.0,
         "raw_recall_at_k": 0.0,
+        "latest_slice_recall": 0.0,
+        "latest_slice_conflict_accuracy": 0.0,
         "false_merge_rate": 0.0,
         "unnecessary_branch_rate": 0.0,
         "header_fake_fact_rate": 0.0,
@@ -1534,6 +1792,10 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
     mature_header_samples = 0
     purity_sum = 0.0
     fake_headers = 0
+    latest_slice_total = 0
+    latest_slice_hits = 0
+    latest_conflict_total = 0
+    latest_conflict_hits = 0
     debug = {
         "abstain_tp": 0,
         "abstain_fp": 0,
@@ -1552,6 +1814,7 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
             "time_bucket_mismatch": 0,
             "attribute_mismatch": 0,
         },
+        "scenario_breakdown": {},
         "failure_examples": [],
     }
 
@@ -1593,16 +1856,33 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
             fake_headers += int(purity < 0.999)
 
         pred_answer = -1 if pred_abs else int(mx.argmax(out["value_logits"]).item())
+        joint_correct = 0
         if gold_abs == 1:
-            metrics["joint_answer_or_abstain_acc"] += int(pred_abs == 1)
+            joint_correct = int(pred_abs == 1)
+            metrics["joint_answer_or_abstain_acc"] += joint_correct
         else:
-            metrics["joint_answer_or_abstain_acc"] += int(pred_abs == 0 and pred_answer == sample["answer"])
+            joint_correct = int(pred_abs == 0 and pred_answer == sample["answer"])
+            metrics["joint_answer_or_abstain_acc"] += joint_correct
 
         if sample["positive_raw_ids"]:
             positive_set = set(sample["positive_raw_ids"])
             metrics["raw_recall_at_k"] += int(any(raw["raw_id"] in positive_set for raw in out["raw"]))
+            latest_slice_total += 1
+            latest_slice_hits += int(any(raw["raw_id"] in positive_set for raw in out["answer_raw"]))
+
+        if gold_abs == 1 and sample["positive_raw_ids"]:
+            latest_conflict_total += 1
+            latest_conflict_hits += int(pred_abs == 1)
 
         if collect_debug:
+            scenario = sample["raw"].get("scenario", "standard")
+            stats = debug["scenario_breakdown"].setdefault(
+                scenario,
+                {"count": 0, "joint_correct": 0, "abstain_gold": 0},
+            )
+            stats["count"] += 1
+            stats["joint_correct"] += joint_correct
+            stats["abstain_gold"] += gold_abs
             debug["abstain_tp"] = abstain_tp
             debug["abstain_fp"] = abstain_fp
             debug["abstain_tn"] = abstain_tn
@@ -1622,6 +1902,8 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
     metrics["abstain_precision"] = abstain_tp / max(1, abstain_pred)
     metrics["abstain_recall"] = abstain_tp / max(1, abstain_gold)
     metrics["raw_recall_at_k"] /= max(1, total)
+    metrics["latest_slice_recall"] = latest_slice_hits / max(1, latest_slice_total)
+    metrics["latest_slice_conflict_accuracy"] = latest_conflict_hits / max(1, latest_conflict_total)
     metrics["false_merge_rate"] = false_merges / max(1, branch_positive)
     metrics["unnecessary_branch_rate"] = unnecessary_branches / max(1, branch_negative)
     metrics["header_fake_fact_rate"] = fake_headers / max(1, mature_header_count)
@@ -1635,7 +1917,20 @@ def evaluate(model: UCMDv31, data: List[dict], collect_debug: bool = False, max_
     metrics["abstain_tn"] = abstain_tn
     metrics["abstain_fn"] = abstain_fn
     if collect_debug:
+        metrics["regime_mismatch"] = debug["failure_tags"]["regime_mismatch"]
+        metrics["time_bucket_mismatch"] = debug["failure_tags"]["time_bucket_mismatch"]
+        metrics["attribute_mismatch"] = debug["failure_tags"]["attribute_mismatch"]
+        metrics["wrong_answer_should_abstain"] = debug["failure_buckets"]["wrong_answer_should_abstain"]
+        metrics["wrong_answer_should_answer"] = debug["failure_buckets"]["wrong_answer_should_answer"]
+        metrics["false_abstain"] = debug["failure_buckets"]["false_abstain"]
         metrics["debug"] = debug
+    else:
+        metrics["regime_mismatch"] = 0
+        metrics["time_bucket_mismatch"] = 0
+        metrics["attribute_mismatch"] = 0
+        metrics["wrong_answer_should_abstain"] = 0
+        metrics["wrong_answer_should_answer"] = 0
+        metrics["false_abstain"] = 0
     return metrics
 
 
@@ -1649,40 +1944,47 @@ def ensure_results_header(path: str):
         return
 
     with open(path) as handle:
-        first_line = handle.readline().rstrip("\n")
+        lines = [line.rstrip("\n") for line in handle]
 
-    if first_line != header_line:
-        with open(path, "w") as handle:
-            handle.write(header_line + "\n")
+    if not lines:
+        Path(path).write_text(header_line + "\n")
+        return
+
+    if lines[0] == header_line:
+        return
+
+    old_header = lines[0].split("\t")
+    migrated = [header_line]
+    for line in lines[1:]:
+        if not line:
+            continue
+        values = line.split("\t")
+        row_map = {key: values[idx] for idx, key in enumerate(old_header) if idx < len(values)}
+        migrated.append("\t".join(row_map.get(key, "") for key in RESULTS_HEADER))
+
+    Path(path).write_text("\n".join(migrated) + "\n")
 
 
-def append_results_row(path: str, metrics: dict, description: str):
+def format_results_value(key: str, value):
+    if value is None:
+        return ""
+    if isinstance(value, float):
+        return f"{value:.6f}" if "latency" not in key and "headers_used" not in key else f"{value:.3f}"
+    return tsv_safe(str(value))
+
+
+def append_results_row(path: str, row: dict):
     ensure_results_header(path)
-    run_id = time.strftime("%Y%m%d-%H%M%S")
-    row = [
-        run_id,
-        str(cfg.n_samples),
-        str(cfg.epochs),
-        f"{metrics['joint_answer_or_abstain_acc']:.6f}",
-        f"{metrics['abstain_accuracy']:.6f}",
-        f"{metrics['abstain_precision']:.6f}",
-        f"{metrics['raw_recall_at_k']:.6f}",
-        f"{metrics['false_merge_rate']:.6f}",
-        f"{metrics['unnecessary_branch_rate']:.6f}",
-        f"{metrics['header_fake_fact_rate']:.6f}",
-        f"{metrics['avg_headers_used']:.3f}",
-        f"{metrics['avg_retrieval_latency_ms']:.3f}",
-        description,
-    ]
+    values = [format_results_value(key, row.get(key, "")) for key in RESULTS_HEADER]
     with open(path, "a") as handle:
-        handle.write("\t".join(row) + "\n")
+        handle.write("\t".join(values) + "\n")
 
 
 def default_dataset_path():
-    return os.path.join(tempfile.gettempdir(), "ucmd_v31_synth.jsonl")
+    return os.path.join(tempfile.gettempdir(), "ucmd_v36_synth.jsonl")
 
 
-def main():
+def run_experiment():
     if not cfg.dataset_path and os.getenv("UCMD_WRITE_DATA", "0") == "1":
         cfg.dataset_path = default_dataset_path()
 
@@ -1699,14 +2001,18 @@ def main():
     test_idx = indices[split:]
     train_data = [ds[idx] for idx in train_idx]
     test_data = [ds[idx] for idx in test_idx]
+    hard_eval_samples = build_hard_eval_samples(cfg)
+    hard_eval_data = [ds.encode_sample(sample) for sample in hard_eval_samples]
     train_abstain_rate = sum(sample["abstain"] for sample in train_data) / max(1, len(train_data))
     test_abstain_rate = sum(sample["abstain"] for sample in test_data) / max(1, len(test_data))
 
     loss_and_grad = nn.value_and_grad(model, batch_loss)
 
     print(f"samples: {len(ds)} | train: {len(train_data)} | test: {len(test_data)}")
+    print(f"hard eval samples: {len(hard_eval_data)}")
     print(f"d_model: {cfg.d_model} | h_max: {cfg.h_max} | n_hot: {cfg.n_hot}")
     print(f"train abstain rate: {train_abstain_rate:.3f} | test abstain rate: {test_abstain_rate:.3f}")
+    print(f"results log: {cfg.results_path}")
     print("training only the small MLP modules and heads; field features are fixed")
 
     train_probe = train_data[: min(cfg.batch_size, len(train_data))]
@@ -1760,7 +2066,15 @@ def main():
         )
 
     if encountered_non_finite:
-        return
+        return {
+            "config": {
+                "samples": cfg.n_samples,
+                "epochs": cfg.epochs,
+                "k_rerank": cfg.k_rerank,
+                "results_path": cfg.results_path,
+            },
+            "non_finite": True,
+        }
 
     final_metrics = evaluate(
         model,
@@ -1768,7 +2082,6 @@ def main():
         collect_debug=True,
         max_failure_examples=cfg.debug_failure_examples,
     )
-    append_results_row(cfg.results_path, final_metrics, cfg.run_note)
 
     print("\n--- summary ---")
     print(f"joint_answer_or_abstain_acc: {final_metrics['joint_answer_or_abstain_acc']:.4f}")
@@ -1783,6 +2096,8 @@ def main():
         f"fn={final_metrics['abstain_fn']}"
     )
     print(f"raw_recall_at_{cfg.k_rerank}:            {final_metrics['raw_recall_at_k']:.4f}")
+    print(f"latest_slice_recall:        {final_metrics['latest_slice_recall']:.4f}")
+    print(f"latest_slice_conflict_acc:  {final_metrics['latest_slice_conflict_accuracy']:.4f}")
     print(f"false_merge_rate:           {final_metrics['false_merge_rate']:.4f}")
     print(f"unnecessary_branch_rate:    {final_metrics['unnecessary_branch_rate']:.4f}")
     print(f"header_fake_fact_rate:      {final_metrics['header_fake_fact_rate']:.4f}")
@@ -1792,6 +2107,40 @@ def main():
     print(f"avg_headers_used:           {final_metrics['avg_headers_used']:.2f}")
     print(f"avg_retrieval_latency_ms:   {final_metrics['avg_retrieval_latency_ms']:.2f}")
     print_eval_debug(final_metrics)
+
+    if hard_eval_data:
+        hard_metrics = evaluate(
+            model,
+            hard_eval_data,
+            collect_debug=True,
+            max_failure_examples=cfg.debug_failure_examples,
+        )
+        print("\n--- hard eval ---")
+        print(f"joint_answer_or_abstain_acc: {hard_metrics['joint_answer_or_abstain_acc']:.4f}")
+        print(f"abstain_accuracy:           {hard_metrics['abstain_accuracy']:.4f}")
+        print(f"abstain_precision:          {hard_metrics['abstain_precision']:.4f}")
+        print(f"abstain_recall:             {hard_metrics['abstain_recall']:.4f}")
+        print(
+            "abstain_confusion:         "
+            f"tp={hard_metrics['abstain_tp']} "
+            f"fp={hard_metrics['abstain_fp']} "
+            f"tn={hard_metrics['abstain_tn']} "
+            f"fn={hard_metrics['abstain_fn']}"
+        )
+        print(f"raw_recall_at_{cfg.k_rerank}:            {hard_metrics['raw_recall_at_k']:.4f}")
+        print(f"latest_slice_recall:        {hard_metrics['latest_slice_recall']:.4f}")
+        print(f"latest_slice_conflict_acc:  {hard_metrics['latest_slice_conflict_accuracy']:.4f}")
+        print(f"false_merge_rate:           {hard_metrics['false_merge_rate']:.4f}")
+        print(f"unnecessary_branch_rate:    {hard_metrics['unnecessary_branch_rate']:.4f}")
+        print(f"header_fake_fact_rate:      {hard_metrics['header_fake_fact_rate']:.4f}")
+        print(f"avg_header_value_purity:    {hard_metrics['avg_header_value_purity']:.4f}")
+        print(f"mature_header_count:        {hard_metrics['mature_header_count']}")
+        print(f"samples_with_mature_headers:{hard_metrics['samples_with_mature_headers']}")
+        print(f"avg_headers_used:           {hard_metrics['avg_headers_used']:.2f}")
+        print(f"avg_retrieval_latency_ms:   {hard_metrics['avg_retrieval_latency_ms']:.2f}")
+        print_eval_debug(hard_metrics)
+    else:
+        hard_metrics = None
 
     mem = Memory(model, ds)
     sample = test_data[0]
@@ -1817,6 +2166,32 @@ def main():
     if result["abstain"]:
         action = mem.decide_after_abstain(sample["query"]["raw"], result, high_risk=False)
         print("after abstain:", action)
+
+    return {
+        "config": {
+            "samples": cfg.n_samples,
+            "epochs": cfg.epochs,
+            "k_rerank": cfg.k_rerank,
+            "results_path": cfg.results_path,
+        },
+        "non_finite": False,
+        "final_metrics": final_metrics,
+        "hard_metrics": hard_metrics,
+        "demo": {
+            "query": sample["query"]["raw"],
+            "gold": gold,
+            "pred": pred,
+            "abstain_prob": scalar(result["abstain_prob"]),
+            "evidence_strength": result["evidence_strength"],
+            "mass_gap": result["mass_gap"],
+            "conflict_mass": result["conflict_mass"],
+            "top_time_penalty": result["top_time_penalty"],
+        },
+    }
+
+
+def main():
+    run_experiment()
 
 
 if __name__ == "__main__":
