@@ -1,0 +1,575 @@
+{
+  "aggregate_metrics": {
+    "query_count": 32,
+    "joint_answer_or_abstain_acc": 0.3125,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 0.75,
+    "answer_match_rate": 0.125,
+    "answer_evidence_recall": 0.46875,
+    "current_joint_acc": 0.2857142857142857,
+    "temporal_joint_acc": 0.2857142857142857,
+    "multi_hop_joint_acc": 0.14285714285714285,
+    "abstain_like_acc": 0.7142857142857143,
+    "false_abstain_penalty": 0.5,
+    "false_confident_answer_penalty": 0.3125
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.16666666666666666,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 0.75,
+    "false_abstain_penalty": 0.5,
+    "false_confident_answer_penalty": 0.3125
+  },
+  "by_slice": {
+    "abstain_like": {
+      "count": 7,
+      "joint_acc": 0.7142857142857143,
+      "pred_abstain_rate": 0.7142857142857143,
+      "gold_abstain_rate": 1.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.14285714285714285
+    },
+    "adversarial": {
+      "count": 2,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.5,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.0
+    },
+    "current": {
+      "count": 7,
+      "joint_acc": 0.2857142857142857,
+      "pred_abstain_rate": 0.2857142857142857,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.2857142857142857,
+      "evidence_hit_rate": 0.5714285714285714
+    },
+    "historical": {
+      "count": 2,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.5,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 1.0
+    },
+    "multi_hop": {
+      "count": 7,
+      "joint_acc": 0.14285714285714285,
+      "pred_abstain_rate": 0.8571428571428571,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.14285714285714285,
+      "evidence_hit_rate": 0.7142857142857143
+    },
+    "temporal": {
+      "count": 7,
+      "joint_acc": 0.2857142857142857,
+      "pred_abstain_rate": 0.42857142857142855,
+      "gold_abstain_rate": 0.14285714285714285,
+      "answer_match_rate": 0.14285714285714285,
+      "evidence_hit_rate": 0.42857142857142855
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 19,
+      "joint_acc": 0.3684210526315789,
+      "pred_abstain_rate": 0.6842105263157895,
+      "gold_abstain_rate": 0.3157894736842105,
+      "answer_match_rate": 0.10526315789473684,
+      "evidence_hit_rate": 0.42105263157894735
+    },
+    "multi_hop": {
+      "count": 7,
+      "joint_acc": 0.2857142857142857,
+      "pred_abstain_rate": 0.5714285714285714,
+      "gold_abstain_rate": 0.14285714285714285,
+      "answer_match_rate": 0.14285714285714285,
+      "evidence_hit_rate": 0.7142857142857143
+    },
+    "temporal": {
+      "count": 6,
+      "joint_acc": 0.16666666666666666,
+      "pred_abstain_rate": 0.16666666666666666,
+      "gold_abstain_rate": 0.16666666666666666,
+      "answer_match_rate": 0.16666666666666666,
+      "evidence_hit_rate": 0.3333333333333333
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 4,
+    "missing_evidence": 0,
+    "false_abstain": 12,
+    "multi_hop_failure": 2,
+    "attribute_mismatch": 9,
+    "entity_mismatch": 0,
+    "false_confident_answer": 14,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-42_q30",
+      "bucket": "false_abstain",
+      "question": "When is Joanna going to make Nate's ice cream for her family?",
+      "gold_answer": "The weekend of 24June, 2022.",
+      "predicted_answer": null,
+      "predicted_mode": "temporal",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: cream, her, ice, joanna.",
+      "support_text": "Joanna appreciates Nate's support for her ice cream making.",
+      "support_dia_ids": [
+        "D16:15"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q129",
+      "bucket": "false_abstain",
+      "question": "What type of meal does John often cook using a slow cooker?",
+      "gold_answer": "honey garlic chicken with roasted veg",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: john, often.",
+      "support_text": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+      "support_dia_ids": [
+        "D15:32"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q188",
+      "bucket": "multi_hop_failure",
+      "question": "What kind of cookies did Jolene used to bake with someone close to her?",
+      "gold_answer": "Chocolate chip cookies",
+      "predicted_answer": "Jolene used to bake cookies with someone close",
+      "predicted_mode": "multi_hop",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close.",
+      "support_text": "Jolene used to bake cookies with someone close to her.",
+      "support_dia_ids": [
+        "D29:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q168",
+      "bucket": "temporal_selection_error",
+      "question": "Did Caroline make the black and white bowl in the photo?",
+      "gold_answer": "No",
+      "predicted_answer": "Yes",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, make. The supported answer is Yes.",
+      "support_text": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+      "support_dia_ids": [
+        "D15:23"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q55",
+      "bucket": "temporal_selection_error",
+      "question": "When was Joanna's second movie script shown on the big screens?",
+      "gold_answer": "The Sunday before 25October, 2022.",
+      "predicted_answer": "25 October 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+      "support_text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+      "support_dia_ids": [
+        "D25:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q152",
+      "bucket": "false_abstain",
+      "question": "What is the topic of discussion between John and Tim on 11 December, 2023?",
+      "gold_answer": "Academic achievements and sports successes",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, december, john, tim.",
+      "support_text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+      "support_dia_ids": [
+        "D23:3",
+        "D23:7",
+        "D23:9",
+        "D23:11",
+        "D23:2",
+        "D23:10",
+        "D23:8",
+        "D23:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q127",
+      "bucket": "false_abstain",
+      "question": "What activity did Caroline used to do with her dad?",
+      "gold_answer": "Horseback riding",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, dad, her, used.",
+      "support_text": "Caroline used to go horseback riding with her dad when she was a kid.",
+      "support_dia_ids": [
+        "D13:7"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q179",
+      "bucket": "false_abstain",
+      "question": "Is Oscar Melanie's pet?",
+      "gold_answer": "No",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+      "support_text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+      "support_dia_ids": [
+        "D17:1",
+        "D17:3",
+        "D17:7",
+        "D17:19",
+        "D17:23",
+        "D17:8",
+        "D17:10",
+        "D17:13",
+        "D17:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q2",
+      "bucket": "multi_hop_failure",
+      "question": "Which of Deborah`s family and friends have passed away?",
+      "gold_answer": "mother, father, her friend Karlie",
+      "predicted_answer": "mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother",
+      "predicted_mode": "multi_hop",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about away, deborah, passed, which. The supported answer is mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother.",
+      "support_text": "Deborah visited her mother's old house last week which holds special memories as her mother passed away a few years ago.",
+      "support_dia_ids": [
+        "D1:3"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q143",
+      "bucket": "false_abstain",
+      "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+      "gold_answer": "It really showed how much she loves her.",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+      "support_text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+      "support_dia_ids": [
+        "D15:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q24",
+      "bucket": "false_confident_answer",
+      "question": "What books has Melanie read?",
+      "gold_answer": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+      "predicted_answer": "Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about melanie, read. The supported answer is Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte.",
+      "support_text": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+      "support_dia_ids": [
+        "D7:1",
+        "D7:5",
+        "D7:11",
+        "D7:13",
+        "D7:2",
+        "D7:4",
+        "D7:8",
+        "D7:18",
+        "D7:20",
+        "D7:24"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q123",
+      "bucket": "false_abstain",
+      "question": "How much does James pay per cooking class?",
+      "gold_answer": "$10",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, how, james.",
+      "support_text": "James made meringue and learned how to make dough at the cooking class.",
+      "support_dia_ids": [
+        "D23:15"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q170",
+      "bucket": "false_confident_answer",
+      "question": "What workshop did Calvin get picked for on 11 August, 2023?",
+      "gold_answer": "",
+      "predicted_answer": "Dave's participation in a car mod workshop",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, calvin, workshop. The supported answer is Dave's participation in a car mod workshop.",
+      "support_text": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+      "support_dia_ids": [
+        "D13:1",
+        "D13:7",
+        "D13:9",
+        "D13:10",
+        "D13:13",
+        "D13:15",
+        "D13:14",
+        "D13:16",
+        "D13:18"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q21",
+      "bucket": "false_confident_answer",
+      "question": "Who inspired Dave's passion for car engineering?",
+      "gold_answer": "His Dad",
+      "predicted_answer": "project impressive and shared his passion for music",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about car, dave's, passion. The supported answer is project impressive and shared his passion for music.",
+      "support_text": "Calvin found Dave's car project impressive and shared his passion for music.",
+      "support_dia_ids": [
+        "D26:1",
+        "D26:3",
+        "D26:5",
+        "D26:9",
+        "D26:11",
+        "D26:2",
+        "D26:4",
+        "D26:6",
+        "D26:7",
+        "D26:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q26",
+      "bucket": "false_confident_answer",
+      "question": "When did Dave host a card-playing night with his friends?",
+      "gold_answer": "on the Friday before 22 August, 2023",
+      "predicted_answer": "18 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+      "support_text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+      "support_dia_ids": [
+        "D15:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q117",
+      "bucket": "false_abstain",
+      "question": "What painting did Evan share with Sam in October?",
+      "gold_answer": "a cactus in the desert",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, october, sam.",
+      "support_text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+      "support_dia_ids": [
+        "D14:1",
+        "D14:3",
+        "D14:7",
+        "D14:11",
+        "D14:2",
+        "D14:4",
+        "D14:8",
+        "D14:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q53",
+      "bucket": "false_abstain",
+      "question": "What does John do to supplement his basketball training?",
+      "gold_answer": "Yoga, strength training",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: basketball, his, john, training.",
+      "support_text": "John found a new gym for training to stay on his basketball game.",
+      "support_dia_ids": [
+        "D8:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q71",
+      "bucket": "temporal_selection_error",
+      "question": "When did Calvin attend a gala in Boston?",
+      "gold_answer": "November 16, 2023",
+      "predicted_answer": "17 November 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+      "support_text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+      "support_dia_ids": [
+        "D30:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q132",
+      "bucket": "false_abstain",
+      "question": "Who is Melanie a fan of in terms of modern music?",
+      "gold_answer": "Ed Sheeran",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie, modern, music.",
+      "support_text": "Melanie enjoys classical music like Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\".",
+      "support_dia_ids": [
+        "D15:28"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q217",
+      "bucket": "temporal_selection_error",
+      "question": "What filling did Nate use in the cake he made recently in May 2022?",
+      "gold_answer": "",
+      "predicted_answer": "25 May",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about 2022, may, nate. The supported answer is 25 May.",
+      "support_text": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+      "support_dia_ids": [
+        "D13:1",
+        "D13:7",
+        "D13:9",
+        "D13:15",
+        "D13:21",
+        "D13:16",
+        "D13:8",
+        "D13:12",
+        "D13:18",
+        "D13:20",
+        "D13:22"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-42_q30",
+      "question": "When is Joanna going to make Nate's ice cream for her family?",
+      "predicted_mode": "temporal",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: cream, her, ice, joanna.",
+      "support_text": "Joanna appreciates Nate's support for her ice cream making.",
+      "gold_answer": "The weekend of 24June, 2022.",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q129",
+      "question": "What type of meal does John often cook using a slow cooker?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: john, often.",
+      "support_text": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+      "gold_answer": "honey garlic chicken with roasted veg",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q144",
+      "question": "How often does Andrew take his dogs for walks?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, dogs, his, take.",
+      "support_text": "Andrew wishes to find a place far from the city to take his dogs for a hike.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q152",
+      "question": "What is the topic of discussion between John and Tim on 11 December, 2023?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, december, john, tim.",
+      "support_text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+      "gold_answer": "Academic achievements and sports successes",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q176",
+      "question": "What is the name of the board game James tried in September 2022?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, game, james, september.",
+      "support_text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q127",
+      "question": "What activity did Caroline used to do with her dad?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, dad, her, used.",
+      "support_text": "Caroline used to go horseback riding with her dad when she was a kid.",
+      "gold_answer": "Horseback riding",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q179",
+      "question": "Is Oscar Melanie's pet?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+      "support_text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+      "gold_answer": "No",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q143",
+      "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+      "support_text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+      "gold_answer": "It really showed how much she loves her.",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q186",
+      "question": "What does Dave aim to do with his passion for cooking?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, his, passion.",
+      "support_text": "Dave shared his passion for car mods and his new blog, seeking tips from Calvin on blogging.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q179",
+      "question": "What emotion does Calvin mention feeling when he sees the relief of someone whose car he fixed?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, car, fixed.",
+      "support_text": "Calvin confirmed the car was fixed and going strong.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q123",
+      "question": "How much does James pay per cooking class?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, how, james.",
+      "support_text": "James made meringue and learned how to make dough at the cooking class.",
+      "gold_answer": "$10",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q117",
+      "question": "What painting did Evan share with Sam in October?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, october, sam.",
+      "support_text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+      "gold_answer": "a cactus in the desert",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "run_id": "20260317-191051",
+  "budget": 32,
+  "seed": 13,
+  "max_metric_calls": 48,
+  "reflection_minibatch_size": 6,
+  "proposal_mode": "custom",
+  "engine_mode": "custom_proposer",
+  "reflection_lm": ""
+}

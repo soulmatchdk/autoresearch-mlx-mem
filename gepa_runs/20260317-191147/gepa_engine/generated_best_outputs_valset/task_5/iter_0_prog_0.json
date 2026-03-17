@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": "Yes",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, make. The supported answer is Yes.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 6.776315789473684,
+            "text": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "value": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+                "D15:23"
+            ]
+        }
+    ],
+    "answer_style": "boolean"
+}

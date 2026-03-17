@@ -1,0 +1,31 @@
+{
+    "query_mode": "multi_hop",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, december, john, tim.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 12.277586206896551,
+            "text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "value": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+                "D23:3",
+                "D23:7",
+                "D23:9",
+                "D23:11",
+                "D23:2",
+                "D23:10",
+                "D23:8",
+                "D23:12"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

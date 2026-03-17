@@ -1,0 +1,4342 @@
+{
+  "current_policy": [
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-43_q58",
+      "Inputs": {
+        "question": "What instruments does Tim play?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.753448275862069,
+            "text": "Tim recently started learning how to play the violin and has been playing the piano for about four months.",
+            "value": "Tim recently started learning how to play the violin and has been playing the piano for about four months.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 21,
+            "session_time": "5:34 pm on 6 December, 2023",
+            "dia_ids": [
+              "D21:9",
+              "D21:13"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 4.85,
+            "text": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+            "value": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:3",
+              "D29:9",
+              "D29:10",
+              "D29:13",
+              "D29:4",
+              "D29:6",
+              "D29:8",
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 4.85,
+            "text": "Tim shared his excitement about researching visa requirements for upcoming travels, while John revealed his recent endorsement deal with a beverage company, expressing pride in his hard work paying off.",
+            "value": "Tim shared his excitement about researching visa requirements for upcoming travels, while John revealed his recent endorsement deal with a beverage company, expressing pride in his hard work paying off.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:3",
+              "D29:9",
+              "D29:10",
+              "D29:13",
+              "D29:4",
+              "D29:6",
+              "D29:8",
+              "D29:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "piano, violin",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about play, tim. The supported answer is piano, violin.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "piano, violin",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": true,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-44_q144",
+      "Inputs": {
+        "question": "How often does Andrew take his dogs for walks?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.8,
+            "text": "Andrew wishes to find a place far from the city to take his dogs for a hike.",
+            "value": "Andrew wishes to find a place far from the city to take his dogs for a hike.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 24,
+            "session_time": "6:12 pm on 19 October, 2023",
+            "dia_ids": [
+              "D24:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, dogs, his, take.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-26_q168",
+      "Inputs": {
+        "question": "Did Caroline make the black and white bowl in the photo?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.776315789473684,
+            "text": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "value": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:23"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, make. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-50_q23",
+      "Inputs": {
+        "question": "Does Calvin want to expand his brand?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.64,
+            "text": "They discussed motivation and goals, with Calvin aiming to expand his music brand globally and grow his fanbase.",
+            "value": "They discussed motivation and goals, with Calvin aiming to expand his music brand globally and grow his fanbase.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": null,
+            "dia_ids": [
+              "D12:1",
+              "D12:7",
+              "D12:11",
+              "D12:13",
+              "D12:15",
+              "D12:2",
+              "D12:4",
+              "D12:5",
+              "D12:12",
+              "D12:14",
+              "D12:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about brand, calvin, expand, his. The supported answer is Yes.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "yes",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-47_q176",
+      "Inputs": {
+        "question": "What is the name of the board game James tried in September 2022?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.248387096774193,
+            "text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "value": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:5",
+              "D22:7",
+              "D22:9",
+              "D22:10",
+              "D22:12",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, game, james, september.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-26_q127",
+      "Inputs": {
+        "question": "What activity did Caroline used to do with her dad?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.739473684210527,
+            "text": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "value": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": "3:31 pm on 23 August, 2023",
+            "dia_ids": [
+              "D13:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, dad, her, used.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Horseback riding",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-26_q179",
+      "Inputs": {
+        "question": "Is Oscar Melanie's pet?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.813157894736842,
+            "text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "value": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-48_q143",
+      "Inputs": {
+        "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.675,
+            "text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "value": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "7:37 pm on 9 July, 2023",
+            "dia_ids": [
+              "D15:20"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "It really showed how much she loves her.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-50_q186",
+      "Inputs": {
+        "question": "What does Dave aim to do with his passion for cooking?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.826666666666666,
+            "text": "Dave shared his passion for car mods and his new blog, seeking tips from Calvin on blogging.",
+            "value": "Dave shared his passion for car mods and his new blog, seeking tips from Calvin on blogging.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.791666666666666,
+            "text": "Dave talked about his passion for car engineering since childhood and detailed his current car restoration project.",
+            "value": "Dave talked about his passion for car engineering since childhood and detailed his current car restoration project.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:1",
+              "D25:7",
+              "D25:13",
+              "D25:15",
+              "D25:17",
+              "D25:20",
+              "D25:2",
+              "D25:4",
+              "D25:6",
+              "D25:10",
+              "D25:12",
+              "D25:22"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.826666666666666,
+            "text": "Dave recently started a blog on car mods to share his passion with others.",
+            "value": "Dave recently started a blog on car mods to share his passion with others.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:46 pm on 2 November, 2023",
+            "dia_ids": [
+              "D28:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, his, passion.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-26_q24",
+      "Inputs": {
+        "question": "What books has Melanie read?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.628947368421052,
+            "text": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "value": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": null,
+            "dia_ids": [
+              "D7:1",
+              "D7:5",
+              "D7:11",
+              "D7:13",
+              "D7:2",
+              "D7:4",
+              "D7:8",
+              "D7:18",
+              "D7:20",
+              "D7:24"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 9.110526315789473,
+            "text": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "value": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 7.110526315789474,
+            "text": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "value": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about melanie, read. The supported answer is Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-50_q179",
+      "Inputs": {
+        "question": "What emotion does Calvin mention feeling when he sees the relief of someone whose car he fixed?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.616666666666667,
+            "text": "Calvin confirmed the car was fixed and going strong.",
+            "value": "Calvin confirmed the car was fixed and going strong.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 10,
+            "session_time": null,
+            "dia_ids": [
+              "D10:1",
+              "D10:3",
+              "D10:11",
+              "D10:2",
+              "D10:6",
+              "D10:10",
+              "D10:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, car, fixed.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-47_q123",
+      "Inputs": {
+        "question": "How much does James pay per cooking class?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.759677419354839,
+            "text": "James made meringue and learned how to make dough at the cooking class.",
+            "value": "James made meringue and learned how to make dough at the cooking class.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "9:23 pm on 4 September, 2022",
+            "dia_ids": [
+              "D23:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, how, james.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "$10",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-50_q170",
+      "Inputs": {
+        "question": "What workshop did Calvin get picked for on 11 August, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.651666666666667,
+            "text": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "value": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:10",
+              "D13:13",
+              "D13:15",
+              "D13:14",
+              "D13:16",
+              "D13:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Dave's participation in a car mod workshop",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, calvin, workshop. The supported answer is Dave's participation in a car mod workshop.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-50_q21",
+      "Inputs": {
+        "question": "Who inspired Dave's passion for car engineering?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.803333333333333,
+            "text": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "value": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "entity": "speaker_b",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": null,
+            "dia_ids": [
+              "D26:1",
+              "D26:3",
+              "D26:5",
+              "D26:9",
+              "D26:11",
+              "D26:2",
+              "D26:4",
+              "D26:6",
+              "D26:7",
+              "D26:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "project impressive and shared his passion for music",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about car, dave's, passion. The supported answer is project impressive and shared his passion for music.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "His Dad",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-49_q117",
+      "Inputs": {
+        "question": "What painting did Evan share with Sam in October?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.196,
+            "text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "value": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 14,
+            "session_time": null,
+            "dia_ids": [
+              "D14:1",
+              "D14:3",
+              "D14:7",
+              "D14:11",
+              "D14:2",
+              "D14:4",
+              "D14:8",
+              "D14:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, october, sam.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "a cactus in the desert",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-43_q53",
+      "Inputs": {
+        "question": "What does John do to supplement his basketball training?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.596551724137932,
+            "text": "John found a new gym for training to stay on his basketball game.",
+            "value": "John found a new gym for training to stay on his basketball game.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 8,
+            "session_time": "4:29 pm on 21 August, 2023",
+            "dia_ids": [
+              "D8:1"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 8.825862068965517,
+            "text": "John practices and trains in basketball daily as it is his passion.",
+            "value": "John practices and trains in basketball daily as it is his passion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "5:26 pm on 2 January, 2024",
+            "dia_ids": [
+              "D27:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 8.813793103448276,
+            "text": "John organized a basketball camp for kids in his hometown last summer, creating opportunities for young athletes.",
+            "value": "John organized a basketball camp for kids in his hometown last summer, creating opportunities for young athletes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:35 pm on 26 December, 2023",
+            "dia_ids": [
+              "D26:23"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: basketball, his, john, training.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Yoga, strength training",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-26_q132",
+      "Inputs": {
+        "question": "Who is Melanie a fan of in terms of modern music?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.776315789473684,
+            "text": "Melanie enjoys classical music like Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\".",
+            "value": "Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\"",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:28"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie, modern, music.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ed Sheeran",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-43_q3",
+      "Inputs": {
+        "question": "What items does John collect?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 4.85,
+            "text": "John recently got an endorsement with a popular beverage company, which he describes as a dream come true.",
+            "value": "John recently got an endorsement with a popular beverage company, which he describes as a dream come true.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:41 pm on 12 January, 2024",
+            "dia_ids": [
+              "D29:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: john.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "sneakers, fantasy movie DVDs, jerseys",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "current_policy",
+      "query_id": "locomo_conv-44_q141",
+      "Inputs": {
+        "question": "What did Andrew do to give his dogs extra comfort as the weather cooled down?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.85,
+            "text": "Andrew values safety and comfort for his dogs, providing them with essentials like a bed, toys, and puppy pads.",
+            "value": "bed, toys, and puppy pads",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "9:02 am on 22 November, 2023",
+            "dia_ids": [
+              "D28:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, comfort, dogs, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "current_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    }
+  ],
+  "answer_synthesis_policy": [
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-43_q58",
+      "Inputs": {
+        "question": "What instruments does Tim play?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.753448275862069,
+            "text": "Tim recently started learning how to play the violin and has been playing the piano for about four months.",
+            "value": "Tim recently started learning how to play the violin and has been playing the piano for about four months.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 21,
+            "session_time": "5:34 pm on 6 December, 2023",
+            "dia_ids": [
+              "D21:9",
+              "D21:13"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 4.85,
+            "text": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+            "value": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:3",
+              "D29:9",
+              "D29:10",
+              "D29:13",
+              "D29:4",
+              "D29:6",
+              "D29:8",
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 4.85,
+            "text": "Tim shared his excitement about researching visa requirements for upcoming travels, while John revealed his recent endorsement deal with a beverage company, expressing pride in his hard work paying off.",
+            "value": "Tim shared his excitement about researching visa requirements for upcoming travels, while John revealed his recent endorsement deal with a beverage company, expressing pride in his hard work paying off.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:3",
+              "D29:9",
+              "D29:10",
+              "D29:13",
+              "D29:4",
+              "D29:6",
+              "D29:8",
+              "D29:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "piano, violin",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about play, tim. The supported answer is piano, violin.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "piano, violin",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-48_q188",
+      "Inputs": {
+        "question": "What kind of cookies did Jolene used to bake with someone close to her?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.838333333333335,
+            "text": "Jolene used to bake cookies with someone close to her.",
+            "value": "Jolene used to bake cookies with someone close to her.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 10.838333333333333,
+            "text": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "value": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:1",
+              "D29:5",
+              "D29:7",
+              "D29:9",
+              "D29:19",
+              "D29:4",
+              "D29:12",
+              "D29:22",
+              "D29:14",
+              "D29:24",
+              "D29:30",
+              "D29:34"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "value": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:11",
+              "D30:13",
+              "D30:4",
+              "D30:6",
+              "D30:8",
+              "D30:10",
+              "D30:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "Jolene used to bake cookies with someone close",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Chocolate chip cookies",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-26_q168",
+      "Inputs": {
+        "question": "Did Caroline make the black and white bowl in the photo?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.776315789473684,
+            "text": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "value": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:23"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, make. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q23",
+      "Inputs": {
+        "question": "Does Calvin want to expand his brand?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.64,
+            "text": "They discussed motivation and goals, with Calvin aiming to expand his music brand globally and grow his fanbase.",
+            "value": "They discussed motivation and goals, with Calvin aiming to expand his music brand globally and grow his fanbase.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": null,
+            "dia_ids": [
+              "D12:1",
+              "D12:7",
+              "D12:11",
+              "D12:13",
+              "D12:15",
+              "D12:2",
+              "D12:4",
+              "D12:5",
+              "D12:12",
+              "D12:14",
+              "D12:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about brand, calvin, expand, his. The supported answer is Yes.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "yes",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q55",
+      "Inputs": {
+        "question": "When was Joanna's second movie script shown on the big screens?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.0,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Sunday before 25October, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-48_q2",
+      "Inputs": {
+        "question": "Which of Deborah`s family and friends have passed away?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.011666666666667,
+            "text": "Deborah visited her mother's old house last week which holds special memories as her mother passed away a few years ago.",
+            "value": "her mother's old house last week which holds special memories as her mother passed away a few years ago",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "4:06 pm on 23 January, 2023",
+            "dia_ids": [
+              "D1:3"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.326666666666666,
+            "text": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "value": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "3:09 pm on 15 September, 2023",
+            "dia_ids": [
+              "D28:1"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.023333333333333,
+            "text": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "value": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "9:49 am on 27 January, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about away, deborah, passed, which. The supported answer is mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "mother, father, her friend Karlie",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-44_q106",
+      "Inputs": {
+        "question": "What type of games do Audrey's dogs like to play at the park?",
+        "entity": "speaker_a",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.7875,
+            "text": "Audrey's dogs love running around the park, but dislike snow and prefer sunny days in the grass.",
+            "value": "sunny days in the grass",
+            "entity": "speaker_a",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "4:22 pm on 13 October, 2023",
+            "dia_ids": [
+              "D23:12"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.7875,
+            "text": "Audrey's dogs go crazy for Fetch and Frisbee at the park and love meeting other pups.",
+            "value": "Audrey's dogs go crazy for Fetch and Frisbee at the park and love meeting other pups.",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "4:22 pm on 13 October, 2023",
+            "dia_ids": [
+              "D23:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.0875,
+            "text": "Audrey took her dogs to the park and enjoys watching them run around and play without a leash.",
+            "value": "Audrey took her dogs to the park and enjoys watching them run around and play without a leash.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": "11:27 am on 2 June, 2023",
+            "dia_ids": [
+              "D7:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "Fetch, Frisbee",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, park. The supported answer is Fetch, Frisbee.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Fetch and Frisbee",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-26_q24",
+      "Inputs": {
+        "question": "What books has Melanie read?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.628947368421052,
+            "text": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "value": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": null,
+            "dia_ids": [
+              "D7:1",
+              "D7:5",
+              "D7:11",
+              "D7:13",
+              "D7:2",
+              "D7:4",
+              "D7:8",
+              "D7:18",
+              "D7:20",
+              "D7:24"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 9.110526315789473,
+            "text": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "value": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 7.110526315789474,
+            "text": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "value": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about melanie, read. The supported answer is Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q170",
+      "Inputs": {
+        "question": "What workshop did Calvin get picked for on 11 August, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.651666666666667,
+            "text": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "value": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:10",
+              "D13:13",
+              "D13:15",
+              "D13:14",
+              "D13:16",
+              "D13:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Dave's participation in a car mod workshop",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, calvin, workshop. The supported answer is Dave's participation in a car mod workshop.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q21",
+      "Inputs": {
+        "question": "Who inspired Dave's passion for car engineering?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.803333333333333,
+            "text": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "value": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "entity": "speaker_b",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": null,
+            "dia_ids": [
+              "D26:1",
+              "D26:3",
+              "D26:5",
+              "D26:9",
+              "D26:11",
+              "D26:2",
+              "D26:4",
+              "D26:6",
+              "D26:7",
+              "D26:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "project impressive and shared his passion for music",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about car, dave's, passion. The supported answer is project impressive and shared his passion for music.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "His Dad",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q71",
+      "Inputs": {
+        "question": "When did Calvin attend a gala in Boston?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+              "D30:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 November 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "November 16, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q217",
+      "Inputs": {
+        "question": "What filling did Nate use in the cake he made recently in May 2022?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.156896551724138,
+            "text": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "value": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:15",
+              "D13:21",
+              "D13:16",
+              "D13:8",
+              "D13:12",
+              "D13:18",
+              "D13:20",
+              "D13:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 May",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2022, may, nate. The supported answer is 25 May.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-41_q54",
+      "Inputs": {
+        "question": "When did John help renovate his hometown community center?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "John helped renovate a rundown community center back home last year.",
+            "value": "John helped renovate a rundown community center back home last year.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:19 pm on 5 August, 2023",
+            "dia_ids": [
+              "D28:11"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about center, community, john, renovate. The supported answer is 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2022",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    }
+  ],
+  "temporal_policy": [
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q30",
+      "Inputs": {
+        "question": "When is Joanna going to make Nate's ice cream for her family?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+              "D16:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: cream, her, ice, joanna.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The weekend of 24June, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q55",
+      "Inputs": {
+        "question": "When was Joanna's second movie script shown on the big screens?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.0,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Sunday before 25October, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-50_q71",
+      "Inputs": {
+        "question": "When did Calvin attend a gala in Boston?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+              "D30:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 November 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "November 16, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q217",
+      "Inputs": {
+        "question": "What filling did Nate use in the cake he made recently in May 2022?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.156896551724138,
+            "text": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "value": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:15",
+              "D13:21",
+              "D13:16",
+              "D13:8",
+              "D13:12",
+              "D13:18",
+              "D13:20",
+              "D13:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 May",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2022, may, nate. The supported answer is 25 May.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-41_q54",
+      "Inputs": {
+        "question": "When did John help renovate his hometown community center?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "John helped renovate a rundown community center back home last year.",
+            "value": "John helped renovate a rundown community center back home last year.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:19 pm on 5 August, 2023",
+            "dia_ids": [
+              "D28:11"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about center, community, john, renovate. The supported answer is 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2022",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    }
+  ],
+  "abstain_policy": [
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-42_q30",
+      "Inputs": {
+        "question": "When is Joanna going to make Nate's ice cream for her family?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+              "D16:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: cream, her, ice, joanna.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The weekend of 24June, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-43_q129",
+      "Inputs": {
+        "question": "What type of meal does John often cook using a slow cooker?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.681034482758621,
+            "text": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "value": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "5:51 pm on 21 October, 2023",
+            "dia_ids": [
+              "D15:32"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: john, often.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "honey garlic chicken with roasted veg",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-43_q152",
+      "Inputs": {
+        "question": "What is the topic of discussion between John and Tim on 11 December, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.277586206896551,
+            "text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "value": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:3",
+              "D23:7",
+              "D23:9",
+              "D23:11",
+              "D23:2",
+              "D23:10",
+              "D23:8",
+              "D23:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, december, john, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Academic achievements and sports successes",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-26_q127",
+      "Inputs": {
+        "question": "What activity did Caroline used to do with her dad?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.739473684210527,
+            "text": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "value": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": "3:31 pm on 23 August, 2023",
+            "dia_ids": [
+              "D13:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, dad, her, used.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Horseback riding",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-26_q179",
+      "Inputs": {
+        "question": "Is Oscar Melanie's pet?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.813157894736842,
+            "text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "value": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-48_q143",
+      "Inputs": {
+        "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.675,
+            "text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "value": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "7:37 pm on 9 July, 2023",
+            "dia_ids": [
+              "D15:20"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "It really showed how much she loves her.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-26_q24",
+      "Inputs": {
+        "question": "What books has Melanie read?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.628947368421052,
+            "text": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "value": "Melanie commended Caroline for her inspiring goal and mentioned a book she read that reminds her to pursue her dreams.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": null,
+            "dia_ids": [
+              "D7:1",
+              "D7:5",
+              "D7:11",
+              "D7:13",
+              "D7:2",
+              "D7:4",
+              "D7:8",
+              "D7:18",
+              "D7:20",
+              "D7:24"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 9.110526315789473,
+            "text": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "value": "Melanie asked about the books she has in her library, and Caroline mentioned classics, stories from different cultures, and educational books.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 7.110526315789474,
+            "text": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "value": "Melanie shared that her favorite book from childhood was \"Charlotte's Web,\" and Caroline agreed that it showed the importance of friendship and compassion.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 6,
+            "session_time": null,
+            "dia_ids": [
+              "D6:3",
+              "D6:7",
+              "D6:9",
+              "D6:11",
+              "D6:13",
+              "D6:4",
+              "D6:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about melanie, read. The supported answer is Charlotte's Web,, s Web,\" and Caroline agreed that it showed the importance of friendship and compassion. Melanie shared that her favorite book from childhood was \"Charlotte.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-47_q123",
+      "Inputs": {
+        "question": "How much does James pay per cooking class?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.759677419354839,
+            "text": "James made meringue and learned how to make dough at the cooking class.",
+            "value": "James made meringue and learned how to make dough at the cooking class.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "9:23 pm on 4 September, 2022",
+            "dia_ids": [
+              "D23:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, how, james.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "$10",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q170",
+      "Inputs": {
+        "question": "What workshop did Calvin get picked for on 11 August, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.651666666666667,
+            "text": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "value": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:10",
+              "D13:13",
+              "D13:15",
+              "D13:14",
+              "D13:16",
+              "D13:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Dave's participation in a car mod workshop",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, calvin, workshop. The supported answer is Dave's participation in a car mod workshop.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q21",
+      "Inputs": {
+        "question": "Who inspired Dave's passion for car engineering?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.803333333333333,
+            "text": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "value": "Calvin found Dave's car project impressive and shared his passion for music.",
+            "entity": "speaker_b",
+            "attribute": "relationship",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": null,
+            "dia_ids": [
+              "D26:1",
+              "D26:3",
+              "D26:5",
+              "D26:9",
+              "D26:11",
+              "D26:2",
+              "D26:4",
+              "D26:6",
+              "D26:7",
+              "D26:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "project impressive and shared his passion for music",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about car, dave's, passion. The supported answer is project impressive and shared his passion for music.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "His Dad",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-49_q117",
+      "Inputs": {
+        "question": "What painting did Evan share with Sam in October?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.196,
+            "text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "value": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 14,
+            "session_time": null,
+            "dia_ids": [
+              "D14:1",
+              "D14:3",
+              "D14:7",
+              "D14:11",
+              "D14:2",
+              "D14:4",
+              "D14:8",
+              "D14:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, october, sam.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "a cactus in the desert",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-43_q53",
+      "Inputs": {
+        "question": "What does John do to supplement his basketball training?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.596551724137932,
+            "text": "John found a new gym for training to stay on his basketball game.",
+            "value": "John found a new gym for training to stay on his basketball game.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 8,
+            "session_time": "4:29 pm on 21 August, 2023",
+            "dia_ids": [
+              "D8:1"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 8.825862068965517,
+            "text": "John practices and trains in basketball daily as it is his passion.",
+            "value": "John practices and trains in basketball daily as it is his passion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "5:26 pm on 2 January, 2024",
+            "dia_ids": [
+              "D27:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 8.813793103448276,
+            "text": "John organized a basketball camp for kids in his hometown last summer, creating opportunities for young athletes.",
+            "value": "John organized a basketball camp for kids in his hometown last summer, creating opportunities for young athletes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": "3:35 pm on 26 December, 2023",
+            "dia_ids": [
+              "D26:23"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: basketball, his, john, training.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Yoga, strength training",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-26_q132",
+      "Inputs": {
+        "question": "Who is Melanie a fan of in terms of modern music?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.776315789473684,
+            "text": "Melanie enjoys classical music like Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\".",
+            "value": "Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\"",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:28"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie, modern, music.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ed Sheeran",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-43_q3",
+      "Inputs": {
+        "question": "What items does John collect?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 4.85,
+            "text": "John recently got an endorsement with a popular beverage company, which he describes as a dream come true.",
+            "value": "John recently got an endorsement with a popular beverage company, which he describes as a dream come true.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:41 pm on 12 January, 2024",
+            "dia_ids": [
+              "D29:4"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: john.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "sneakers, fantasy movie DVDs, jerseys",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "abstain_policy",
+      "query_id": "locomo_conv-30_q4",
+      "Inputs": {
+        "question": "What do Jon and Gina both have in common?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "Jon and Gina caught up at 6:46 pm on 23 July, 2023.",
+            "value": "Jon and Gina caught up at 6:46 pm on 23 July, 2023.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "Gina continued to motivate Jon, reminding him to never give up.",
+            "value": "Gina continued to motivate Jon, reminding him to never give up.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "The conversation ended with Jon feeling motivated and ready to \"just do it\", as Gina encouraged him to do.",
+            "value": "The conversation ended with Jon feeling motivated and ready to \"just do it\", as Gina encouraged him to do.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: gina, jon.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "They lost their jobs and decided to start their own businesses.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "abstain_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    }
+  ],
+  "multi_hop_policy": [
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-43_q129",
+      "Inputs": {
+        "question": "What type of meal does John often cook using a slow cooker?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.681034482758621,
+            "text": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "value": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "5:51 pm on 21 October, 2023",
+            "dia_ids": [
+              "D15:32"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: john, often.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "honey garlic chicken with roasted veg",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-48_q188",
+      "Inputs": {
+        "question": "What kind of cookies did Jolene used to bake with someone close to her?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.838333333333335,
+            "text": "Jolene used to bake cookies with someone close to her.",
+            "value": "Jolene used to bake cookies with someone close to her.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 10.838333333333333,
+            "text": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "value": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:1",
+              "D29:5",
+              "D29:7",
+              "D29:9",
+              "D29:19",
+              "D29:4",
+              "D29:12",
+              "D29:22",
+              "D29:14",
+              "D29:24",
+              "D29:30",
+              "D29:34"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "value": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:11",
+              "D30:13",
+              "D30:4",
+              "D30:6",
+              "D30:8",
+              "D30:10",
+              "D30:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "Jolene used to bake cookies with someone close",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Chocolate chip cookies",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-43_q152",
+      "Inputs": {
+        "question": "What is the topic of discussion between John and Tim on 11 December, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.277586206896551,
+            "text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "value": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:3",
+              "D23:7",
+              "D23:9",
+              "D23:11",
+              "D23:2",
+              "D23:10",
+              "D23:8",
+              "D23:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, december, john, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Academic achievements and sports successes",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-48_q2",
+      "Inputs": {
+        "question": "Which of Deborah`s family and friends have passed away?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.011666666666667,
+            "text": "Deborah visited her mother's old house last week which holds special memories as her mother passed away a few years ago.",
+            "value": "her mother's old house last week which holds special memories as her mother passed away a few years ago",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "4:06 pm on 23 January, 2023",
+            "dia_ids": [
+              "D1:3"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.326666666666666,
+            "text": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "value": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "3:09 pm on 15 September, 2023",
+            "dia_ids": [
+              "D28:1"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.023333333333333,
+            "text": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "value": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "9:49 am on 27 January, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about away, deborah, passed, which. The supported answer is mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "mother, father, her friend Karlie",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-44_q106",
+      "Inputs": {
+        "question": "What type of games do Audrey's dogs like to play at the park?",
+        "entity": "speaker_a",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.7875,
+            "text": "Audrey's dogs love running around the park, but dislike snow and prefer sunny days in the grass.",
+            "value": "sunny days in the grass",
+            "entity": "speaker_a",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "4:22 pm on 13 October, 2023",
+            "dia_ids": [
+              "D23:12"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.7875,
+            "text": "Audrey's dogs go crazy for Fetch and Frisbee at the park and love meeting other pups.",
+            "value": "Audrey's dogs go crazy for Fetch and Frisbee at the park and love meeting other pups.",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "4:22 pm on 13 October, 2023",
+            "dia_ids": [
+              "D23:14"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.0875,
+            "text": "Audrey took her dogs to the park and enjoys watching them run around and play without a leash.",
+            "value": "Audrey took her dogs to the park and enjoys watching them run around and play without a leash.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": "11:27 am on 2 June, 2023",
+            "dia_ids": [
+              "D7:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "Fetch, Frisbee",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, park. The supported answer is Fetch, Frisbee.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Fetch and Frisbee",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": true,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-47_q180",
+      "Inputs": {
+        "question": "What kind of gig was James offered at the game dev non-profit organization?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 12.624193548387098,
+            "text": "James offered support and encouragement to find the right non-profit organization that aligns with John's values and passion for programming.",
+            "value": "James offered support and encouragement to find the right non-profit organization that aligns with John's values and passion for programming.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 11,
+            "session_time": "5:00 pm on 11 May, 2022",
+            "dia_ids": [
+              "D11:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: james, non, offered, organization.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "multi_hop_policy",
+      "query_id": "locomo_conv-30_q4",
+      "Inputs": {
+        "question": "What do Jon and Gina both have in common?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "Jon and Gina caught up at 6:46 pm on 23 July, 2023.",
+            "value": "Jon and Gina caught up at 6:46 pm on 23 July, 2023.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "Gina continued to motivate Jon, reminding him to never give up.",
+            "value": "Gina continued to motivate Jon, reminding him to never give up.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.35,
+            "text": "The conversation ended with Jon feeling motivated and ready to \"just do it\", as Gina encouraged him to do.",
+            "value": "The conversation ended with Jon feeling motivated and ready to \"just do it\", as Gina encouraged him to do.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:7",
+              "D19:6",
+              "D19:10"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: gina, jon.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "They lost their jobs and decided to start their own businesses.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "multi_hop_policy",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    }
+  ],
+  "query_mode_rubric": [
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-44_q144",
+      "Inputs": {
+        "question": "How often does Andrew take his dogs for walks?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.8,
+            "text": "Andrew wishes to find a place far from the city to take his dogs for a hike.",
+            "value": "Andrew wishes to find a place far from the city to take his dogs for a hike.",
+            "entity": "speaker_b",
+            "attribute": "location",
+            "regime": "global",
+            "session_idx": 24,
+            "session_time": "6:12 pm on 19 October, 2023",
+            "dia_ids": [
+              "D24:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, dogs, his, take.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-48_q188",
+      "Inputs": {
+        "question": "What kind of cookies did Jolene used to bake with someone close to her?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.838333333333335,
+            "text": "Jolene used to bake cookies with someone close to her.",
+            "value": "Jolene used to bake cookies with someone close to her.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 10.838333333333333,
+            "text": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "value": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:1",
+              "D29:5",
+              "D29:7",
+              "D29:9",
+              "D29:19",
+              "D29:4",
+              "D29:12",
+              "D29:22",
+              "D29:14",
+              "D29:24",
+              "D29:30",
+              "D29:34"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "value": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+              "D30:1",
+              "D30:11",
+              "D30:13",
+              "D30:4",
+              "D30:6",
+              "D30:8",
+              "D30:10",
+              "D30:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "Jolene used to bake cookies with someone close",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Chocolate chip cookies",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-26_q168",
+      "Inputs": {
+        "question": "Did Caroline make the black and white bowl in the photo?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 6.776315789473684,
+            "text": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "value": "Caroline finds the song \"Brave\" by Sara Bareilles significant and inspiring as it resonates with her journey and determination to make a difference.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:23"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Yes",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, make. The supported answer is Yes.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q176",
+      "Inputs": {
+        "question": "What is the name of the board game James tried in September 2022?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.248387096774193,
+            "text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "value": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:5",
+              "D22:7",
+              "D22:9",
+              "D22:10",
+              "D22:12",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, game, james, september.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-26_q127",
+      "Inputs": {
+        "question": "What activity did Caroline used to do with her dad?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.739473684210527,
+            "text": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "value": "Caroline used to go horseback riding with her dad when she was a kid.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": "3:31 pm on 23 August, 2023",
+            "dia_ids": [
+              "D13:7"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, dad, her, used.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "historical",
+        "gold_answer": "Horseback riding",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-26_q179",
+      "Inputs": {
+        "question": "Is Oscar Melanie's pet?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.813157894736842,
+            "text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "value": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "No",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-48_q2",
+      "Inputs": {
+        "question": "Which of Deborah`s family and friends have passed away?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.011666666666667,
+            "text": "Deborah visited her mother's old house last week which holds special memories as her mother passed away a few years ago.",
+            "value": "her mother's old house last week which holds special memories as her mother passed away a few years ago",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "4:06 pm on 23 January, 2023",
+            "dia_ids": [
+              "D1:3"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.326666666666666,
+            "text": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "value": "Deborah reconnected with her late mother's friends, which brought up a mix of emotions but overall was comforting.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "3:09 pm on 15 September, 2023",
+            "dia_ids": [
+              "D28:1"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.023333333333333,
+            "text": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "value": "Deborah's father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": "9:49 am on 27 January, 2023",
+            "dia_ids": [
+              "D2:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about away, deborah, passed, which. The supported answer is mother, father, mom, friend, s old house last week which holds special memories as her mother passed away a few years ago. her mother, s friends, which brought up a mix of emotions but overall was comforting. Deborah reconnected with her late mother, s father passed away two days before the conversation. She is trying to channel her grief by spending more time with family and cherishing memories. Deborah, s presence. Deborah visits her old home, where her mom passed away, to find peace and feel her mother.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "mother, father, her friend Karlie",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-48_q143",
+      "Inputs": {
+        "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.675,
+            "text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "value": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "7:37 pm on 9 July, 2023",
+            "dia_ids": [
+              "D15:20"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "It really showed how much she loves her.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-50_q186",
+      "Inputs": {
+        "question": "What does Dave aim to do with his passion for cooking?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.826666666666666,
+            "text": "Dave shared his passion for car mods and his new blog, seeking tips from Calvin on blogging.",
+            "value": "Dave shared his passion for car mods and his new blog, seeking tips from Calvin on blogging.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:7",
+              "D28:29",
+              "D28:31",
+              "D28:8",
+              "D28:10",
+              "D28:18",
+              "D28:36",
+              "D28:40"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 8.791666666666666,
+            "text": "Dave talked about his passion for car engineering since childhood and detailed his current car restoration project.",
+            "value": "Dave talked about his passion for car engineering since childhood and detailed his current car restoration project.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:1",
+              "D25:7",
+              "D25:13",
+              "D25:15",
+              "D25:17",
+              "D25:20",
+              "D25:2",
+              "D25:4",
+              "D25:6",
+              "D25:10",
+              "D25:12",
+              "D25:22"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 7.826666666666666,
+            "text": "Dave recently started a blog on car mods to share his passion with others.",
+            "value": "Dave recently started a blog on car mods to share his passion with others.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:46 pm on 2 November, 2023",
+            "dia_ids": [
+              "D28:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, his, passion.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-50_q179",
+      "Inputs": {
+        "question": "What emotion does Calvin mention feeling when he sees the relief of someone whose car he fixed?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.616666666666667,
+            "text": "Calvin confirmed the car was fixed and going strong.",
+            "value": "Calvin confirmed the car was fixed and going strong.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 10,
+            "session_time": null,
+            "dia_ids": [
+              "D10:1",
+              "D10:3",
+              "D10:11",
+              "D10:2",
+              "D10:6",
+              "D10:10",
+              "D10:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, car, fixed.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q123",
+      "Inputs": {
+        "question": "How much does James pay per cooking class?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.759677419354839,
+            "text": "James made meringue and learned how to make dough at the cooking class.",
+            "value": "James made meringue and learned how to make dough at the cooking class.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "9:23 pm on 4 September, 2022",
+            "dia_ids": [
+              "D23:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, how, james.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "$10",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-50_q170",
+      "Inputs": {
+        "question": "What workshop did Calvin get picked for on 11 August, 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.651666666666667,
+            "text": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "value": "Dave and Calvin, at 5:22 pm on 11 August, 2023, discussed Dave's participation in a car mod workshop where he was excited to learn about auto engineering and building a custom car.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:10",
+              "D13:13",
+              "D13:15",
+              "D13:14",
+              "D13:16",
+              "D13:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "Dave's participation in a car mod workshop",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, calvin, workshop. The supported answer is Dave's participation in a car mod workshop.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-49_q117",
+      "Inputs": {
+        "question": "What painting did Evan share with Sam in October?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.196,
+            "text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "value": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 14,
+            "session_time": null,
+            "dia_ids": [
+              "D14:1",
+              "D14:3",
+              "D14:7",
+              "D14:11",
+              "D14:2",
+              "D14:4",
+              "D14:8",
+              "D14:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, october, sam.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "a cactus in the desert",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-47_q180",
+      "Inputs": {
+        "question": "What kind of gig was James offered at the game dev non-profit organization?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 12.624193548387098,
+            "text": "James offered support and encouragement to find the right non-profit organization that aligns with John's values and passion for programming.",
+            "value": "James offered support and encouragement to find the right non-profit organization that aligns with John's values and passion for programming.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 11,
+            "session_time": "5:00 pm on 11 May, 2022",
+            "dia_ids": [
+              "D11:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: james, non, offered, organization.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-26_q132",
+      "Inputs": {
+        "question": "Who is Melanie a fan of in terms of modern music?",
+        "entity": "speaker_b",
+        "attribute": "relationship",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.776315789473684,
+            "text": "Melanie enjoys classical music like Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\".",
+            "value": "Bach and Mozart, as well as modern music like Ed Sheeran's \"Perfect\"",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "3:19 pm on 28 August, 2023",
+            "dia_ids": [
+              "D15:28"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie, modern, music.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "multi_hop",
+        "gold_answer": "Ed Sheeran",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": true
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-42_q217",
+      "Inputs": {
+        "question": "What filling did Nate use in the cake he made recently in May 2022?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.156896551724138,
+            "text": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "value": "At 3:00 pm on 25 May 2022, Nate and Joanna caught up after a long time.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 13,
+            "session_time": null,
+            "dia_ids": [
+              "D13:1",
+              "D13:7",
+              "D13:9",
+              "D13:15",
+              "D13:21",
+              "D13:16",
+              "D13:8",
+              "D13:12",
+              "D13:18",
+              "D13:20",
+              "D13:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 May",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2022, may, nate. The supported answer is 25 May.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    },
+    {
+      "component": "query_mode_rubric",
+      "query_id": "locomo_conv-44_q141",
+      "Inputs": {
+        "question": "What did Andrew do to give his dogs extra comfort as the weather cooled down?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.85,
+            "text": "Andrew values safety and comfort for his dogs, providing them with essentials like a bed, toys, and puppy pads.",
+            "value": "bed, toys, and puppy pads",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "9:02 am on 22 November, 2023",
+            "dia_ids": [
+              "D28:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, comfort, dogs, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "adversarial",
+        "gold_answer": "",
+        "gold_abstain": true,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "query_mode_rubric",
+        "answer_match": false,
+        "evidence_hit": false
+      }
+    }
+  ]
+}

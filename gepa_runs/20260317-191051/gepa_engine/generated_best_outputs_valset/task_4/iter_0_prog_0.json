@@ -1,0 +1,70 @@
+{
+    "query_mode": "multi_hop",
+    "answer_candidate": "Jolene used to bake cookies with someone close",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close.",
+    "confidence_band": "high",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 16.838333333333335,
+            "text": "Jolene used to bake cookies with someone close to her.",
+            "value": "Jolene used to bake cookies with someone close to her.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+                "D29:12"
+            ]
+        },
+        {
+            "kind": "header_sentence",
+            "score": 10.838333333333333,
+            "text": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "value": "Jolene mentioned baking cookies with someone close and their favorite cookie to make.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+                "D29:1",
+                "D29:5",
+                "D29:7",
+                "D29:9",
+                "D29:19",
+                "D29:4",
+                "D29:12",
+                "D29:22",
+                "D29:14",
+                "D29:24",
+                "D29:30",
+                "D29:34"
+            ]
+        },
+        {
+            "kind": "header_sentence",
+            "score": 6.85,
+            "text": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "value": "Jolene talked about her festival experience with her partner and a recent yoga retreat.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": null,
+            "dia_ids": [
+                "D30:1",
+                "D30:11",
+                "D30:13",
+                "D30:4",
+                "D30:6",
+                "D30:8",
+                "D30:10",
+                "D30:14"
+            ]
+        }
+    ],
+    "answer_style": "focused_span"
+}

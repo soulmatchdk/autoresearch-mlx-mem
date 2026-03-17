@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import Iterable
 
-from locomo_temporal_policy import date_phrase, parse_session_datetime, temporal_answer_from_text
+from locomo_temporal_policy import MONTHS, date_phrase, parse_session_datetime, temporal_answer_from_text
 from reasoning_layer_schema import MemoryContext, MemoryEvidence, ReasoningOutput, validate_candidate, validate_confidence_band, validate_query_mode
 
 
@@ -74,6 +74,31 @@ ABSTAIN_PATTERNS = (
     "not mentioned",
     "what do we know",
 )
+BOOLEAN_PREFIXES = ("is ", "are ", "was ", "were ", "do ", "does ", "did ", "can ", "could ", "has ", "have ", "had ")
+FREQUENCY_PATTERNS = (
+    r"\bevery day\b",
+    r"\bevery week\b",
+    r"\bevery month\b",
+    r"\bevery year\b",
+    r"\bonce a day\b",
+    r"\bonce a week\b",
+    r"\btwice a week\b",
+    r"\bweekly\b",
+    r"\bdaily\b",
+    r"\bmonthly\b",
+    r"\boften\b",
+    r"\bregularly\b",
+)
+FAMILY_ROLES = ("mother", "father", "mom", "dad", "brother", "sister", "grandmother", "grandfather", "friend")
+INSTRUMENTS = ("piano", "violin", "guitar", "drums", "flute", "saxophone", "cello", "ukulele")
+GAME_NAMES = ("fetch", "frisbee", "tag", "hide and seek")
+MONEY_PATTERN = re.compile(r"(\$\d+(?:\.\d{1,2})?)")
+NUMBER_PATTERN = re.compile(r"\b(\d+(?:\.\d+)?)\b")
+MONTH_PATTERN = re.compile(r"\b(" + "|".join(month.lower() for month in MONTHS) + r")\b", re.IGNORECASE)
+DAY_MONTH_YEAR_PATTERN = re.compile(
+    r"\b(\d{1,2}\s+(?:" + "|".join(month.lower() for month in MONTHS) + r")(?:\s+\d{4})?)\b",
+    re.IGNORECASE,
+)
 
 
 def normalize_text(text: str) -> str:
@@ -87,10 +112,14 @@ def content_terms(text: str) -> set[str]:
 
 
 def parse_flags(policy_text: str) -> set[str]:
-    if "Flags:" not in policy_text:
-        return set()
-    _, tail = policy_text.split("Flags:", 1)
-    return {part.strip().strip(".") for part in tail.split(",") if part.strip()}
+    matches = re.findall(r"Flags:\s*([^.]*)", policy_text)
+    flags = set()
+    for match in matches:
+        for part in match.split(","):
+            token = part.strip().strip(".")
+            if token:
+                flags.add(token)
+    return flags
 
 
 def candidate_flags(candidate: dict[str, str]) -> set[str]:
@@ -100,26 +129,80 @@ def candidate_flags(candidate: dict[str, str]) -> set[str]:
     return flags
 
 
+def extract_time_terms(text: str) -> set[str]:
+    lowered = normalize_text(text)
+    if not lowered:
+        return set()
+    terms = set(re.findall(r"\b(?:19|20)\d{2}\b", lowered))
+    terms.update(match.lower() for match in MONTH_PATTERN.findall(lowered))
+    terms.update(normalize_text(match) for match in DAY_MONTH_YEAR_PATTERN.findall(lowered))
+    return terms
+
+
+def time_anchor_adjustment(question: str, item: MemoryEvidence, flags: set[str]) -> float:
+    question_terms = extract_time_terms(question)
+    if not question_terms:
+        return 0.0
+    item_terms = extract_time_terms(f"{item.session_time or ''} {item.text}")
+    overlap = len(question_terms & item_terms)
+    if overlap > 0:
+        bonus = 2.0 + 0.5 * overlap
+        if "prefer_time_anchor_match" in flags:
+            bonus += 1.0
+        return bonus
+    penalty = 2.0
+    if "require_time_anchor_match" in flags:
+        penalty += 2.0
+    return -penalty
+
+
 def classify_query_mode(candidate: dict[str, str], question: str) -> str:
     _ = validate_candidate(candidate)
     lowered = f" {question.lower()} "
+    temporal_score = 0
+    multi_hop_score = 0
+    abstain_score = 0
     if any(pattern in lowered for pattern in ABSTAIN_PATTERNS):
-        return validate_query_mode("abstain_like")
+        abstain_score += 3
     if lowered.startswith(" when ") or " how long " in lowered or " how long ago " in lowered or " what date " in lowered or " which year " in lowered:
-        return validate_query_mode("temporal")
+        temporal_score += 3
+    if any(token in lowered for token in (" last ", " yesterday ", " before ", " after ", " recently ", " ago ")):
+        temporal_score += 1
+    if extract_time_terms(question):
+        temporal_score += 1
     if lowered.startswith(" would ") or " if " in lowered or " likely " in lowered or " how many " in lowered:
+        multi_hop_score += 3
+    if any(token in lowered for token in (" both ", " in common ", " which of ", " topic of discussion ", " what kind of ", " what type of ")):
+        multi_hop_score += 2
+    if lowered.startswith(" who ") or lowered.startswith(" which "):
+        multi_hop_score += 1
+    if abstain_score >= max(temporal_score, multi_hop_score) and abstain_score > 0:
+        return validate_query_mode("abstain_like")
+    if temporal_score >= max(2, multi_hop_score + 1):
+        return validate_query_mode("temporal")
+    if multi_hop_score >= 2:
         return validate_query_mode("multi_hop")
     return validate_query_mode("current")
 
 
 def infer_answer_style(question: str, query_mode: str) -> str:
     lowered = question.lower()
+    if lowered.startswith(BOOLEAN_PREFIXES):
+        return "boolean"
+    if "how much" in lowered or "how many" in lowered:
+        return "numeric"
+    if "how often" in lowered:
+        return "frequency"
+    if "what emotion" in lowered or "describe the feeling" in lowered or ("how does" in lowered and "feeling" in lowered):
+        return "emotion"
     if lowered.startswith("would ") or " likely " in lowered:
         return "counterfactual"
-    if any(phrase in lowered for phrase in ("what activities", "what books", "where has", "what events", "what do")):
+    if any(phrase in lowered for phrase in ("what activities", "what books", "where has", "what events", "what do", "what instruments", "which of", "what type of games")):
         return "collection"
     if query_mode == "temporal":
         return "temporal"
+    if any(phrase in lowered for phrase in ("what kind of", "what type of", "what topic", "what workshop", "who ", "which ")):
+        return "focused_span"
     return "single"
 
 
@@ -154,6 +237,7 @@ def rank_support_items(candidate: dict[str, str], context: MemoryContext, query_
         score = item.score
         direct = directness_score(context.question, item)
         score += 1.5 * direct
+        score += time_anchor_adjustment(context.question, item, flags)
         if "prefer_direct_match" in flags and direct > 0:
             score += 1.5
         if "prefer_attribute_match" in flags and context.attribute and item.attribute == context.attribute:
@@ -213,6 +297,19 @@ def aggregate_collection_answer(question: str, support_items: list[MemoryEvidenc
         for value in COLLECTION_VOCABS["kids_like"]:
             if normalize_text(value) in normalize_text(merged):
                 items.append(value)
+    elif "instruments" in lowered:
+        for value in INSTRUMENTS:
+            if normalize_text(value) in normalize_text(merged):
+                items.append(value)
+    elif "type of games" in lowered or "games do" in lowered:
+        for value in GAME_NAMES:
+            if normalize_text(value) in normalize_text(merged):
+                items.append(value.title())
+    elif "which of" in lowered and "passed away" in lowered:
+        for value in FAMILY_ROLES:
+            if normalize_text(value) in normalize_text(merged):
+                items.append(value)
+        items.extend(extract_titles(merged))
     elif "events" in lowered or "participated in" in lowered:
         for value in COLLECTION_VOCABS["events"]:
             if normalize_text(value) in normalize_text(merged):
@@ -233,10 +330,93 @@ def duration_answer(text: str) -> str | None:
     return None
 
 
-def current_answer_from_item(question: str, item: MemoryEvidence) -> str | None:
+def extract_frequency_answer(text: str) -> str | None:
+    for pattern in FREQUENCY_PATTERNS:
+        match = re.search(pattern, text, flags=re.IGNORECASE)
+        if match:
+            return match.group(0)
+    return None
+
+
+def extract_focus_span(question: str, text: str) -> str | None:
+    question_lower = question.lower()
+    text_clean = " ".join((text or "").split())
+    focus_match = re.search(r"(?:what kind of|what type of|what topic|what workshop|which|who)\s+([a-z][a-z\s']+?)(?:\s+(?:do|does|did|is|are|was|were|has|have|had|did|at|on|in|with|for)\b|\?)", question_lower)
+    focus = ""
+    if focus_match:
+        focus = focus_match.group(1).strip()
+    head = focus.split()[-1] if focus else ""
+    if head:
+        pattern = re.compile(rf"\b((?:[A-Za-z0-9'/-]+\s+){{0,5}}{re.escape(head)}(?:\s+[A-Za-z0-9'/-]+){{0,3}})\b", re.IGNORECASE)
+        matches = [match.group(1).strip(" .,'\"") for match in pattern.finditer(text_clean)]
+        matches = [match for match in matches if len(match.split()) <= 8]
+        if matches:
+            matches.sort(key=lambda value: len(value.split()))
+            return matches[0]
+    if "who inspired" in question_lower:
+        match = re.search(r"\b(?:his|her)\s+(dad|father|mother|mom|friend|teacher)\b", text_clean, flags=re.IGNORECASE)
+        if match:
+            prefix = "His" if question[:1].isupper() else "his"
+            return f"{prefix} {match.group(1)}"
+        titles = extract_titles(text_clean)
+        if titles:
+            return titles[0]
+    if "what topic" in question_lower:
+        match = re.search(r"\b(?:discussed|talked about|shared)\s+([^.]+)", text_clean, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).strip(" .")
+    if "what workshop" in question_lower:
+        match = re.search(r"\b([A-Za-z][A-Za-z0-9' -]{0,40}\bworkshop)\b", text_clean, flags=re.IGNORECASE)
+        if match:
+            return match.group(1).strip(" .")
+    return None
+
+
+def extract_boolean_answer(question: str, item: MemoryEvidence) -> str | None:
+    question_terms = content_terms(question)
+    support_terms = content_terms(f"{item.text} {item.value or ''}")
+    overlap = question_terms & support_terms
+    if len(overlap) >= 2:
+        if any(token in support_terms for token in {"not", "never", "no"}):
+            return "No"
+        return "Yes"
+    return None
+
+
+def extract_emotion_answer(text: str) -> str | None:
+    match = re.search(r"\b(?:felt|feeling|described|describe(?:d)?)\s+(?:as\s+)?([A-Za-z][A-Za-z' -]{0,40})", text, flags=re.IGNORECASE)
+    if match:
+        return match.group(1).strip(" .")
+    return None
+
+
+def current_answer_from_item(question: str, item: MemoryEvidence, answer_style: str) -> str | None:
     text = f"{item.text} {item.value or ''}"
     lowered = text.lower()
     q = question.lower()
+    if answer_style == "numeric":
+        money = MONEY_PATTERN.search(text)
+        if money:
+            return money.group(1)
+        number = NUMBER_PATTERN.search(text)
+        if number and "how many" in q:
+            return number.group(1)
+    if answer_style == "frequency":
+        frequency = extract_frequency_answer(text)
+        if frequency:
+            return frequency
+    if answer_style == "boolean":
+        answer = extract_boolean_answer(question, item)
+        if answer:
+            return answer
+    if answer_style == "emotion":
+        emotion = extract_emotion_answer(text)
+        if emotion:
+            return emotion
+    if answer_style == "focused_span":
+        span = extract_focus_span(question, text)
+        if span:
+            return span
     if "identity" in q:
         if "transgender woman" in lowered:
             return "Transgender woman"
@@ -264,7 +444,7 @@ def current_answer_from_item(question: str, item: MemoryEvidence) -> str | None:
         answer = duration_answer(text)
         if answer:
             return answer
-    return item.value or item.text
+    return None
 
 
 def compact_answer(question: str, answer: str) -> str:
@@ -290,6 +470,10 @@ def temporal_answer_from_item(question: str, item: MemoryEvidence, flags: set[st
     if "allow_recently_anchor" in flags and "recently" in lowered:
         dt = parse_session_datetime(item.session_time)
         if dt is not None:
+            return date_phrase(dt)
+    if "allow_session_time_temporal_backoff" in flags:
+        dt = parse_session_datetime(item.session_time)
+        if dt is not None and directness_score(question, item) >= 2.0:
             return date_phrase(dt)
     return None
 
@@ -334,12 +518,12 @@ def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode:
                 return answer, ranked[:combine_k]
         combine_k = 3 if "combine_top3_multihop" in flags else 2
         for item in ranked[:combine_k]:
-            answer = current_answer_from_item(context.question, item)
+            answer = current_answer_from_item(context.question, item, answer_style)
             if answer:
                 return answer, ranked[:combine_k]
         return None, ranked[:1]
     for item in ranked[:4]:
-        answer = current_answer_from_item(context.question, item)
+        answer = current_answer_from_item(context.question, item, answer_style)
         if answer:
             if "prefer_compact_value_span" in flags:
                 answer = compact_answer(context.question, answer)
@@ -370,7 +554,7 @@ def make_explanation(candidate: dict[str, str], question: str, query_mode: str, 
     return f"I answered using the strongest grounded support, especially the evidence about {shared_fragment}. The supported answer is {answer}."
 
 
-def should_abstain(candidate: dict[str, str], query_mode: str, answer: str | None, support_items: list[MemoryEvidence]) -> bool:
+def should_abstain(candidate: dict[str, str], query_mode: str, answer_style: str, answer: str | None, support_items: list[MemoryEvidence]) -> bool:
     flags = candidate_flags(candidate)
     if query_mode == "abstain_like":
         return True
@@ -384,6 +568,17 @@ def should_abstain(candidate: dict[str, str], query_mode: str, answer: str | Non
         threshold = 3.5
     if top.score < threshold and "grounded_answer_beats_default_abstain" not in flags:
         return True
+    if "require_time_anchor_match" in flags and extract_time_terms(top.text + " " + (top.session_time or "")) and extract_time_terms(support_items[0].text + " " + (support_items[0].session_time or "")):
+        if not (extract_time_terms(top.text + " " + (top.session_time or "")) & extract_time_terms(answer or "")):
+            if extract_time_terms(top.text + " " + (top.session_time or "")) and extract_time_terms(answer or ""):
+                return True
+    support_norm = normalize_text(top.text)
+    answer_norm = normalize_text(answer)
+    if "abstain_on_sentence_copy" in flags and answer_norm and support_norm.startswith(answer_norm):
+        if answer_style in {"single", "focused_span", "numeric", "frequency", "emotion", "boolean"} and len(answer_norm.split()) >= 8:
+            return True
+    if "require_specific_answer_span" in flags and len(answer_norm.split()) >= 10:
+        return True
     if "abstain_on_long_generic_answers" in flags and len((answer or "").split()) > 10:
         return True
     if query_mode in {"current", "temporal"} and "grounded_answer_beats_default_abstain" in flags:
@@ -396,7 +591,7 @@ def run_reasoning(candidate: dict[str, str], context: MemoryContext) -> Reasonin
     query_mode = classify_query_mode(candidate, context.question)
     answer_style = infer_answer_style(context.question, query_mode)
     answer, support_items = choose_answer(candidate, context, query_mode, answer_style)
-    abstain = should_abstain(candidate, query_mode, answer, support_items)
+    abstain = should_abstain(candidate, query_mode, answer_style, answer, support_items)
     if abstain:
         answer = None
     explanation = make_explanation(candidate, context.question, query_mode, answer, support_items, abstain)

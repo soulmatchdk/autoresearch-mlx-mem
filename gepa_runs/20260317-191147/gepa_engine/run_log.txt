@@ -1,0 +1,91 @@
+Iteration 0: Base program full valset score: 0.07 over 10 / 10 examples
+Iteration 1: Selected program 0 score: 0.07
+Iteration 1: Proposed new text for query_mode_rubric: Classify from the question text only. Temporal questions usually start with when/how long/how long ago/what date/which year. Multi-hop questions usually contain would/if/likely/how many or require combining several clues. Abstain-like questions ask for missing or unsupported information. Everything else defaults to current. Flags: question_only_mode_routing, prefer_temporal_for_when, prefer_multihop_for_would_if. Extra rule: treat both, in common, which of, what topic, and date-anchored what/who questions as multi-hop unless they ask directly for a date. Iteration note: reflective custom proposer step 1.
+Iteration 1: Proposed new text for current_policy: Use the frozen memory evidence only. Prefer direct lexical grounding over generic thematic overlap. For current answers, prefer the freshest direct snippet among top evidence, but do not discard older direct evidence when it is much more specific. Allow list aggregation for activities, books, events, and places from up to four grounded snippets. Flags: prefer_direct_match, blend_specificity_with_freshness, collection_top4.
+Iteration 1: Proposed new text for temporal_policy: For temporal questions, anchor relative phrases to session time when possible. Accept direct dates, month-year, last week, last weekend, last weekday, yesterday, next month, last month, and recently when tied to a grounded event. Return a concrete temporal answer when one snippet is well grounded; otherwise abstain. Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required.
+Iteration 1: Proposed new text for multi_hop_policy: For multi-hop questions, combine up to three evidence snippets before abstaining. Prefer grounded likely yes/no answers only when support snippets explicitly justify the conclusion. Use collection aggregation when the question asks for multiple items. Flags: combine_top3_multihop, prefer_grounded_likely_answers, allow_collection_union.
+Iteration 1: Proposed new text for abstain_policy: Abstain when there is no grounded support, when the top evidence conflicts sharply, or when the explanation would be weak. Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question. Flags: grounded_answer_beats_default_abstain, abstain_on_conflict, abstain_on_missing_grounding.
+Iteration 1: Proposed new text for answer_synthesis_policy: Keep answers short and directly supported by the evidence. Prefer the canonical phrase from the best snippet over paraphrasing. For collections, deduplicate and preserve a stable order. Flags: concise_grounded_answers, dedupe_collections.
+Iteration 1: Proposed new text for explanation_policy: Explain the decision using the strongest one or two support snippets only. For abstain, name the missing grounding or conflict. For answers, cite the direct support. Avoid generic confidence language without evidence. Flags: cite_support_terms, explain_abstain_reason, avoid_generic_confidence.
+Iteration 1: New subsample score -1.95 is not better than old score -1.95, skipping
+Iteration 2: Selected program 0 score: 0.07
+Iteration 2: Exception during reflection/proposal: name 're' is not defined
+Traceback (most recent call last):
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 297, in propose
+    new_texts = self.propose_new_texts(curr_prog, reflective_dataset, predictor_names_to_update)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 99, in propose_new_texts
+    return self.custom_candidate_proposer(candidate, reflective_dataset, components_to_update)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 281, in proposer
+    tuned = apply_reflective_tune(tuned, component, rows, state["calls"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 240, in apply_reflective_tune
+    tuned["current_policy"] = append_flags(tuned["current_policy"], "prefer_focus_span_extraction", "prefer_compact_value_span")
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 199, in append_flags
+    existing = parse_flags_from_candidate_text(text)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 208, in parse_flags_from_candidate_text
+    matches = re.findall(r"Flags:\s*([^.]*)", text)
+              ^^
+NameError: name 're' is not defined. Did you forget to import 're'
+
+Iteration 2: Reflective mutation did not propose a new candidate
+Iteration 3: Selected program 0 score: 0.07
+Iteration 3: Proposed new text for query_mode_rubric: Classify from the question text only. Temporal questions usually start with when/how long/how long ago/what date/which year. Multi-hop questions usually contain would/if/likely/how many or require combining several clues. Abstain-like questions ask for missing or unsupported information. Everything else defaults to current. Flags: question_only_mode_routing, prefer_temporal_for_when, prefer_multihop_for_would_if. Iteration note: reflective custom proposer step 3.
+Iteration 3: Proposed new text for current_policy: Use the frozen memory evidence only. Prefer direct lexical grounding over generic thematic overlap. For current answers, prefer the freshest direct snippet among top evidence, but do not discard older direct evidence when it is much more specific. Allow list aggregation for activities, books, events, and places from up to four grounded snippets. Flags: prefer_direct_match, blend_specificity_with_freshness, collection_top4.
+Iteration 3: Proposed new text for temporal_policy: For temporal questions, anchor relative phrases to session time when possible. Accept direct dates, month-year, last week, last weekend, last weekday, yesterday, next month, last month, and recently when tied to a grounded event. Return a concrete temporal answer when one snippet is well grounded; otherwise abstain. Flags: allow_recently_anchor, allow_duration_answer, temporal_grounding_required.
+Iteration 3: Proposed new text for multi_hop_policy: For multi-hop questions, combine up to three evidence snippets before abstaining. Prefer grounded likely yes/no answers only when support snippets explicitly justify the conclusion. Use collection aggregation when the question asks for multiple items. Flags: combine_top3_multihop, prefer_grounded_likely_answers, allow_collection_union.
+Iteration 3: Proposed new text for abstain_policy: Abstain when there is no grounded support, when the top evidence conflicts sharply, or when the explanation would be weak. Do not abstain on answerable current or temporal questions if one grounded snippet directly answers the question. Flags: grounded_answer_beats_default_abstain, abstain_on_conflict, abstain_on_missing_grounding.
+Iteration 3: Proposed new text for answer_synthesis_policy: Keep answers short and directly supported by the evidence. Prefer the canonical phrase from the best snippet over paraphrasing. For collections, deduplicate and preserve a stable order. Flags: concise_grounded_answers, dedupe_collections.
+Iteration 3: Proposed new text for explanation_policy: Explain the decision using the strongest one or two support snippets only. For abstain, name the missing grounding or conflict. For answers, cite the direct support. Avoid generic confidence language without evidence. Flags: cite_support_terms, explain_abstain_reason, avoid_generic_confidence.
+Iteration 3: New subsample score -2.75 is not better than old score -2.75, skipping
+Iteration 4: Selected program 0 score: 0.07
+Iteration 4: Exception during reflection/proposal: name 're' is not defined
+Traceback (most recent call last):
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 297, in propose
+    new_texts = self.propose_new_texts(curr_prog, reflective_dataset, predictor_names_to_update)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 99, in propose_new_texts
+    return self.custom_candidate_proposer(candidate, reflective_dataset, components_to_update)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 281, in proposer
+    tuned = apply_reflective_tune(tuned, component, rows, state["calls"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 249, in apply_reflective_tune
+    tuned["multi_hop_policy"] = append_flags(tuned["multi_hop_policy"], "combine_top3_multihop", "prefer_focus_span_extraction")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 199, in append_flags
+    existing = parse_flags_from_candidate_text(text)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 208, in parse_flags_from_candidate_text
+    matches = re.findall(r"Flags:\s*([^.]*)", text)
+              ^^
+NameError: name 're' is not defined. Did you forget to import 're'
+
+Iteration 4: Reflective mutation did not propose a new candidate
+Iteration 5: Selected program 0 score: 0.07
+Iteration 5: Exception during reflection/proposal: name 're' is not defined
+Traceback (most recent call last):
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 297, in propose
+    new_texts = self.propose_new_texts(curr_prog, reflective_dataset, predictor_names_to_update)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/.venv/lib/python3.12/site-packages/gepa/proposer/reflective_mutation/reflective_mutation.py", line 99, in propose_new_texts
+    return self.custom_candidate_proposer(candidate, reflective_dataset, components_to_update)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 281, in proposer
+    tuned = apply_reflective_tune(tuned, component, rows, state["calls"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 253, in apply_reflective_tune
+    tuned["abstain_policy"] = append_flags(tuned["abstain_policy"], "abstain_on_sentence_copy", "require_specific_answer_span")
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 199, in append_flags
+    existing = parse_flags_from_candidate_text(text)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/buddythacat/Documents/UCMD MTX autotrain v1/autoresearch-mlx-mem/gepa_reasoning_v1.py", line 208, in parse_flags_from_candidate_text
+    matches = re.findall(r"Flags:\s*([^.]*)", text)
+              ^^
+NameError: name 're' is not defined. Did you forget to import 're'
+
+Iteration 5: Reflective mutation did not propose a new candidate

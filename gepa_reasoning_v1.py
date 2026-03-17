@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import csv
 import json
 import os
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -165,6 +167,106 @@ def apply_component_tune(candidate: dict[str, str], component: str, iteration: i
     return tuned
 
 
+def reflective_signals(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    failure_buckets = Counter()
+    gold_modes = Counter()
+    answer_matches = 0
+    evidence_hits = 0
+    for row in rows:
+        feedback = row.get("Feedback", {})
+        failure_bucket = feedback.get("failure_bucket")
+        if failure_bucket:
+            failure_buckets[failure_bucket] += 1
+        gold_mode = feedback.get("gold_mode_label")
+        if gold_mode:
+            gold_modes[gold_mode] += 1
+        if feedback.get("answer_match"):
+            answer_matches += 1
+        if feedback.get("evidence_hit"):
+            evidence_hits += 1
+    return {
+        "count": len(rows),
+        "failure_buckets": failure_buckets,
+        "gold_modes": gold_modes,
+        "answer_match_rate": answer_matches / max(1, len(rows)),
+        "evidence_hit_rate": evidence_hits / max(1, len(rows)),
+    }
+
+
+def append_flags(text: str, *flags: str) -> str:
+    flags = [flag for flag in flags if flag]
+    if not flags:
+        return text
+    existing = parse_flags_from_candidate_text(text)
+    new_flags = [flag for flag in flags if flag not in existing]
+    if not new_flags:
+        return text
+    suffix = " Flags: " + ", ".join(new_flags) + "."
+    return text + suffix
+
+
+def parse_flags_from_candidate_text(text: str) -> set[str]:
+    matches = re.findall(r"Flags:\s*([^.]*)", text)
+    flags = set()
+    for match in matches:
+        for part in match.split(","):
+            token = part.strip().strip(".")
+            if token:
+                flags.add(token)
+    return flags
+
+
+def apply_reflective_tune(candidate: dict[str, str], component: str, rows: list[dict[str, Any]], iteration: int) -> dict[str, str]:
+    tuned = clone_candidate(candidate)
+    signals = reflective_signals(rows)
+    failures = signals["failure_buckets"]
+    gold_modes = signals["gold_modes"]
+
+    if component == "query_mode_rubric":
+        additions = []
+        if gold_modes.get("multi_hop", 0) > 0:
+            additions.append("Extra rule: treat both, in common, which of, what topic, and date-anchored what/who questions as multi-hop unless they ask directly for a date.")
+        if gold_modes.get("abstain_like", 0) > 0:
+            additions.append("Extra rule: treat do we know, is there any information, and explicitly unsupported-information questions as abstain-like.")
+        if gold_modes.get("temporal", 0) > 0:
+            additions.append("Extra rule: temporal questions include when, how long, how long ago, and direct date/year lookups.")
+        if additions:
+            tuned["query_mode_rubric"] += " " + " ".join(additions)
+    elif component == "current_policy":
+        if failures.get("temporal_selection_error", 0) > 0:
+            tuned["current_policy"] += " Extra rule: heavily prefer evidence whose session date matches any explicit date or month in the question."
+            tuned["current_policy"] = append_flags(tuned["current_policy"], "prefer_time_anchor_match", "require_time_anchor_match")
+        if failures.get("false_confident_answer", 0) > 0 or failures.get("attribute_mismatch", 0) > 0:
+            tuned["current_policy"] += " Extra rule: prefer short focus spans over repeating a whole support sentence."
+            tuned["current_policy"] = append_flags(tuned["current_policy"], "prefer_focus_span_extraction", "prefer_compact_value_span")
+    elif component == "temporal_policy":
+        if failures.get("false_abstain", 0) > 0:
+            tuned["temporal_policy"] += " Extra rule: if the event is otherwise well grounded, back off to the supporting session date instead of empty abstention."
+            tuned["temporal_policy"] = append_flags(tuned["temporal_policy"], "allow_session_time_temporal_backoff")
+        if failures.get("temporal_selection_error", 0) > 0:
+            tuned["temporal_policy"] += " Extra rule: preserve relative time phrasing when the evidence uses relative calendar language."
+    elif component == "multi_hop_policy":
+        tuned["multi_hop_policy"] += " Extra rule: use the top grounded evidence items to synthesize compact, non-sentence answers before giving up."
+        tuned["multi_hop_policy"] = append_flags(tuned["multi_hop_policy"], "combine_top3_multihop", "prefer_focus_span_extraction")
+    elif component == "abstain_policy":
+        if failures.get("false_confident_answer", 0) > 0:
+            tuned["abstain_policy"] += " Extra rule: abstain when the candidate answer is just a copied broad sentence rather than a specific span."
+            tuned["abstain_policy"] = append_flags(tuned["abstain_policy"], "abstain_on_sentence_copy", "require_specific_answer_span")
+        if failures.get("false_abstain", 0) > 0:
+            tuned["abstain_policy"] += " Extra rule: do not abstain when one grounded snippet directly answers the question with a compact span."
+            tuned["abstain_policy"] = append_flags(tuned["abstain_policy"], "grounded_answer_beats_default_abstain", "low_grounding_threshold")
+    elif component == "answer_synthesis_policy":
+        tuned["answer_synthesis_policy"] += " Extra rule: return the smallest grounded span that answers the question, not the surrounding narrative sentence."
+        tuned["answer_synthesis_policy"] = append_flags(tuned["answer_synthesis_policy"], "prefer_compact_value_span", "prefer_focus_span_extraction")
+        if failures.get("temporal_selection_error", 0) > 0:
+            tuned["answer_synthesis_policy"] = append_flags(tuned["answer_synthesis_policy"], "prefer_time_anchor_match")
+    elif component == "explanation_policy":
+        tuned["explanation_policy"] += " Extra rule: name the direct support span or the missing span, not just the general topic."
+
+    tuned["query_mode_rubric"] += f" Iteration note: reflective custom proposer step {iteration}."
+    return tuned
+
+
 def make_custom_candidate_proposer():
     state = {"calls": 0}
 
@@ -175,7 +277,10 @@ def make_custom_candidate_proposer():
             targets = ["query_mode_rubric"]
         tuned = clone_candidate(candidate)
         for component in targets:
-            if component in reflective_dataset or component in tuned:
+            rows = reflective_dataset.get(component, [])
+            if rows:
+                tuned = apply_reflective_tune(tuned, component, rows, state["calls"])
+            elif component in tuned:
                 tuned = apply_component_tune(tuned, component, state["calls"])
         return tuned
 
