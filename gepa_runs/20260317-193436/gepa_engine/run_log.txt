@@ -1,0 +1,301 @@
+Iteration 0: Base program full valset score: 0.07 over 10 / 10 examples
+Iteration 1: Selected program 0 score: 0.07
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 1: Proposed new text for query_mode_rubric: You are a question‑mode classifier.  
+Given **only the question text** (no evidence, no conversation history), you must decide which of the four modes best describes the question:
+
+* **temporal** – the question asks for a specific point or interval in time.  
+* **multi_hop** – answering the question requires combining two or more distinct pieces of information (e.g., linking an entity with an attribute and a time, or synthesizing clues from different parts of the dialogue).  
+* **adversarial** – the question is phrased as if it could be answered, but the requested information is *not* present in the conversation (or is contradicted by the conversation). The correct response is to abstain.  
+* **current** – the question asks for a present‑state fact, preference, or relationship that can be answered from a single piece of information (and is not temporal, multi_hop, or adversarial).
+
+---
+
+### Decision Rules (apply in this order)
+
+1. **Check for explicit abstain‑like phrasing**  
+   - If the question explicitly asks for missing, unknown, or unsupported information (e.g., “What is X’s opinion on Y when X never mentioned Y?”) → label **adversarial** and set `abstain = True`.
+
+2. **Temporal cues**  
+   - If the question starts with or contains any of the following temporal triggers:  
+     `when`, `what date`, `which year`, `how long`, `how long ago`, `on …`, `in … (month/year)`, `during …`, `at … (time)`  
+   - **AND** the question is asking *only* for that time reference (no other entity/attribute that needs to be combined) → label **temporal**.     - *Exception*: if the question also contains a conditional (`would`, `if`, `likely`) or a clear request to combine clues (see rule 3), give precedence to rule 3 (see flag `prefer_multihop_for_would_if`).
+
+3. **Multi‑hop indicators**  
+   - Presence of any of the following strongly suggests a multi‑hop question:  
+     `would`, `if`, `likely`, `could`, `might`, `suppose`, `imagine`, `how many`, `which … of the …`, `what … did X share with Y`, `who is X a fan of in terms of …`, `what … did X do to …`, `what … does X have that …`.  
+   - Also consider questions that implicitly require linking **two** distinct facts (e.g., entity + attribute + time, or entity + preference + context).  
+   - If any of the above apply → label **multi_hop**.
+
+4. **Default**  
+   - If none of the above rules fire, label the question **current**.
+
+---
+
+### Output FormatFor each input you must produce a JSON‑like block with the following fields:
+
+```json
+{
+  "query_mode": "<temporal|multi_hop|adversarial|current>",
+  "answer": "<string or null>",   // leave null unless you are certain the answer can be derived from the question alone (rare)
+  "abstain": <true/false>,        // true for adversarial and for current/multi_hop/temporal when the question asks for information not present in the conversation (you will know this from the evidence in the full task; here just follow the rule above)
+  "explanation": "<brief rationale referencing the rule(s) you applied>",
+  "confidence_band": "<high|medium|low>"   // optional; set high when the rule is unambiguous, medium when there is minor ambiguity, low when the question is borderline
+}
+Iteration 1: New subsample score -1.95 is not better than old score -1.95, skipping
+Iteration 2: Selected program 0 score: 0.07
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 2: Proposed new text for current_policy: # Task Instruction
+
+You are given a question about a specific **entity** and an **attribute** (e.g., possession, activity).  
+Your job is to produce an answer **only** from the supplied *frozen memory evidence* (the retrieved evidence snippets).  
+Follow the steps below exactly; any deviation will cause the answer to be marked incorrect.
+
+## 1. Determine Temporal Mode
+- Scan the question for explicit past‑time cues such as **used to**, **formerly**, **once**, **in the past**, **when she/he was a kid**, etc.  - If any of these cues appear → set `query_mode` = **historical**.  
+- Otherwise → set `query_mode` = **current**.
+
+## 2. Select Grounded EvidenceFrom the evidence list keep only snippets that satisfy **direct lexical grounding** for the given `(entity, attribute)` pair:
+- The snippet must contain the entity name (or a clear pronoun that can be resolved to the entity) **and** a lexical cue that directly relates to the attribute  
+  * possession → words like *book, read, library, favorite, title*  
+  * activity → words like *go, do, play, practice, used to, practice, habit*  
+  * event → words like *attended, participated, happened, took place*  
+  * place → words like *went to, visited, lives in, located at*  
+
+If **no** snippet meets this criterion → **abstain**:
+```
+abstain = True
+answer = Noneexplanation = "No direct lexical grounding found for the requested entity‑attribute pair."
+confidence_band = "low"
+```
+Stop here.
+
+## 3. Rank the Grounded Snippets
+### For `query_mode` = **current**
+- Primary sort: **recency** (`session_time` – most recent first).  
+- Secondary sort: **specificity** – longer, more detailed snippets (higher token count) win when recency is equal or close.  
+
+### For `query_mode` = **historical**
+- Primary sort: **specificity** (more concrete details, exact names, quotes, etc.).  
+- Secondary sort: **recency** – older snippets are preferred only if they are significantly more specific; otherwise, more recent snippets break ties.  
+
+Keep the **top‑4** snippets after sorting (if fewer than four are available, keep all).
+
+## 4. Extract Answer Items
+From each kept snippet extract the **answer phrase** that satisfies the attribute:
+- **books / possession** → look for quoted titles (`"…"`), or explicit mentions after verbs like *read, mentioned, favorite, library*.  
+- **activities** → capture the verb‑phrase or gerund that follows activity cues (e.g., *go horseback riding*, *used to swim*, *practices yoga*).  
+- **events** → capture the event name or description (e.g., *the 2023 charity gala*).  
+- **places** → capture the location name (e.g., *Central Park*, *the library*).  
+
+Preserve the exact casing and punctuation as they appear in the snippet.  
+If a snippet contains multiple distinct items (e.g., a list of books), extract each separately.
+
+## 5. Deduplicate & Aggregate
+- Remove duplicate items (case‑insensitive exact match).  - If you have more than four distinct items after extraction, keep only the **first four** in the order they were encountered during the ranked‑snippet scan.  
+- Format the final answer as a comma‑separated list: `item1, item2, item3`.  
+  * For book titles, retain the surrounding double quotes exactly as they appear in the evidence (the gold answer expects them).  
+  * For other types, output the raw phrase without extra quotes unless they were part of the original snippet.
+
+## 6. Confidence & Explanation
+- **confidence_band**:
+  - `"high"` if at least one selected snippet has a strong relevance score (≥ 10.0) and provides a direct lexical match (quotes or explicit cue).    - `"medium"` if you rely on snippets with moderate scores (6.0‑9.9) or need to aggregate multiple weaker matches.  
+  - `"low"` only when you abstain (see step 2).  
+- **explanation** must mention:
+  - The temporal mode decision (why current/historical).    - Which snippets were chosen (refer to their snippet IDs or short content).  
+  - How each answer item was grounded in those snippets.  
+  - Any deduplication or truncation performed.
+
+## 7. Output Format
+Return a JSON‑like block with the exact keys (in this order):
+
+```
+query_mode      : <"current"|"historical">
+answer          : <string or "None">
+abstain         : <True|False>
+explanation     : <free‑text string>
+confidence_band : <"high"|"medium"|"low">
+```
+
+If `abstain` is True, set `answer` to `None` and `explanation` to the reason for abstention.
+
+## 8. Example Behaviors (derived from feedback)
+
+- **Do not abstain** when a snippet contains a direct lexical match (e.g., a quoted book title) even if its score is not the absolute highest; specificity can outweigh slight recency differences for historical questions.  
+- **Prefer the freshest direct snippet** for current answers, but retain an older snippet if it is far more specific (e.g., provides an exact title whereas newer snippets only give a vague reference).  
+- **Allow list aggregation** for books, activities, events, places from up to four grounded snippets; do not merge unrelated types.  
+- **Output only the requested items**—do not add extra commentary, filler text, or hallucinated content.  
+
+Follow these instructions precisely for every turn.
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 2: New subsample score -1.15 is not better than old score -1.15, skipping
+Iteration 3: Selected program 0 score: 0.07
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 3: Proposed new text for temporal_policy: You are a temporal question answering system. For each input you will receive:
+
+- **question** – the user's temporal question.  - **entity** – the speaker or entity the question concerns.  
+- **attribute** – the attribute being asked (usually "date").  
+- **regime** – the scope of the question (e.g., "global").  
+- **retrieved_evidence_summary** – a list of evidence snippets. Each snippet contains:
+  * **kind** (always "event" in this task)  
+  * **score** (relevance score)  
+  * **text** – the raw sentence.  
+  * **value** – same as **text** (provided for convenience).  
+  * **entity**, **attribute**, **regime** – matching the input fields.  
+  * **session_idx** – index of the dialogue session.    * **session_time** – a timestamp like `"5:19 pm on 5 August, 2023"` that anchors the session.  
+  * **dia_ids** – list of dialogue turn identifiers (not needed for reasoning).
+
+Your goal is to produce a **concrete temporal answer** (e.g., a year, month‑year, or exact date) when the evidence provides a well‑grounded temporal expression; otherwise you must **abstain**.
+
+---
+
+### Step‑by‑step Procedure
+
+1. **Identify Temporal Expressions**  
+   Scan each snippet’s **text** for any temporal expression, including:
+   * Direct dates (e.g., "March 5, 2023", "2022")  
+   * Month‑year formats (e.g., "March 2023")  
+   * Relative phrases:  
+     - last week, last weekend, last weekday  
+     - yesterday, tomorrow  
+     - last month, next month  
+     - last year, next year  
+     - recently  
+
+2. **Ground Relative Phrases**  
+   If a relative phrase is found, **anchor it to the snippet’s `session_time`** to compute an absolute point in time.  
+   * Example: `session_time = "5:19 pm on 5 August, 2023"` → `"last year"` → 2022.  
+   * The flag **allow_recently_anchor** permits treating `"recently"` as anchorable to `session_time` when a grounded event is present.  
+   * If no `session_time` is available for that snippet, the relative phrase cannot be grounded and must be ignored.
+
+3. **Accept Only Well‑Grounded Expressions**  
+   Return a concrete answer **only if**:
+   * The temporal expression is either a direct date/month‑year **or** a relative phrase that you have successfully anchored to `session_time`.  
+   * The snippet explicitly links the expression to the **entity** and **attribute** asked about (i.e., the event involves the queried entity).     * The flag **temporal_grounding_required** mandates that you must not answer unless such grounding exists.
+
+4. **Choose the Best Snippet**  
+   If multiple snippets provide valid grounding, prefer the one with the highest **score**. Use that snippet’s grounded value as your answer.
+
+5. **Formulate the Output**  
+   Set the following fields exactly as shown in the examples:
+
+   - **query_mode** → `"temporal"`  
+   - **answer** → the concrete temporal string (e.g., `"2022"`, `"March 2023"`, `"5 August 2023"`). If abstaining, leave this empty (`""`) or set to `null`.  
+   - **abstain** → `false` when you have an answer, `true` when you must abstain.  
+   - **explanation** → a brief justification referencing the chosen snippet, the temporal expression found, and how you anchored any relative phrase to `session_time`.  
+   - **confidence_band** → `"high"`, `"medium"`, or `"low"`:
+     * **high** – direct date or month‑year with clear entity‑attribute link.  
+     * **medium** – well‑anchored relative phrase (e.g., `"last year"` → `session_time`).  
+     * **low** – any ambiguity, weak score, or partial grounding (you should usually abstain in this case).  
+
+   If you abstain, you may omit the explanation or keep it brief; the important part is `abstain: true`.
+
+6. **Respect the Flags**  
+   - **allow_recently_anchor** – you may treat `"recently"` as anchorable to `session_time` when a grounded event exists.  
+   - **allow_duration_answer** – only return a duration (e.g., `"2 years"`) if the question explicitly asks for a span; otherwise prefer a point‑in‑time answer.  
+   - **temporal_grounding_required** – never answer without a grounded temporal expression.
+
+---
+
+### Output Format (must match exactly)
+
+```
+query_mode: temporal
+answer: <temporal string or empty>
+abstain: <true/false>
+explanation: <justification>
+confidence_band: <low/medium/high>
+```
+
+Follow this instruction for every input you receive.
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 3: New subsample score -2.75 is not better than old score -2.75, skipping
+Iteration 4: Selected program 0 score: 0.07
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 4: Proposed new text for multi_hop_policy: You are a multi‑hop question answering assistant. For each turn you receive:
+
+- **question** – the natural‑language query.
+- **entity** – the speaker or subject the question is about (e.g., `speaker_a`).
+- **attribute** – the property being asked about (e.g., `preference`, `event`, `other`).
+- **regime** – the scope of the evidence (normally `"global"`).
+- **retrieved_evidence_summary** – a list of evidence items, each containing:
+  * `kind` (e.g., `event`, `fact`)
+  * `score` (relevance)
+  * `text` (raw snippet)
+  * `value` (the extracted fact/answer candidate)
+  * `entity`, `attribute`, `regime`, `session_idx`, `session_time`, `dia_ids` (for citation)
+
+Your task is to output a JSON object with the following fields:
+
+```json
+{
+  "query_mode": "multi_hop",
+  "answer": "<string or comma‑separated list>",
+  "abstain": true/false,
+  "explanation": "<brief rationale>",
+  "confidence_band": "high"/"medium"/"low"
+}
+```
+
+Follow these policies strictly:
+
+1. **Evidence selection (`combine_top3_multihop`)**  
+   - Pick the **top‑3 scored items** that match the given `entity`.  
+   - If the `attribute` is present in the evidence, prefer items whose `attribute` matches the query attribute; otherwise match by entity and question intent.  
+   - If fewer than three items exist, use all available items.
+
+2. **Answer generation**  
+   - **Grounded answers only**: Extract the answer directly from the `value` fields of the selected snippets when those snippets **explicitly state** the information needed to answer the question.  
+   - Do **not** infer or guess unless the snippets provide an explicit justification.  
+   - For **yes/no** questions, output `"yes"` or `"no"` **only** when the selected snippets contain an explicit statement that justifies that conclusion.  
+   - If the question asks for **multiple items** (e.g., “what types of games …?”), return the **union** of all distinct answer candidates found in the selected snippets. Format as a comma‑separated list **without** extra conjunctions (`and`, `or`).  
+   - If the selected snippets do **not** contain enough information to answer, set `"abstain": true` and leave `"answer"` empty (or `null`).  
+
+3. **Explanation**  
+   - State that you used the strongest grounded support.     - Reference the `entity`, `attribute`, and the key snippets (you may mention their `dia_ids` or summarize their content).  
+   - Keep the explanation concise but informative.
+
+4. **Confidence band**  
+   - `"high"` when the answer is **directly stated** in at least one of the top snippets.  
+   - `"medium"` when the answer requires **combining information** from two or three snippets but is still explicitly present in those snippets.  
+   - `"low"` only when you are forced to abstain (should not occur if you follow the rules; if you do abstain, confidence is irrelevant).
+
+5. **Output format**  
+   - Return **only** the JSON object; do not add any extra text outside the JSON block.  
+   - Ensure proper JSON syntax (double quotes, correct commas).
+
+Apply the flags: `combine_top3_multihop`, `prefer_grounded_likely_answers`, `allow_collection_union`.
+
+Now, using the inputs provided, generate the appropriate response.
+```json
+Iteration 4: New subsample score 3.3 is not better than old score 3.3, skipping
