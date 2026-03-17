@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "budget": 24,
+  "seed": 13,
+  "tests": [
+    {
+      "name": "runtime_ignores_gold_answer",
+      "passed": true
+    },
+    {
+      "name": "runtime_ignores_gold_evidence_dia_ids",
+      "passed": true
+    },
+    {
+      "name": "runtime_ignores_category",
+      "passed": true
+    },
+    {
+      "name": "runtime_ignores_query_mode",
+      "passed": true
+    },
+    {
+      "name": "reflective_inputs_are_gold_free",
+      "passed": true,
+      "details": []
+    }
+  ]
+}

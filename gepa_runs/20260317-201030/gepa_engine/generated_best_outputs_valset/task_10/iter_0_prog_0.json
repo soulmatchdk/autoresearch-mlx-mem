@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 8.5984375,
+            "text": "John is particularly interested in improving education and infrastructure.",
+            "value": "John is particularly interested in improving education and infrastructure.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": "9:36 am on 2 April, 2023",
+            "dia_ids": [
+                "D9:8"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

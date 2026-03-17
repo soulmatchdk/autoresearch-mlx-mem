@@ -1,0 +1,24 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "17 November 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+                "D30:2"
+            ]
+        }
+    ],
+    "answer_style": "temporal"
+}

@@ -1,0 +1,522 @@
+{
+  "aggregate_metrics": {
+    "query_count": 24,
+    "joint_answer_or_abstain_acc": 0.25,
+    "abstain_precision": 0.3,
+    "abstain_recall": 1.0,
+    "answer_match_rate": 0.0,
+    "answer_evidence_recall": 0.3333333333333333,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.0,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 1.0,
+    "false_abstain_penalty": 0.7777777777777778,
+    "false_confident_answer_penalty": 0.16666666666666666
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.0,
+    "abstain_precision": 0.3,
+    "abstain_recall": 1.0,
+    "false_abstain_penalty": 0.7777777777777778,
+    "false_confident_answer_penalty": 0.16666666666666666
+  },
+  "by_slice": {
+    "abstain_like": {
+      "count": 6,
+      "joint_acc": 1.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 1.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    },
+    "current": {
+      "count": 6,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.8333333333333334,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.16666666666666666
+    },
+    "multi_hop": {
+      "count": 6,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.16666666666666666
+    },
+    "temporal": {
+      "count": 6,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.5,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.6666666666666666
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 18,
+      "joint_acc": 0.2777777777777778,
+      "pred_abstain_rate": 0.9444444444444444,
+      "gold_abstain_rate": 0.2777777777777778,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    },
+    "multi_hop": {
+      "count": 3,
+      "joint_acc": 0.3333333333333333,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.3333333333333333,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.0
+    },
+    "temporal": {
+      "count": 3,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.6666666666666666
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 2,
+    "missing_evidence": 0,
+    "false_abstain": 14,
+    "multi_hop_failure": 0,
+    "attribute_mismatch": 9,
+    "entity_mismatch": 0,
+    "false_confident_answer": 6,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-41_q53",
+      "bucket": "temporal_selection_error",
+      "question": "Who have written notes of gratitude to Maria?",
+      "gold_answer": "Cindy, Laura",
+      "predicted_answer": "Maria suggests to John",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about maria. The supported answer is Maria suggests to John.",
+      "support_text": "Maria suggests to John to focus his energy on something meaningful, like joining local organizations or volunteering programs.",
+      "support_dia_ids": [
+        "D30:19"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q94",
+      "bucket": "false_abstain",
+      "question": "How did Audrey calm down her dog after the leash incident?",
+      "gold_answer": "Petted, hugged, spoke calmly and slowly walked the dog",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, her, incident, leash.",
+      "support_text": "Audrey shared a recent incident where her dog's leash broke, causing a scare but strengthening their bond.",
+      "support_dia_ids": [
+        "D19:3",
+        "D19:5",
+        "D19:7",
+        "D19:18",
+        "D19:2",
+        "D19:4",
+        "D19:6",
+        "D19:8",
+        "D19:12",
+        "D19:16",
+        "D19:22",
+        "D19:24",
+        "D19:28"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q20",
+      "bucket": "false_abstain",
+      "question": "What is a prominent charity organization that John might want to work with and why?",
+      "gold_answer": "Good Sports, because they work with Nike, Gatorade, and Under Armour and they aim toprovide youth sports opportunities for kids ages 3-18 in high-need communities.",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: charity, john, organization, work.",
+      "support_text": "John is teaming up with a local organization to help disadvantaged kids with sports and school as part of his charity work.",
+      "support_dia_ids": [
+        "D6:17"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q55",
+      "bucket": "false_abstain",
+      "question": "What activity do Audrey's dogs like to do in the dog park?",
+      "gold_answer": "Play fetch with ball and frisbee, run around and meet other dogs",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey's, dogs, park.",
+      "support_text": "Audrey's dogs love running around the park, but dislike snow and prefer sunny days in the grass.",
+      "support_dia_ids": [
+        "D23:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q82",
+      "bucket": "temporal_selection_error",
+      "question": "When did the Deboran and Jolene agree to go surfing?",
+      "gold_answer": "in October 2023",
+      "predicted_answer": "17 September 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+      "support_text": "Jolene just started learning about surfing but hasn't gone yet.",
+      "support_dia_ids": [
+        "D29:30"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q121",
+      "bucket": "false_abstain",
+      "question": "What advice did Evan give to Sam to avoid injuries while starting weightlifting?",
+      "gold_answer": "Find a trainer",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, sam, while.",
+      "support_text": "Sam shared about his health issues and feeling weighed down, while Evan apologized to his partner for a drunken incident involving rose bushes.",
+      "support_dia_ids": [
+        "D25:1",
+        "D25:5",
+        "D25:7",
+        "D25:13",
+        "D25:14",
+        "D25:2",
+        "D25:10",
+        "D25:8",
+        "D25:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q67",
+      "bucket": "false_abstain",
+      "question": "What does Melanie do with her family on hikes?",
+      "gold_answer": "Roast marshmallows, tell stories",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, her, melanie.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:3",
+        "D19:7",
+        "D19:9",
+        "D19:2",
+        "D19:6",
+        "D19:8",
+        "D19:10",
+        "D19:13"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q93",
+      "bucket": "false_abstain",
+      "question": "What did John's teammates give him when they met on Aug 15th?",
+      "gold_answer": "a basketball with autographs on it",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: him, john's, teammates.",
+      "support_text": "John's teammates believing in him and his love for improving his skills keep him motivated, especially during challenging times.",
+      "support_dia_ids": [
+        "D15:18"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q100",
+      "bucket": "false_abstain",
+      "question": "What did John and the veterans do during the small party?",
+      "gold_answer": "share stories and make connections",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: john, party, small, veterans.",
+      "support_text": "John organized a small party for some veterans to share their stories and make connections, which was heartwarming for him.",
+      "support_dia_ids": [
+        "D15:13"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q79",
+      "bucket": "false_abstain",
+      "question": "How many video game tournaments has Nate participated in?",
+      "gold_answer": "nine",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: game, nate, tournaments, video.",
+      "support_text": "Nate practices for video game tournaments.",
+      "support_dia_ids": [
+        "D24:11"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q63",
+      "bucket": "false_confident_answer",
+      "question": "When did Melanie go to the park?",
+      "gold_answer": "27 August 2023",
+      "predicted_answer": "28 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about melanie, park. The supported answer is 28 August 2023.",
+      "support_text": "Melanie took her kids to a park and enjoyed seeing them have fun exploring and playing.",
+      "support_dia_ids": [
+        "D15:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q70",
+      "bucket": "false_abstain",
+      "question": "What personality traits might Melanie say Caroline has?",
+      "gold_answer": "Thoughtful, authentic, driven",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, melanie.",
+      "support_text": "Melanie is supportive and expresses happiness for Caroline finding her true self and helping others.",
+      "support_dia_ids": [
+        "D19:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q84",
+      "bucket": "false_abstain",
+      "question": "What kind of professional activities does Jolene participate in to gain more experience in her field?",
+      "gold_answer": "present work at virtual conference, attend workshops and intern at firms",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: experience, her, jolene, more.",
+      "support_text": "Jolene is focusing on studying, gaining more experience, and considering more internships to enhance her skills.",
+      "support_dia_ids": [
+        "D21:8"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q50",
+      "bucket": "false_confident_answer",
+      "question": "When Dave was a child, what did he and his father do in the garage?",
+      "gold_answer": "tinkering with car engines, restoration and refurbishing cars",
+      "predicted_answer": "8 October 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about child, dave, garage, his. The supported answer is 8 October 2023.",
+      "support_text": "Dave spent hours as a child tinkering with engines in his dad's garage, finding it to be like his sanctuary.",
+      "support_dia_ids": [
+        "D22:5"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q119",
+      "bucket": "false_abstain",
+      "question": "What is one of Jolene's favorite dishes?",
+      "gold_answer": "lasagna",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: favorite, jolene's.",
+      "support_text": "Jolene's favorite game to play with her mom is 'Monster Hunter: World', appreciating the immersive story and open-world gaming.",
+      "support_dia_ids": [
+        "D24:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q58",
+      "bucket": "false_abstain",
+      "question": "What causes has John done events for?",
+      "gold_answer": "Toy drive, Community food drive, veterans, domestic violence",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: causes, events, john.",
+      "support_text": "John has organized events for causes other than helping veterans, like raising awareness and funds for victims of domestic abuse.",
+      "support_dia_ids": [
+        "D29:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q124",
+      "bucket": "false_abstain",
+      "question": "What did Maria plan to do later on the evening of 7 July, 2023?",
+      "gold_answer": "have dinner with friends from the gym",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, july, maria.",
+      "support_text": "John informed Maria about a recent flood in his area at 6:29 pm on 7 July, 2023, expressing the need to improve the community.",
+      "support_dia_ids": [
+        "D23:1",
+        "D23:3",
+        "D23:7",
+        "D23:9",
+        "D23:2",
+        "D23:4",
+        "D23:6",
+        "D23:8",
+        "D23:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q116",
+      "bucket": "false_abstain",
+      "question": "What is John organizing with his siblings?",
+      "gold_answer": "a gaming night",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: his, john, organizing.",
+      "support_text": "John mentioned organizing an online competition with his programmer friends, while James shared his excitement about releasing his first game inspired by Witcher 3.",
+      "support_dia_ids": [
+        "D27:1",
+        "D27:3",
+        "D27:5",
+        "D27:9",
+        "D27:11",
+        "D27:2",
+        "D27:4",
+        "D27:6",
+        "D27:8",
+        "D27:10",
+        "D27:12",
+        "D27:14"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-44_q94",
+      "question": "How did Audrey calm down her dog after the leash incident?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, her, incident, leash.",
+      "support_text": "Audrey shared a recent incident where her dog's leash broke, causing a scare but strengthening their bond.",
+      "gold_answer": "Petted, hugged, spoke calmly and slowly walked the dog",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q20",
+      "question": "What is a prominent charity organization that John might want to work with and why?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: charity, john, organization, work.",
+      "support_text": "John is teaming up with a local organization to help disadvantaged kids with sports and school as part of his charity work.",
+      "gold_answer": "Good Sports, because they work with Nike, Gatorade, and Under Armour and they aim toprovide youth sports opportunities for kids ages 3-18 in high-need communities.",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q190",
+      "question": "What does Caroline do to keep herself busy during her pottery break?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, her, herself.",
+      "support_text": "Caroline started playing acoustic guitar about five years ago as a way to express herself and escape in her emotions.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q55",
+      "question": "What activity do Audrey's dogs like to do in the dog park?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey's, dogs, park.",
+      "support_text": "Audrey's dogs love running around the park, but dislike snow and prefer sunny days in the grass.",
+      "gold_answer": "Play fetch with ball and frisbee, run around and meet other dogs",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q121",
+      "question": "What advice did Evan give to Sam to avoid injuries while starting weightlifting?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, sam, while.",
+      "support_text": "Sam shared about his health issues and feeling weighed down, while Evan apologized to his partner for a drunken incident involving rose bushes.",
+      "gold_answer": "Find a trainer",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q220",
+      "question": "How did Tim overcome his ankle injury from last season?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: his, last, tim.",
+      "support_text": "Tim told John about his trip to a castle in the UK last Friday, praising its architecture and history.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q67",
+      "question": "What does Melanie do with her family on hikes?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, her, melanie.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "gold_answer": "Roast marshmallows, tell stories",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q93",
+      "question": "What did John's teammates give him when they met on Aug 15th?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: him, john's, teammates.",
+      "support_text": "John's teammates believing in him and his love for improving his skills keep him motivated, especially during challenging times.",
+      "gold_answer": "a basketball with autographs on it",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q100",
+      "question": "What did John and the veterans do during the small party?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: john, party, small, veterans.",
+      "support_text": "John organized a small party for some veterans to share their stories and make connections, which was heartwarming for him.",
+      "gold_answer": "share stories and make connections",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q171",
+      "question": "What has James been teaching his siblings?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: his, james, siblings.",
+      "support_text": "James and John, at 9:18 pm on 26 August 2022, discussed James' dog named Ned, John helping his siblings with programming, and working on a coding project with the siblings.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q79",
+      "question": "How many video game tournaments has Nate participated in?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: game, nate, tournaments, video.",
+      "support_text": "Nate practices for video game tournaments.",
+      "gold_answer": "nine",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q70",
+      "question": "What personality traits might Melanie say Caroline has?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, melanie.",
+      "support_text": "Melanie is supportive and expresses happiness for Caroline finding her true self and helping others.",
+      "gold_answer": "Thoughtful, authentic, driven",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}

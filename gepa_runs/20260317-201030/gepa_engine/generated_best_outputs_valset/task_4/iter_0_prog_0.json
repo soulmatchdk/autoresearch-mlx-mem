@@ -1,0 +1,24 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "25 October 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about big, joanna, screen, shown. The supported answer is 25 October 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 9.801724137931034,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+                "D25:2"
+            ]
+        }
+    ],
+    "answer_style": "temporal"
+}

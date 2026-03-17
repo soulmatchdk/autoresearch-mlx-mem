@@ -1,0 +1,33 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: cars, dave's.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 6.756666666666667,
+            "text": "Dave and Calvin, at 3:13 pm on 8 October, 2023, discussed Dave's passion for cars.",
+            "value": "Dave and Calvin, at 3:13 pm on 8 October, 2023, discussed Dave's passion for cars.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+                "D22:1",
+                "D22:3",
+                "D22:5",
+                "D22:7",
+                "D22:6",
+                "D22:9",
+                "D22:2",
+                "D22:4",
+                "D22:8",
+                "D22:12"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

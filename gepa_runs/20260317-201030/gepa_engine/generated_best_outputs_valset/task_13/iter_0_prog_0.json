@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: help, john.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 6.816129032258065,
+            "text": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "value": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "7:36 pm on 21 October, 2022",
+            "dia_ids": [
+                "D28:16"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

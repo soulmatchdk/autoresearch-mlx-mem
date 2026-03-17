@@ -1,0 +1,4564 @@
+{
+  "temporal_policy": [
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q30",
+      "Inputs": {
+        "question": "When is Joanna going to make Nate's ice cream for her family?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+              "D16:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "24 June 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about cream, her, ice, joanna. The supported answer is 24 June 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The weekend of 24June, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q55",
+      "Inputs": {
+        "question": "When was Joanna's second movie script shown on the big screens?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.0,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Sunday before 25October, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-50_q71",
+      "Inputs": {
+        "question": "When did Calvin attend a gala in Boston?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+              "D30:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 November 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "November 16, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-41_q54",
+      "Inputs": {
+        "question": "When did John help renovate his hometown community center?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "John helped renovate a rundown community center back home last year.",
+            "value": "John helped renovate a rundown community center back home last year.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:19 pm on 5 August, 2023",
+            "dia_ids": [
+              "D28:11"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about center, community, john, renovate. The supported answer is 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2022",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-48_q66",
+      "Inputs": {
+        "question": "Which country was Jolene located in during the last week of August 2023?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.268333333333333,
+            "text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "value": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:9",
+              "D23:29",
+              "D23:4",
+              "D23:12",
+              "D23:18",
+              "D23:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "30 August",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, jolene. The supported answer is 30 August.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Brazil",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q9",
+      "Inputs": {
+        "question": "When did Nate get his first two turtles?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "value": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:21"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, nate, turtles. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2019",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-48_q82",
+      "Inputs": {
+        "question": "When did the Deboran and Jolene agree to go surfing?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 September 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "in October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-26_q4",
+      "Inputs": {
+        "question": "What did Caroline research?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.813157894736841,
+            "text": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "value": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "and emotional preparation",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, research. The supported answer is and emotional preparation.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Adoption agencies",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q4",
+      "Inputs": {
+        "question": "When did Nate win his first video game tournament?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.5,
+            "text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "value": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "7:31 pm on 21 January, 2022",
+            "dia_ids": [
+              "D1:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 January 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "the week before 21Janury, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-30_q34",
+      "Inputs": {
+        "question": "When did Jon visit networking events for his store?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Jon has been attending networking events to make things happen after losing his job.",
+            "value": "Jon has been attending networking events to make things happen after losing his job.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "2:15 pm on 21 June, 2023",
+            "dia_ids": [
+              "D16:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-26_q80",
+      "Inputs": {
+        "question": "When did Caroline pass the adoption interview?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.5,
+            "text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "value": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:7",
+              "D19:9",
+              "D19:2",
+              "D19:6",
+              "D19:8",
+              "D19:10",
+              "D19:13"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: adoption, caroline.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Friday before 22 October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "temporal_grounding",
+        "bad_decision_pattern": "treated a grounded temporal clue as too weak to answer",
+        "should_have_done": "answer from the strongest grounded temporal clue instead of abstaining",
+        "minimal_fix_hint": "abstain_policy should let one grounded temporal snippet beat default abstain"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-47_q54",
+      "Inputs": {
+        "question": "How long did it take for James to complete his Witcher-inspired game?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.5,
+            "text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "value": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:5",
+              "D22:7",
+              "D22:9",
+              "D22:10",
+              "D22:12",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 September",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about game, his, inspired, james. The supported answer is 1 September.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "six months",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-41_q134",
+      "Inputs": {
+        "question": "What did John do the week before August 3, 2023 involving his kids?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.30625,
+            "text": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "value": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:5",
+              "D28:11",
+              "D28:8",
+              "D28:10",
+              "D28:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "5 August, 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, his, john. The supported answer is 5 August, 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Had a meaningful experience at a military memorial",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-42_q65",
+      "Inputs": {
+        "question": "When did Nate win a big Valorant tourney?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.0,
+            "text": "Nate won a big Valorant tournament making him the champion.",
+            "value": "Nate won a big Valorant tournament making him the champion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "8:10 pm on 7 November, 2022",
+            "dia_ids": [
+              "D27:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "7 November 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Saturday before 7November, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-26_q32",
+      "Inputs": {
+        "question": "When did Melanie go camping in June?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "value": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "10:37 am on 27 June, 2023",
+            "dia_ids": [
+              "D4:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "The week before 27 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about camping, melanie. The supported answer is The week before 27 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The week before 27 June 2023",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-44_q11",
+      "Inputs": {
+        "question": "When did Audrey's positive reinforcement training course for dogs take place?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "value": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "5:41 pm on 3 May, 2023",
+            "dia_ids": [
+              "D4:17"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "3 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, place. The supported answer is 3 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_policy",
+      "query_id": "locomo_conv-30_q31",
+      "Inputs": {
+        "question": "When Jon is planning to open his dance studio?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.5,
+            "text": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "value": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 3,
+            "session_time": null,
+            "dia_ids": [
+              "D3:1",
+              "D3:2",
+              "D3:4",
+              "D3:6",
+              "D3:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 February",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about dance, his, jon, open. The supported answer is 1 February.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    }
+  ],
+  "temporal_evidence_policy": [
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-42_q30",
+      "Inputs": {
+        "question": "When is Joanna going to make Nate's ice cream for her family?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+              "D16:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "24 June 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about cream, her, ice, joanna. The supported answer is 24 June 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The weekend of 24June, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-42_q55",
+      "Inputs": {
+        "question": "When was Joanna's second movie script shown on the big screens?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.0,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Sunday before 25October, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-50_q71",
+      "Inputs": {
+        "question": "When did Calvin attend a gala in Boston?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+              "D30:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 November 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "November 16, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-41_q54",
+      "Inputs": {
+        "question": "When did John help renovate his hometown community center?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "John helped renovate a rundown community center back home last year.",
+            "value": "John helped renovate a rundown community center back home last year.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:19 pm on 5 August, 2023",
+            "dia_ids": [
+              "D28:11"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about center, community, john, renovate. The supported answer is 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2022",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-48_q66",
+      "Inputs": {
+        "question": "Which country was Jolene located in during the last week of August 2023?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.268333333333333,
+            "text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "value": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:9",
+              "D23:29",
+              "D23:4",
+              "D23:12",
+              "D23:18",
+              "D23:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "30 August",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, jolene. The supported answer is 30 August.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Brazil",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-42_q9",
+      "Inputs": {
+        "question": "When did Nate get his first two turtles?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "value": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:21"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, nate, turtles. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2019",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-48_q82",
+      "Inputs": {
+        "question": "When did the Deboran and Jolene agree to go surfing?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 September 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "in October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-26_q4",
+      "Inputs": {
+        "question": "What did Caroline research?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.813157894736841,
+            "text": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "value": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "and emotional preparation",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, research. The supported answer is and emotional preparation.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Adoption agencies",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-42_q4",
+      "Inputs": {
+        "question": "When did Nate win his first video game tournament?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.5,
+            "text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "value": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "7:31 pm on 21 January, 2022",
+            "dia_ids": [
+              "D1:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 January 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "the week before 21Janury, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-30_q34",
+      "Inputs": {
+        "question": "When did Jon visit networking events for his store?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Jon has been attending networking events to make things happen after losing his job.",
+            "value": "Jon has been attending networking events to make things happen after losing his job.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "2:15 pm on 21 June, 2023",
+            "dia_ids": [
+              "D16:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-26_q80",
+      "Inputs": {
+        "question": "When did Caroline pass the adoption interview?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.5,
+            "text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "value": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:7",
+              "D19:9",
+              "D19:2",
+              "D19:6",
+              "D19:8",
+              "D19:10",
+              "D19:13"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: adoption, caroline.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Friday before 22 October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "temporal_grounding",
+        "bad_decision_pattern": "treated a grounded temporal clue as too weak to answer",
+        "should_have_done": "answer from the strongest grounded temporal clue instead of abstaining",
+        "minimal_fix_hint": "abstain_policy should let one grounded temporal snippet beat default abstain"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-47_q54",
+      "Inputs": {
+        "question": "How long did it take for James to complete his Witcher-inspired game?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.5,
+            "text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "value": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:5",
+              "D22:7",
+              "D22:9",
+              "D22:10",
+              "D22:12",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 September",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about game, his, inspired, james. The supported answer is 1 September.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "six months",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-41_q134",
+      "Inputs": {
+        "question": "What did John do the week before August 3, 2023 involving his kids?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.30625,
+            "text": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "value": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:5",
+              "D28:11",
+              "D28:8",
+              "D28:10",
+              "D28:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "5 August, 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, his, john. The supported answer is 5 August, 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Had a meaningful experience at a military memorial",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-42_q65",
+      "Inputs": {
+        "question": "When did Nate win a big Valorant tourney?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.0,
+            "text": "Nate won a big Valorant tournament making him the champion.",
+            "value": "Nate won a big Valorant tournament making him the champion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "8:10 pm on 7 November, 2022",
+            "dia_ids": [
+              "D27:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "7 November 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Saturday before 7November, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-26_q32",
+      "Inputs": {
+        "question": "When did Melanie go camping in June?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "value": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "10:37 am on 27 June, 2023",
+            "dia_ids": [
+              "D4:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "The week before 27 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about camping, melanie. The supported answer is The week before 27 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The week before 27 June 2023",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-44_q11",
+      "Inputs": {
+        "question": "When did Audrey's positive reinforcement training course for dogs take place?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "value": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "5:41 pm on 3 May, 2023",
+            "dia_ids": [
+              "D4:17"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "3 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, place. The supported answer is 3 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "temporal_evidence_policy",
+      "query_id": "locomo_conv-30_q31",
+      "Inputs": {
+        "question": "When Jon is planning to open his dance studio?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.5,
+            "text": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "value": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 3,
+            "session_time": null,
+            "dia_ids": [
+              "D3:1",
+              "D3:2",
+              "D3:4",
+              "D3:6",
+              "D3:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 February",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about dance, his, jon, open. The supported answer is 1 February.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "temporal_evidence_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    }
+  ],
+  "answer_synthesis_policy": [
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q30",
+      "Inputs": {
+        "question": "When is Joanna going to make Nate's ice cream for her family?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.0,
+            "text": "Joanna appreciates Nate's support for her ice cream making.",
+            "value": "Joanna appreciates Nate's support for her ice cream making.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "10:55 am on 24 June, 2022",
+            "dia_ids": [
+              "D16:15"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "24 June 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about cream, her, ice, joanna. The supported answer is 24 June 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The weekend of 24June, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q55",
+      "Inputs": {
+        "question": "When was Joanna's second movie script shown on the big screens?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.0,
+            "text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "value": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Sunday before 25October, 2022.",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-50_q71",
+      "Inputs": {
+        "question": "When did Calvin attend a gala in Boston?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+            "value": "fancy gala in Boston recently and met interesting people",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 30,
+            "session_time": "10:54 am on 17 November, 2023",
+            "dia_ids": [
+              "D30:2"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 November 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "November 16, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-41_q54",
+      "Inputs": {
+        "question": "When did John help renovate his hometown community center?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "John helped renovate a rundown community center back home last year.",
+            "value": "John helped renovate a rundown community center back home last year.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "5:19 pm on 5 August, 2023",
+            "dia_ids": [
+              "D28:11"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about center, community, john, renovate. The supported answer is 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2022",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-48_q66",
+      "Inputs": {
+        "question": "Which country was Jolene located in during the last week of August 2023?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.268333333333333,
+            "text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "value": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:9",
+              "D23:29",
+              "D23:4",
+              "D23:12",
+              "D23:18",
+              "D23:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "30 August",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, jolene. The supported answer is 30 August.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Brazil",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q9",
+      "Inputs": {
+        "question": "When did Nate get his first two turtles?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "value": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+              "D25:21"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "25 October 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, nate, turtles. The supported answer is 25 October 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "2019",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-48_q82",
+      "Inputs": {
+        "question": "When did the Deboran and Jolene agree to go surfing?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+              "D29:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "17 September 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "in October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-26_q4",
+      "Inputs": {
+        "question": "What did Caroline research?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 11.813157894736841,
+            "text": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "value": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "and emotional preparation",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, research. The supported answer is and emotional preparation.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Adoption agencies",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q4",
+      "Inputs": {
+        "question": "When did Nate win his first video game tournament?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.5,
+            "text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "value": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "7:31 pm on 21 January, 2022",
+            "dia_ids": [
+              "D1:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 January 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "the week before 21Janury, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-48_q55",
+      "Inputs": {
+        "question": "Which pet did Jolene adopt first - Susie or Seraphim?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Additionally, Jolene showed a photo of her pet Susie, whom she adores for bringing comfort and brightness into her life.",
+            "value": "Additionally, Jolene showed a photo of her pet Susie, whom she adores for bringing comfort and brightness into her life.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:5",
+              "D28:7",
+              "D28:9",
+              "D28:11",
+              "D28:15",
+              "D28:16",
+              "D28:18",
+              "D28:22",
+              "D28:26",
+              "D28:30"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": "showed a photo of her pet Susie",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, pet, susie. The supported answer is showed a photo of her pet Susie.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Susie",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": false,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q63",
+      "Inputs": {
+        "question": "How many letters has Joanna recieved?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.801724137931035,
+            "text": "At 8:16 pm on 25 October 2022, Nate asked Joanna how she's been.",
+            "value": "At 8:16 pm on 25 October 2022, Nate asked Joanna how she's been.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:15",
+              "D25:19",
+              "D25:21",
+              "D25:25",
+              "D25:27",
+              "D25:2",
+              "D25:4",
+              "D25:8",
+              "D25:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.801724137931035,
+            "text": "Joanna found it fascinating and admired how Nate's turtles have different personalities.",
+            "value": "Joanna found it fascinating and admired how Nate's turtles have different personalities.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:15",
+              "D25:19",
+              "D25:21",
+              "D25:25",
+              "D25:27",
+              "D25:2",
+              "D25:4",
+              "D25:8",
+              "D25:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.7172413793103445,
+            "text": "Joanna shared her passion for writing as a form of solace and creativity, mentioning how it has become her escape.",
+            "value": "Joanna shared her passion for writing as a form of solace and creativity, mentioning how it has become her escape.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": null,
+            "dia_ids": [
+              "D18:1",
+              "D18:3",
+              "D18:5",
+              "D18:7",
+              "D18:11",
+              "D18:13",
+              "D18:8",
+              "D18:10",
+              "D18:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "8",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about how, joanna. The supported answer is 8.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Two",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-30_q34",
+      "Inputs": {
+        "question": "When did Jon visit networking events for his store?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Jon has been attending networking events to make things happen after losing his job.",
+            "value": "Jon has been attending networking events to make things happen after losing his job.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "2:15 pm on 21 June, 2023",
+            "dia_ids": [
+              "D16:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-47_q54",
+      "Inputs": {
+        "question": "How long did it take for James to complete his Witcher-inspired game?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.5,
+            "text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "value": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:5",
+              "D22:7",
+              "D22:9",
+              "D22:10",
+              "D22:12",
+              "D22:14",
+              "D22:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 September",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about game, his, inspired, james. The supported answer is 1 September.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "six months",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-41_q134",
+      "Inputs": {
+        "question": "What did John do the week before August 3, 2023 involving his kids?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.30625,
+            "text": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "value": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+              "D28:1",
+              "D28:3",
+              "D28:5",
+              "D28:11",
+              "D28:8",
+              "D28:10",
+              "D28:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "5 August, 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, his, john. The supported answer is 5 August, 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Had a meaningful experience at a military memorial",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-42_q65",
+      "Inputs": {
+        "question": "When did Nate win a big Valorant tourney?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.0,
+            "text": "Nate won a big Valorant tournament making him the champion.",
+            "value": "Nate won a big Valorant tournament making him the champion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "8:10 pm on 7 November, 2022",
+            "dia_ids": [
+              "D27:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "7 November 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Saturday before 7November, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-26_q32",
+      "Inputs": {
+        "question": "When did Melanie go camping in June?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "value": "Melanie went camping with her family in the mountains last week and had a great time exploring nature, roasting marshmallows, and hiking.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "10:37 am on 27 June, 2023",
+            "dia_ids": [
+              "D4:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "The week before 27 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about camping, melanie. The supported answer is The week before 27 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The week before 27 June 2023",
+        "gold_abstain": false,
+        "failure_bucket": null,
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": true,
+        "evidence_hit": true,
+        "missed_evidence_type": "none",
+        "bad_decision_pattern": "none",
+        "should_have_done": "keep the current behavior",
+        "minimal_fix_hint": "no policy change needed"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-44_q11",
+      "Inputs": {
+        "question": "When did Audrey's positive reinforcement training course for dogs take place?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "value": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "5:41 pm on 3 May, 2023",
+            "dia_ids": [
+              "D4:17"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "3 May 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, place. The supported answer is 3 May 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-30_q31",
+      "Inputs": {
+        "question": "When Jon is planning to open his dance studio?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 12.5,
+            "text": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "value": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 3,
+            "session_time": null,
+            "dia_ids": [
+              "D3:1",
+              "D3:2",
+              "D3:4",
+              "D3:6",
+              "D3:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "1 February",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about dance, his, jon, open. The supported answer is 1 February.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "temporal_selection_error",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "time_anchor_alignment",
+        "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
+        "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
+        "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates"
+      }
+    },
+    {
+      "component": "answer_synthesis_policy",
+      "query_id": "locomo_conv-47_q46",
+      "Inputs": {
+        "question": "What kind of beer does McGee's bar serve?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.759677419354839,
+            "text": "James and Samantha were at McGee's bar where he found out she loves lager beer.",
+            "value": "James and Samantha were at McGee's bar where he found out she loves lager beer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "9:23 pm on 4 September, 2022",
+            "dia_ids": [
+              "D23:3"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.827419354838709,
+            "text": "McGee's bar was one of the criteria for James and Samantha's choice of apartment.",
+            "value": "McGee's bar was one of the criteria for James and Samantha's choice of apartment.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "12:37 am on 31 October, 2022",
+            "dia_ids": [
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.827419354838709,
+            "text": "John shared a tournament photo, and James revealed plans to move in with Samantha near McGee's bar.",
+            "value": "John shared a tournament photo, and James revealed plans to move in with Samantha near McGee's bar.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:1",
+              "D29:3",
+              "D29:5",
+              "D29:8",
+              "D29:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "found out she loves lager beer",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about bar, beer, mcgee's. The supported answer is found out she loves lager beer.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Stout, lager",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_synthesis_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    }
+  ],
+  "answer_style_policy": [
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-43_q2",
+      "Inputs": {
+        "question": "What are John's goals for his career that are not related to his basketball skills?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 15.132758620689655,
+            "text": "They discussed John's passion for basketball, his career goals, and plans for life after sports.",
+            "value": "They discussed John's passion for basketball, his career goals, and plans for life after sports.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 11,
+            "session_time": null,
+            "dia_ids": [
+              "D11:5",
+              "D11:7",
+              "D11:11",
+              "D11:15",
+              "D11:17",
+              "D11:19",
+              "D11:20",
+              "D11:10",
+              "D11:22",
+              "D11:24"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: basketball, career, goals, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "get endorsements, build his brand, do charity work",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-43_q14",
+      "Inputs": {
+        "question": "What does Tim do to escape reality?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.681034482758621,
+            "text": "Tim loves curling up with a good book to escape reality and get lost in different worlds during his free time.",
+            "value": "Tim loves curling up with a good book to escape reality and get lost in different worlds during his free time.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "5:51 pm on 21 October, 2023",
+            "dia_ids": [
+              "D15:29"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: escape, reality, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Read fantasy books.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-48_q143",
+      "Inputs": {
+        "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 16.675,
+            "text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "value": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "7:37 pm on 9 July, 2023",
+            "dia_ids": [
+              "D15:20"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "It really showed how much she loves her.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-43_q66",
+      "Inputs": {
+        "question": "What fantasy movies does Tim like?",
+        "entity": "speaker_a",
+        "attribute": "preference",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.813793103448276,
+            "text": "Tim enjoys escaping in books and movies, particularly fantasy genres like \"The Lord of the Rings\", and looks forward to a new TV series, \"The Wheel of Time\".",
+            "value": "Tim enjoys escaping in books and movies, particularly fantasy genres like \"The Lord of the Rings\", and looks forward to a new TV series, \"The Wheel of Time\".",
+            "entity": "speaker_a",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 26,
+            "session_time": null,
+            "dia_ids": [
+              "D26:1",
+              "D26:23",
+              "D26:21",
+              "D26:19",
+              "D26:29",
+              "D26:6",
+              "D26:32",
+              "D26:36"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: fantasy, like, movies, tim.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Lord of the Rings, Harry Potter, and Star Wars.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-44_q49",
+      "Inputs": {
+        "question": "What does Andrew view his pets as?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.8375,
+            "text": "Andrew considered getting another dog but decided to focus on his current pets first.",
+            "value": "Andrew considered getting another dog but decided to focus on his current pets first.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": null,
+            "dia_ids": [
+              "D27:1",
+              "D27:5",
+              "D27:7",
+              "D27:9",
+              "D27:15",
+              "D27:17",
+              "D27:2",
+              "D27:4",
+              "D27:6",
+              "D27:8",
+              "D27:10",
+              "D27:12",
+              "D27:14",
+              "D27:18"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, his, pets.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Family",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-50_q26",
+      "Inputs": {
+        "question": "When did Dave host a card-playing night with his friends?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "value": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+              "D15:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "18 August 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "on the Friday before 22 August, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-50_q30",
+      "Inputs": {
+        "question": "What are Dave's hobbies other than fixing cars?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.756666666666667,
+            "text": "Dave and Calvin, at 3:13 pm on 8 October, 2023, discussed Dave's passion for cars.",
+            "value": "Dave and Calvin, at 3:13 pm on 8 October, 2023, discussed Dave's passion for cars.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 22,
+            "session_time": null,
+            "dia_ids": [
+              "D22:1",
+              "D22:3",
+              "D22:5",
+              "D22:7",
+              "D22:6",
+              "D22:9",
+              "D22:2",
+              "D22:4",
+              "D22:8",
+              "D22:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: cars, dave's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "take a walk, go hiking, listen to favorite albums, live concerts, photography",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-49_q12",
+      "Inputs": {
+        "question": "What health issue did Sam face that motivated him to change his lifestyle?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 10.598,
+            "text": "Sam feels a mix of emotions, somewhat concerned about his health but motivated to make positive changes.",
+            "value": "Sam feels a mix of emotions, somewhat concerned about his health but motivated to make positive changes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 7,
+            "session_time": "4:20 pm on 15 August, 2023",
+            "dia_ids": [
+              "D7:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: health, his, motivated, sam.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Weight problem",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-26_q40",
+      "Inputs": {
+        "question": "In what ways is Caroline participating in the LGBTQ community?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.294736842105262,
+            "text": "Caroline expressed how excited she was about her work volunteering for the LGBTQ+ community and how it inspired her to create art.",
+            "value": "Caroline expressed how excited she was about her work volunteering for the LGBTQ+ community and how it inspired her to create art.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": null,
+            "dia_ids": [
+              "D16:1",
+              "D16:5",
+              "D16:7",
+              "D16:9",
+              "D16:13",
+              "D16:15",
+              "D16:2",
+              "D16:4",
+              "D16:8"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, community, lgbtq.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Joining activist group, going to pride parades, participating in an art show, mentoring program",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-48_q66",
+      "Inputs": {
+        "question": "Which country was Jolene located in during the last week of August 2023?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.268333333333333,
+            "text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "value": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:9",
+              "D23:29",
+              "D23:4",
+              "D23:12",
+              "D23:18",
+              "D23:22"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "30 August",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, august, jolene. The supported answer is 30 August.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Brazil",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-26_q53",
+      "Inputs": {
+        "question": "What are Melanie's pets' names?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.813157894736842,
+            "text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "value": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+              "D17:1",
+              "D17:3",
+              "D17:7",
+              "D17:19",
+              "D17:23",
+              "D17:8",
+              "D17:10",
+              "D17:13",
+              "D17:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Oliver, Luna, Bailey",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-41_q58",
+      "Inputs": {
+        "question": "What causes has John done events for?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.8171875,
+            "text": "John has organized events for causes other than helping veterans, like raising awareness and funds for victims of domestic abuse.",
+            "value": "raising awareness and funds for victims of domestic abuse",
+            "entity": "speaker_a",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "8:06 pm on 9 August, 2023",
+            "dia_ids": [
+              "D29:10"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: causes, events, john.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Toy drive, Community food drive, veterans, domestic violence",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-41_q36",
+      "Inputs": {
+        "question": "What states has Maria vacationed at?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 4.85,
+            "text": "John excitedly told Maria about joining the fire-fighting brigade at 11:08 am on 16 August, 2023.",
+            "value": "John excitedly told Maria about joining the fire-fighting brigade at 11:08 am on 16 August, 2023.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 32,
+            "session_time": null,
+            "dia_ids": [
+              "D32:1",
+              "D32:3",
+              "D32:7",
+              "D32:9",
+              "D32:11",
+              "D32:14",
+              "D32:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: maria.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Oregon, Florida",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-42_q4",
+      "Inputs": {
+        "question": "When did Nate win his first video game tournament?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 13.5,
+            "text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "value": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "7:31 pm on 21 January, 2022",
+            "dia_ids": [
+              "D1:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 January 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "the week before 21Janury, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-44_q32",
+      "Inputs": {
+        "question": "What has Andrew done with his dogs?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.85,
+            "text": "Andrew values safety and comfort for his dogs, providing them with essentials like a bed, toys, and puppy pads.",
+            "value": "bed, toys, and puppy pads",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "9:02 am on 22 November, 2023",
+            "dia_ids": [
+              "D28:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: andrew, dogs, his.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Taking walks and hiking",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-49_q46",
+      "Inputs": {
+        "question": "Which places in Canada was Evan visiting in July 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.056,
+            "text": "At 10:52 am on 27 July, 2023, Sam confided in Evan about being teased for his weight, prompting him to make health changes.",
+            "value": "At 10:52 am on 27 July, 2023, Sam confided in Evan about being teased for his weight, prompting him to make health changes.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": null,
+            "dia_ids": [
+              "D4:1",
+              "D4:3",
+              "D4:7",
+              "D4:15",
+              "D4:17",
+              "D4:19",
+              "D4:2",
+              "D4:4",
+              "D4:6",
+              "D4:8",
+              "D4:12",
+              "D4:10"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, evan, july.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Banff, Rocky Mountains",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-42_q63",
+      "Inputs": {
+        "question": "How many letters has Joanna recieved?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.801724137931035,
+            "text": "At 8:16 pm on 25 October 2022, Nate asked Joanna how she's been.",
+            "value": "At 8:16 pm on 25 October 2022, Nate asked Joanna how she's been.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:15",
+              "D25:19",
+              "D25:21",
+              "D25:25",
+              "D25:27",
+              "D25:2",
+              "D25:4",
+              "D25:8",
+              "D25:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.801724137931035,
+            "text": "Joanna found it fascinating and admired how Nate's turtles have different personalities.",
+            "value": "Joanna found it fascinating and admired how Nate's turtles have different personalities.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:15",
+              "D25:19",
+              "D25:21",
+              "D25:25",
+              "D25:27",
+              "D25:2",
+              "D25:4",
+              "D25:8",
+              "D25:10"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.7172413793103445,
+            "text": "Joanna shared her passion for writing as a form of solace and creativity, mentioning how it has become her escape.",
+            "value": "Joanna shared her passion for writing as a form of solace and creativity, mentioning how it has become her escape.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": null,
+            "dia_ids": [
+              "D18:1",
+              "D18:3",
+              "D18:5",
+              "D18:7",
+              "D18:11",
+              "D18:13",
+              "D18:8",
+              "D18:10",
+              "D18:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "8",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about how, joanna. The supported answer is 8.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Two",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-50_q124",
+      "Inputs": {
+        "question": "How does Calvin stay motivated when faced with setbacks?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.768333333333333,
+            "text": "Calvin encouraged him not to give up and stay positive, sharing his approach to staying motivated during setbacks.",
+            "value": "Calvin encouraged him not to give up and stay positive, sharing his approach to staying motivated during setbacks.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:5",
+              "D23:11",
+              "D23:2",
+              "D23:4",
+              "D23:10",
+              "D23:16"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, motivated, setbacks, stay.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "Reminds himself of his passion for goals, gets help from others, and takes a break to recharge",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-42_q48",
+      "Inputs": {
+        "question": "What places has Nate met new people?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.777586206896551,
+            "text": "Nate shared his experience at a game convention where he met new people who shared his gaming interests.",
+            "value": "Nate shared his experience at a game convention where he met new people who shared his gaming interests.",
+            "entity": "speaker_b",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+              "D23:1",
+              "D23:3",
+              "D23:5",
+              "D23:7",
+              "D23:11",
+              "D23:17",
+              "D23:2",
+              "D23:6",
+              "D23:16",
+              "D23:18",
+              "D23:26"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: met, nate, new, people.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "A tournament and agaming convention.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-30_q34",
+      "Inputs": {
+        "question": "When did Jon visit networking events for his store?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Jon has been attending networking events to make things happen after losing his job.",
+            "value": "Jon has been attending networking events to make things happen after losing his job.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "2:15 pm on 21 June, 2023",
+            "dia_ids": [
+              "D16:6"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "21 June 2023",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "20 June, 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-50_q2",
+      "Inputs": {
+        "question": "What items did Calvin buy in March 2023?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.023333333333333,
+            "text": "Calvin told Dave about his new luxury car at 4:45 pm on 26 March, 2023, expressing excitement and gratitude.",
+            "value": "Calvin told Dave about his new luxury car at 4:45 pm on 26 March, 2023, expressing excitement and gratitude.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": null,
+            "dia_ids": [
+              "D2:1",
+              "D2:5",
+              "D2:17",
+              "D2:8",
+              "D2:10",
+              "D2:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, calvin, march.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "mansion in Japan, luxury car Ferrari 488 GTB",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-26_q80",
+      "Inputs": {
+        "question": "When did Caroline pass the adoption interview?",
+        "entity": "speaker_a",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 6.5,
+            "text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "value": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": null,
+            "dia_ids": [
+              "D19:1",
+              "D19:3",
+              "D19:7",
+              "D19:9",
+              "D19:2",
+              "D19:6",
+              "D19:8",
+              "D19:10",
+              "D19:13"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: adoption, caroline.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Friday before 22 October 2023",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "temporal_grounding",
+        "bad_decision_pattern": "treated a grounded temporal clue as too weak to answer",
+        "should_have_done": "answer from the strongest grounded temporal clue instead of abstaining",
+        "minimal_fix_hint": "abstain_policy should let one grounded temporal snippet beat default abstain"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-44_q30",
+      "Inputs": {
+        "question": "What are the names of Audrey's dogs?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 7.6875,
+            "text": "Pepper, Pixie, Precious, and Panda are the names of Audrey's dogs, each having their own favorite spot to relax.",
+            "value": "spot to relax",
+            "entity": "speaker_a",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "9:58 pm on 16 August, 2023",
+            "dia_ids": [
+              "D15:5"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey's, dogs, names.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Pepper, Precious, Panda, and Pixie",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-41_q33",
+      "Inputs": {
+        "question": "What outdoor activities has John done with his colleagues?",
+        "entity": "speaker_a",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.8390625,
+            "text": "John enjoys outdoor activities such as hiking, picnics, and board games with his family.",
+            "value": "John enjoys outdoor activities such as hiking, picnics, and board games with his family.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "3:14 pm on 13 August, 2023",
+            "dia_ids": [
+              "D31:19"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: activities, his, john, outdoor.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Hiking, mountaineering",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-43_q30",
+      "Inputs": {
+        "question": "What schools did John play basketball in and how many years was he with his team during high school?",
+        "entity": "speaker_b",
+        "attribute": "education",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 14.608620689655172,
+            "text": "John shared about catching up with old friends from his high school sports team, where they played together for four years.",
+            "value": "John shared about catching up with old friends from his high school sports team, where they played together for four years.",
+            "entity": "speaker_b",
+            "attribute": "education",
+            "regime": "global",
+            "session_idx": 9,
+            "session_time": null,
+            "dia_ids": [
+              "D9:1",
+              "D9:5",
+              "D9:7",
+              "D9:9",
+              "D9:15",
+              "D9:2",
+              "D9:4",
+              "D9:6",
+              "D9:8",
+              "D9:10",
+              "D9:12",
+              "D9:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: high, his, john, school.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Middle school, high school, and college and he was with his high school team for 4 years.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-49_q62",
+      "Inputs": {
+        "question": "What kind of stress was Sam dealing with in October 2023?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 10.196,
+            "text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "value": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 14,
+            "session_time": null,
+            "dia_ids": [
+              "D14:1",
+              "D14:3",
+              "D14:7",
+              "D14:11",
+              "D14:2",
+              "D14:4",
+              "D14:8",
+              "D14:14"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: 2023, october, sam.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "work-related stress",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "multi_evidence_synthesis",
+        "bad_decision_pattern": "gave up before combining the available support snippets",
+        "should_have_done": "combine the best grounded snippets into one compact answer",
+        "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-44_q43",
+      "Inputs": {
+        "question": "What technique is Audrey using to discipline her dogs?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.85,
+            "text": "Audrey worries about her dogs when they are in new places but was relieved to see them well-behaved at the salon.",
+            "value": "Audrey worries about her dogs when they are in new places but was relieved to see them well-behaved at the salon.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": "9:02 am on 22 November, 2023",
+            "dia_ids": [
+              "D28:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, dogs, her.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Positive reinforcement",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-42_q65",
+      "Inputs": {
+        "question": "When did Nate win a big Valorant tourney?",
+        "entity": "speaker_b",
+        "attribute": "date",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 9.0,
+            "text": "Nate won a big Valorant tournament making him the champion.",
+            "value": "Nate won a big Valorant tournament making him the champion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "8:10 pm on 7 November, 2022",
+            "dia_ids": [
+              "D27:1"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "temporal",
+        "answer": "7 November 2022",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+        "confidence_band": "medium"
+      },
+      "Feedback": {
+        "gold_mode_label": "temporal",
+        "gold_answer": "The Saturday before 7November, 2022",
+        "gold_abstain": false,
+        "failure_bucket": "false_confident_answer",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "specific_answer_span",
+        "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
+        "should_have_done": "either extract a compact grounded span or abstain",
+        "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-42_q47",
+      "Inputs": {
+        "question": "What board games has Nate played?",
+        "entity": "speaker_b",
+        "attribute": "possession",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 5.777586206896552,
+            "text": "Nate made friends at the convention who love games like him and planned a gaming session together.",
+            "value": "him and planned a gaming session together",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "10:58 am on 9 October, 2022",
+            "dia_ids": [
+              "D23:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: games, nate.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Chess, Catan.",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-26_q8",
+      "Inputs": {
+        "question": "What is Caroline's relationship status?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 4.85,
+            "text": "Caroline's vision for the future includes creating a safe and loving home for needy kids to experience love and acceptance.",
+            "value": "Caroline's vision for the future includes creating a safe and loving home for needy kids to experience love and acceptance.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 19,
+            "session_time": "9:55 am on 22 October, 2023",
+            "dia_ids": [
+              "D19:3"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline's.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Single",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-41_q31",
+      "Inputs": {
+        "question": "What shelters does Maria volunteer at?",
+        "entity": "speaker_b",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "header_sentence",
+            "score": 8.7734375,
+            "text": "Maria shared her upcoming plan to explore more and volunteer at shelters.",
+            "value": "Maria shared her upcoming plan to explore more and volunteer at shelters.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+              "D25:1",
+              "D25:11",
+              "D25:13",
+              "D25:17",
+              "D25:2",
+              "D25:4",
+              "D25:8",
+              "D25:20"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "current",
+        "answer": null,
+        "abstain": true,
+        "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: maria, shelters, volunteer.",
+        "confidence_band": "low"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "The homeless shelter, the dog shelter",
+        "gold_abstain": false,
+        "failure_bucket": "false_abstain",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": false,
+        "missed_evidence_type": "direct_answer_span",
+        "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
+        "should_have_done": "extract the smallest grounded answer span and answer",
+        "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans"
+      }
+    },
+    {
+      "component": "answer_style_policy",
+      "query_id": "locomo_conv-47_q46",
+      "Inputs": {
+        "question": "What kind of beer does McGee's bar serve?",
+        "entity": "speaker_a",
+        "attribute": "other",
+        "regime": "global",
+        "retrieved_evidence_summary": [
+          {
+            "kind": "event",
+            "score": 8.759677419354839,
+            "text": "James and Samantha were at McGee's bar where he found out she loves lager beer.",
+            "value": "James and Samantha were at McGee's bar where he found out she loves lager beer.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": "9:23 pm on 4 September, 2022",
+            "dia_ids": [
+              "D23:3"
+            ]
+          },
+          {
+            "kind": "event",
+            "score": 6.827419354838709,
+            "text": "McGee's bar was one of the criteria for James and Samantha's choice of apartment.",
+            "value": "McGee's bar was one of the criteria for James and Samantha's choice of apartment.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "12:37 am on 31 October, 2022",
+            "dia_ids": [
+              "D29:12"
+            ]
+          },
+          {
+            "kind": "header_sentence",
+            "score": 6.827419354838709,
+            "text": "John shared a tournament photo, and James revealed plans to move in with Samantha near McGee's bar.",
+            "value": "John shared a tournament photo, and James revealed plans to move in with Samantha near McGee's bar.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": null,
+            "dia_ids": [
+              "D29:1",
+              "D29:3",
+              "D29:5",
+              "D29:8",
+              "D29:12"
+            ]
+          }
+        ]
+      },
+      "Generated Outputs": {
+        "query_mode": "multi_hop",
+        "answer": "found out she loves lager beer",
+        "abstain": false,
+        "explanation": "I answered using the strongest grounded support, especially the evidence about bar, beer, mcgee's. The supported answer is found out she loves lager beer.",
+        "confidence_band": "high"
+      },
+      "Feedback": {
+        "gold_mode_label": "current",
+        "gold_answer": "Stout, lager",
+        "gold_abstain": false,
+        "failure_bucket": "multi_hop_failure",
+        "explanation_quality": "good",
+        "reflection_target": "answer_style_policy",
+        "answer_match": false,
+        "evidence_hit": true,
+        "missed_evidence_type": "multi_evidence_aggregation",
+        "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
+        "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
+        "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain"
+      }
+    }
+  ]
+}

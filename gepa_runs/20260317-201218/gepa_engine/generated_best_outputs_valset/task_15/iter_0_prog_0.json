@@ -1,0 +1,32 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: melanie's.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 4.813157894736842,
+            "text": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "value": "Caroline showed interest in Melanie's paintings, and shared her own recent venture into abstract art.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+                "D17:1",
+                "D17:3",
+                "D17:7",
+                "D17:19",
+                "D17:23",
+                "D17:8",
+                "D17:10",
+                "D17:13",
+                "D17:16"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

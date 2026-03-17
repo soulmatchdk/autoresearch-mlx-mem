@@ -1,0 +1,55 @@
+Iteration 0: Base program full valset score: -0.40625 over 16 / 16 examples
+Iteration 1: Selected program 0 score: -0.40625
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+
+[1;31mProvider List: https://docs.litellm.ai/docs/providers[0m
+
+Iteration 1: Proposed new text for temporal_policy: You are answering temporal questions about events in a conversation.
+
+**Goal**  
+Return a concrete temporal answer (exact date, month‑year, or an anchored relative phrase) **only** when the retrieved evidence supplies a clear temporal expression that can be grounded to a known reference time. If no such expression exists, abstain.
+
+**Procedure**
+
+1. **Identify any explicit time anchor in the question**  
+   - Look for phrases like “in October 2023”, “last week”, “yesterday”, “next month”, “last month”, “recently”, etc.  
+   - Treat this anchor as the required reference if present; otherwise proceed to step 2.
+
+2. **Search the evidence for a temporal expression**  
+   - Explicit dates or month‑year (e.g., “17 September 2023”, “June 2023”).  
+   - Relative temporal phrases: “last week”, “last weekend”, “last weekday”, “yesterday”, “next month”, “last month”, “recently”, “last Friday”, etc.     - If the evidence contains **no** temporal expression at all → **abstain** (do not fall back to session time or any other default).
+
+3. **Ground the temporal expression**  
+   a. **Explicit date / month‑year** → return it directly.     b. **Relative phrase** → attempt to anchor it:  
+      - First, use the `session_time` attached to the evidence snippet (if available).  
+      - If `session_time` is missing, scan the same snippet and any other retrieved snippets for an explicit date that can serve as a reference.  
+      - If a reference time is found, compute the absolute date (or week/month) implied by the relative phrase and return that concrete answer.  
+      - If no reference time can be located → **abstain**.  
+
+4. **Tie‑breaking when multiple candidates exist**  
+   - Prefer the candidate whose temporal expression most closely matches any explicit time anchor from the question (step 1).  
+   - If the question has no anchor, prefer the answer grounded to the session time.  
+
+5. **Explanation**  
+   - Cite the specific evidence snippet(s) that provided the temporal expression and the reference time used for grounding.  
+
+6. **Abstain flag**  
+   - Set `abstain = True` only when step 3 fails to produce a grounded answer; otherwise `abstain = False`.  
+
+7. **Confidence band**  
+   - **Low** – grounding relies on a single weak clue (e.g., a lone “last Friday” with no other date).  
+   - **Medium** – supported by multiple snippets or a strong explicit date that is not directly mentioned in the question.  
+   - **High** – evidence includes an explicit date that directly matches the question’s anchor.  
+
+8. **Flag handling**  
+   - `allow_recently_anchor`: treat “recently” as a valid relative phrase that can be anchored when a reference time exists.  
+   - `allow_duration_answer`: if the question asks for a length of time, you may return a duration (e.g., “two weeks”) when the evidence supports it.  
+   - `temporal_grounding_required`: you must ground any relative phrase; never return a raw relative phrase without anchoring to a reference time.  
+
+**Do not** answer based solely on session time when the evidence lacks any temporal cue. If the evidence does not contain a date or relative phrase, abstain.
+Iteration 1: New subsample score -0.19999999999999996 is not better than old score -0.19999999999999996, skipping

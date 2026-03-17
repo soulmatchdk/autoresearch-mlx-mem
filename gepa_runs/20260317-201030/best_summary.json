@@ -1,0 +1,554 @@
+{
+  "aggregate_metrics": {
+    "query_count": 48,
+    "joint_answer_or_abstain_acc": 0.25,
+    "abstain_precision": 0.32432432432432434,
+    "abstain_recall": 0.8571428571428571,
+    "answer_match_rate": 0.0,
+    "answer_evidence_recall": 0.4166666666666667,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.08333333333333333,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 0.9166666666666666,
+    "false_abstain_penalty": 0.7352941176470589,
+    "false_confident_answer_penalty": 0.22916666666666666
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.0,
+    "abstain_precision": 0.32432432432432434,
+    "abstain_recall": 0.8571428571428571,
+    "false_abstain_penalty": 0.7352941176470589,
+    "false_confident_answer_penalty": 0.22916666666666666
+  },
+  "by_slice": {
+    "abstain_like": {
+      "count": 12,
+      "joint_acc": 0.9166666666666666,
+      "pred_abstain_rate": 0.9166666666666666,
+      "gold_abstain_rate": 1.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3333333333333333
+    },
+    "current": {
+      "count": 12,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.8333333333333334,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.4166666666666667
+    },
+    "multi_hop": {
+      "count": 12,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.5
+    },
+    "temporal": {
+      "count": 12,
+      "joint_acc": 0.08333333333333333,
+      "pred_abstain_rate": 0.3333333333333333,
+      "gold_abstain_rate": 0.16666666666666666,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.4166666666666667
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 35,
+      "joint_acc": 0.34285714285714286,
+      "pred_abstain_rate": 0.9142857142857143,
+      "gold_abstain_rate": 0.34285714285714286,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.37142857142857144
+    },
+    "multi_hop": {
+      "count": 4,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.75,
+      "gold_abstain_rate": 0.25,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.75
+    },
+    "temporal": {
+      "count": 9,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.2222222222222222,
+      "gold_abstain_rate": 0.1111111111111111,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.4444444444444444
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 5,
+    "missing_evidence": 0,
+    "false_abstain": 25,
+    "multi_hop_failure": 1,
+    "attribute_mismatch": 10,
+    "entity_mismatch": 0,
+    "false_confident_answer": 16,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-41_q63",
+      "bucket": "false_abstain",
+      "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+      "gold_answer": "two",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+      "support_text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+      "support_dia_ids": [
+        "D31:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q177",
+      "bucket": "false_confident_answer",
+      "question": "What did Joanna contribute to that was shown on the big screen on the Sunday before October 25, 2022?",
+      "gold_answer": "movie script",
+      "predicted_answer": "25 October 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about big, joanna, screen, shown. The supported answer is 25 October 2022.",
+      "support_text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+      "support_dia_ids": [
+        "D25:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q80",
+      "bucket": "false_abstain",
+      "question": "What is the name of the pup that was adopted by James?",
+      "gold_answer": "Ned",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+      "support_text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+      "support_dia_ids": [
+        "D5:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q31",
+      "bucket": "false_abstain",
+      "question": "What kind of writings does Joanna do?",
+      "gold_answer": "Screenplays,books, online blog posts, journal",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+      "support_text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+      "support_dia_ids": [
+        "D26:5"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q23",
+      "bucket": "false_confident_answer",
+      "question": "When did John go to a convention with colleagues?",
+      "gold_answer": "March 2023",
+      "predicted_answer": "18 April 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about colleagues, convention, john. The supported answer is 18 April 2023.",
+      "support_text": "John attended a convention with colleagues who share his passion for using tech for good in the community.",
+      "support_dia_ids": [
+        "D12:9"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q86",
+      "bucket": "false_abstain",
+      "question": "What event did John volunteer at last weekend?",
+      "gold_answer": "career fair at a local school",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+      "support_text": "John recalls having a blast at a live music event with his family last week.",
+      "support_dia_ids": [
+        "D20:4"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q81",
+      "bucket": "false_confident_answer",
+      "question": "Has Jolene tried surfing?",
+      "gold_answer": "no",
+      "predicted_answer": "Yes",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is Yes.",
+      "support_text": "Jolene just started learning about surfing but hasn't gone yet.",
+      "support_dia_ids": [
+        "D29:30"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q64",
+      "bucket": "temporal_selection_error",
+      "question": "When did James, his family and his dogs start on a road trip together?",
+      "gold_answer": "November 4, 2022",
+      "predicted_answer": "7 November 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about dogs, family, his, james. The supported answer is 7 November 2022.",
+      "support_text": "James and his family visited an animal sanctuary on the road trip and saw many cute rescue dogs.",
+      "support_dia_ids": [
+        "D31:11"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q84",
+      "bucket": "false_abstain",
+      "question": "What areas is John particularly interested in for policymaking?",
+      "gold_answer": "education and infrastructure",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+      "support_text": "John is particularly interested in improving education and infrastructure.",
+      "support_dia_ids": [
+        "D9:8"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q47",
+      "bucket": "false_abstain",
+      "question": "What is Dave's favorite activity?",
+      "gold_answer": "Restoring cars",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+      "support_text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+      "support_dia_ids": [
+        "D28:1",
+        "D28:3",
+        "D28:7",
+        "D28:29",
+        "D28:31",
+        "D28:8",
+        "D28:10",
+        "D28:18",
+        "D28:36",
+        "D28:40"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q59",
+      "bucket": "temporal_selection_error",
+      "question": "When did Evan start lifting weights?",
+      "gold_answer": "October 2022",
+      "predicted_answer": "8 October 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about evan, lifting, start, weights. The supported answer is 8 October 2023.",
+      "support_text": "Evan offered advice to Sam on how to start lifting weights and emphasized the importance of good form and technique.",
+      "support_dia_ids": [
+        "D12:4"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q93",
+      "bucket": "false_abstain",
+      "question": "How often does John work out with his family?",
+      "gold_answer": "Three times a week",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+      "support_text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+      "support_dia_ids": [
+        "D22:9"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q228",
+      "bucket": "multi_hop_failure",
+      "question": "What kind of impact does Joanna hope to have with her painting?",
+      "gold_answer": "",
+      "predicted_answer": "her writing had a positive impact on someone",
+      "predicted_mode": "multi_hop",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about her, impact, joanna. The supported answer is her writing had a positive impact on someone.",
+      "support_text": "Joanna also talked about a touching moment when her writing had a positive impact on someone, making her realize the power of words.",
+      "support_dia_ids": [
+        "D18:1",
+        "D18:3",
+        "D18:5",
+        "D18:7",
+        "D18:11",
+        "D18:13",
+        "D18:8",
+        "D18:10",
+        "D18:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q65",
+      "bucket": "false_abstain",
+      "question": "What activities has Dave participated in with his friends?",
+      "gold_answer": "weekly visits to local parks, countryside roadtrip, celebration of the opening of his car maintenance shop, card-playing nights",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, friends, his.",
+      "support_text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+      "support_dia_ids": [
+        "D28:1",
+        "D28:3",
+        "D28:7",
+        "D28:29",
+        "D28:31",
+        "D28:8",
+        "D28:10",
+        "D28:18",
+        "D28:36",
+        "D28:40"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q31",
+      "bucket": "temporal_selection_error",
+      "question": "When Jon is planning to open his dance studio?",
+      "gold_answer": "20 June, 2023",
+      "predicted_answer": "1 February",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about dance, his, jon, open. The supported answer is 1 February.",
+      "support_text": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+      "support_dia_ids": [
+        "D3:1",
+        "D3:2",
+        "D3:4",
+        "D3:6",
+        "D3:8"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q46",
+      "bucket": "false_abstain",
+      "question": "What shared activities do Dave and Calvin have?",
+      "gold_answer": "Working on cars",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+      "support_text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+      "support_dia_ids": [
+        "D28:1",
+        "D28:3",
+        "D28:7",
+        "D28:29",
+        "D28:31",
+        "D28:8",
+        "D28:10",
+        "D28:18",
+        "D28:36",
+        "D28:40"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q50",
+      "bucket": "false_abstain",
+      "question": "Who was injured in Evan's family?",
+      "gold_answer": "Evan's son and Evan himself",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan's, family.",
+      "support_text": "Sam admired Evan's strong family bond and offered support for their upcoming family reunion.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:3",
+        "D19:9",
+        "D19:11",
+        "D19:2",
+        "D19:4",
+        "D19:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q6",
+      "bucket": "false_confident_answer",
+      "question": "When did Melanie run a charity race?",
+      "gold_answer": "The sunday before 25 May 2023",
+      "predicted_answer": "20 May 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about charity, melanie, race. The supported answer is 20 May 2023.",
+      "support_text": "Melanie ran a charity race for mental health last Saturday.",
+      "support_dia_ids": [
+        "D2:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q107",
+      "bucket": "false_abstain",
+      "question": "Where did Dave come back from with insights on car modification on 1st September 2023?",
+      "gold_answer": "San Francisco",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, car, dave, insights.",
+      "support_text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+      "support_dia_ids": [
+        "D17:1",
+        "D17:3",
+        "D17:5",
+        "D17:6",
+        "D17:7"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q6",
+      "bucket": "false_abstain",
+      "question": "What are Dave's dreams?",
+      "gold_answer": "open a car maintenance shop, work on classic cars, build a custom car from scratch",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's, dreams.",
+      "support_text": "They discussed Ratatouille, following dreams, and Dave's car restoration hobby.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:7",
+        "D19:9",
+        "D19:6",
+        "D19:10"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-41_q63",
+      "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: adopted, maria, shelter.",
+      "support_text": "Maria recently adopted a cute pup named Shadow from a shelter.",
+      "gold_answer": "two",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q80",
+      "question": "What is the name of the pup that was adopted by James?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: adopted, james, pup.",
+      "support_text": "James adopted a pup from a shelter in Stamford last week and named it Ned, making his days happier.",
+      "gold_answer": "Ned",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q209",
+      "question": "Where did Tim capture the painting of the sunset over the mountain range?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: over, tim.",
+      "support_text": "Tim feels that his passion for fantasy stuff brings him closer to people from all over the world.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q31",
+      "question": "What kind of writings does Joanna do?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: joanna, writings.",
+      "support_text": "Joanna found old notebooks with her early writings and feels appreciative of her progress as a writer.",
+      "gold_answer": "Screenplays,books, online blog posts, journal",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q86",
+      "question": "What event did John volunteer at last weekend?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: event, john, last.",
+      "support_text": "John recalls having a blast at a live music event with his family last week.",
+      "gold_answer": "career fair at a local school",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q158",
+      "question": "What did the system John created help the illegal organization with?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: help, john.",
+      "support_text": "John is helpful and willing to share resources and tutorials with others to help them learn and grow.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q84",
+      "question": "What areas is John particularly interested in for policymaking?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: interested, john, particularly.",
+      "support_text": "John is particularly interested in improving education and infrastructure.",
+      "gold_answer": "education and infrastructure",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q245",
+      "question": "What does Joanna rely on for cheer and joy?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: joanna, joy.",
+      "support_text": "They discussed the joy of having extra cash, watching movies, and supporting each other's endeavors, with Nate even creating something special for Joanna.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q47",
+      "question": "What is Dave's favorite activity?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+      "support_text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+      "gold_answer": "Restoring cars",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q93",
+      "question": "How often does John work out with his family?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: family, his, john, work.",
+      "support_text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+      "gold_answer": "Three times a week",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q65",
+      "question": "What activities has Dave participated in with his friends?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, friends, his.",
+      "support_text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+      "gold_answer": "weekly visits to local parks, countryside roadtrip, celebration of the opening of his car maintenance shop, card-playing nights",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q46",
+      "question": "What shared activities do Dave and Calvin have?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, dave, shared.",
+      "support_text": "Calvin shared with Dave about throwing a party for his new album last week at his Japanese house, receiving immense love and support from friends and family.",
+      "gold_answer": "Working on cars",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}

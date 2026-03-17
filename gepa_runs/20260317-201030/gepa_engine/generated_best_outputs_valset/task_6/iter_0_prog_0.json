@@ -1,0 +1,24 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "7 November 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about dogs, family, his, james. The supported answer is 7 November 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 12.0,
+            "text": "James and his family visited an animal sanctuary on the road trip and saw many cute rescue dogs.",
+            "value": "animal sanctuary on the road trip and saw many cute rescue dogs",
+            "entity": "speaker_a",
+            "attribute": "event",
+            "regime": "global",
+            "session_idx": 31,
+            "session_time": "8:57 pm on 7 November, 2022",
+            "dia_ids": [
+                "D31:11"
+            ]
+        }
+    ],
+    "answer_style": "temporal"
+}

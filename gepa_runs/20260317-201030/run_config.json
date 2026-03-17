@@ -1,0 +1,19 @@
+{
+  "run_id": "20260317-201030",
+  "track": "mode_abstain",
+  "active_components": [
+    "query_mode_rubric",
+    "routing_bias_current_vs_temporal",
+    "abstain_policy",
+    "generic_answer_guardrail",
+    "confidence_policy"
+  ],
+  "budget": 48,
+  "holdout_budget": 24,
+  "seed": 13,
+  "max_metric_calls": 24,
+  "reflection_minibatch_size": 6,
+  "proposal_mode": "reflection_lm",
+  "engine_mode": "reflection_lm:openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+  "reflection_lm": "openrouter/nvidia/nemotron-3-super-120b-a12b:free"
+}

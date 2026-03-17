@@ -1,0 +1,33 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave's.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 4.826666666666666,
+            "text": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "value": "Calvin admired Dave's efforts, especially sharing his knowledge and inspiring others.",
+            "entity": "speaker_b",
+            "attribute": "preference",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+                "D28:1",
+                "D28:3",
+                "D28:7",
+                "D28:29",
+                "D28:31",
+                "D28:8",
+                "D28:10",
+                "D28:18",
+                "D28:36",
+                "D28:40"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

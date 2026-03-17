@@ -1,0 +1,24 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "8 October 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about evan, lifting, start, weights. The supported answer is 8 October 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Evan offered advice to Sam on how to start lifting weights and emphasized the importance of good form and technique.",
+            "value": "Evan offered advice to Sam on how to start lifting weights and emphasized the importance of good form and technique.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 12,
+            "session_time": "3:09 pm on 8 October, 2023",
+            "dia_ids": [
+                "D12:4"
+            ]
+        }
+    ],
+    "answer_style": "temporal"
+}

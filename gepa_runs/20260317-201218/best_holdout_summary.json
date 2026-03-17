@@ -1,0 +1,562 @@
+{
+  "aggregate_metrics": {
+    "query_count": 24,
+    "joint_answer_or_abstain_acc": 0.08333333333333333,
+    "abstain_precision": 0.0625,
+    "abstain_recall": 1.0,
+    "answer_match_rate": 0.041666666666666664,
+    "answer_evidence_recall": 0.25,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.16666666666666666,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 0.0,
+    "false_abstain_penalty": 0.6521739130434783,
+    "false_confident_answer_penalty": 0.2916666666666667
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.043478260869565216,
+    "abstain_precision": 0.0625,
+    "abstain_recall": 1.0,
+    "false_abstain_penalty": 0.6521739130434783,
+    "false_confident_answer_penalty": 0.2916666666666667
+  },
+  "by_slice": {
+    "current": {
+      "count": 12,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.9166666666666666,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.25
+    },
+    "temporal": {
+      "count": 12,
+      "joint_acc": 0.16666666666666666,
+      "pred_abstain_rate": 0.4166666666666667,
+      "gold_abstain_rate": 0.08333333333333333,
+      "answer_match_rate": 0.08333333333333333,
+      "evidence_hit_rate": 0.25
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 13,
+      "joint_acc": 0.07692307692307693,
+      "pred_abstain_rate": 1.0,
+      "gold_abstain_rate": 0.07692307692307693,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.3076923076923077
+    },
+    "multi_hop": {
+      "count": 3,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.6666666666666666,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.0
+    },
+    "temporal": {
+      "count": 8,
+      "joint_acc": 0.125,
+      "pred_abstain_rate": 0.125,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.125,
+      "evidence_hit_rate": 0.25
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 5,
+    "missing_evidence": 0,
+    "false_abstain": 15,
+    "multi_hop_failure": 1,
+    "attribute_mismatch": 6,
+    "entity_mismatch": 0,
+    "false_confident_answer": 8,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-42_q32",
+      "bucket": "false_confident_answer",
+      "question": "When did Nate win his fourth video game tournament?",
+      "gold_answer": "The Friday before 10July, 2022.",
+      "predicted_answer": "10 July 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about fourth, game, his, nate. The supported answer is 10 July 2022.",
+      "support_text": "Nate won his fourth video game tournament online and is proud to make money doing what he loves.",
+      "support_dia_ids": [
+        "D17:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q79",
+      "bucket": "false_abstain",
+      "question": "Who did Evan tell about his marriage?",
+      "gold_answer": "To Sam, to his friends from work, and to his and his wife's families.",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, his, marriage.",
+      "support_text": "At 1:32 pm on 6 January 2024, Evan excitedly informed Sam about sharing news of his marriage with their extended family, receiving overwhelming love and support.",
+      "support_dia_ids": [
+        "D23:1",
+        "D23:3",
+        "D23:5",
+        "D23:23",
+        "D23:25",
+        "D23:2",
+        "D23:6",
+        "D23:8",
+        "D23:12",
+        "D23:16",
+        "D23:20",
+        "D23:28"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q9",
+      "bucket": "false_abstain",
+      "question": "What helped Deborah find peace when grieving deaths of her loved ones?",
+      "gold_answer": "yoga, old photos, the roses and dahlias in a flower garden, nature",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: deborah, find, helped, her.",
+      "support_text": "Yoga helped Deborah find peace during a rough time, inspiring her to share it with others.",
+      "support_dia_ids": [
+        "D1:15"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q33",
+      "bucket": "false_abstain",
+      "question": "Where did Dave return from with new knowledge of different techniques of car restoration?",
+      "gold_answer": "San Francisco",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, knowledge, new, return.",
+      "support_text": "Calvin encouraged Dave to keep discovering new tunes and broadening his musical knowledge before parting ways as Dave had to return to work.",
+      "support_dia_ids": [
+        "D28:1",
+        "D28:3",
+        "D28:7",
+        "D28:29",
+        "D28:31",
+        "D28:8",
+        "D28:10",
+        "D28:18",
+        "D28:36",
+        "D28:40"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q12",
+      "bucket": "temporal_selection_error",
+      "question": "When did Gina get her tattoo?",
+      "gold_answer": "A few years ago",
+      "predicted_answer": "3 April 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about get, gina, her. The supported answer is 3 April 2023.",
+      "support_text": "Gina plans to work with fashion bloggers and influencers to get more attention for her store and do more ads to reach more people.",
+      "support_dia_ids": [
+        "D8:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q8",
+      "bucket": "false_abstain",
+      "question": "What new hobbies did Sam consider trying?",
+      "gold_answer": "Painting, kayaking, hiking, cooking, running",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: new, sam, trying.",
+      "support_text": "Sam is open to trying new healthy snacks and recipes to stay healthy.",
+      "support_dia_ids": [
+        "D22:11"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q41",
+      "bucket": "false_abstain",
+      "question": "Has Tim been to North Carolina and/or Tennesee states in the US?",
+      "gold_answer": "Yes",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: tim.",
+      "support_text": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+      "support_dia_ids": [
+        "D29:3",
+        "D29:9",
+        "D29:10",
+        "D29:13",
+        "D29:4",
+        "D29:6",
+        "D29:8",
+        "D29:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q33",
+      "bucket": "false_abstain",
+      "question": "What LGBTQ+ events has Caroline participated in?",
+      "gold_answer": "Pride parade, school speech, support group",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, events, participated.",
+      "support_text": "Melanie praised the group and asked if Caroline has participated in any events or campaigns.",
+      "support_dia_ids": [
+        "D10:3",
+        "D10:5",
+        "D10:7",
+        "D10:8",
+        "D10:12",
+        "D10:14",
+        "D10:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q16",
+      "bucket": "false_abstain",
+      "question": "Why does Dave regularly visit parks?",
+      "gold_answer": "because it relaxes and calms him",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, visit.",
+      "support_text": "Dave described his recent visit to a car show and his love for car mods.",
+      "support_dia_ids": [
+        "D22:1",
+        "D22:3",
+        "D22:5",
+        "D22:7",
+        "D22:6",
+        "D22:9",
+        "D22:2",
+        "D22:4",
+        "D22:8",
+        "D22:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q33",
+      "bucket": "false_abstain",
+      "question": "Where did Joanna travel to in July 2022?",
+      "gold_answer": "Woodhaven",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, joanna.",
+      "support_text": "Joanna excitedly shared with Nate at 12:06 am on 11 November, 2022, that she was filming her own movie from a road-trip script.",
+      "support_dia_ids": [
+        "D29:1",
+        "D29:5",
+        "D29:3",
+        "D29:6",
+        "D29:8",
+        "D29:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q12",
+      "bucket": "false_abstain",
+      "question": "What is Joanna allergic to?",
+      "gold_answer": "Most reptiles,animals with fur,cockroaches, dairy",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: allergic, joanna.",
+      "support_text": "Joanna is allergic to turtles but expresses interest in watching Nate play with them.",
+      "support_dia_ids": [
+        "D28:28"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q72",
+      "bucket": "temporal_selection_error",
+      "question": "When did Deborah go to a community meetup?",
+      "gold_answer": "last week of August 2023",
+      "predicted_answer": "1 September 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about community, deborah, meetup. The supported answer is 1 September 2023.",
+      "support_text": "Deborah attended a community meetup last Friday where stories were shared, emphasizing the importance of relationships.",
+      "support_dia_ids": [
+        "D24:3"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q53",
+      "bucket": "false_abstain",
+      "question": "How many of Joanna's writing have made it to the big screen?",
+      "gold_answer": "two",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: how, joanna's.",
+      "support_text": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+      "support_dia_ids": [
+        "D29:5"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q69",
+      "bucket": "temporal_selection_error",
+      "question": "When did Deborah visit Brazil?",
+      "gold_answer": "2020",
+      "predicted_answer": "20 September, 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about deborah. The supported answer is 20 September, 2023.",
+      "support_text": "Deborah and Jolene had a conversation at 10:17 am on 20 September, 2023.",
+      "support_dia_ids": [
+        "D30:1",
+        "D30:11",
+        "D30:13",
+        "D30:4",
+        "D30:6",
+        "D30:8",
+        "D30:10",
+        "D30:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q76",
+      "bucket": "false_abstain",
+      "question": "How many children does Melanie have?",
+      "gold_answer": "3",
+      "predicted_answer": null,
+      "predicted_mode": "multi_hop",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: how, melanie.",
+      "support_text": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+      "support_dia_ids": [
+        "D17:1",
+        "D17:3",
+        "D17:7",
+        "D17:19",
+        "D17:23",
+        "D17:8",
+        "D17:10",
+        "D17:13",
+        "D17:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q55",
+      "bucket": "false_abstain",
+      "question": "When did Caroline draw a self-portrait?",
+      "gold_answer": "The week before 23 August 2023",
+      "predicted_answer": null,
+      "predicted_mode": "temporal",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: caroline, portrait, self.",
+      "support_text": "Caroline shared a self-portrait she recently made, mentioning how painting helps her explore her identity.",
+      "support_dia_ids": [
+        "D13:1",
+        "D13:3",
+        "D13:7",
+        "D13:13",
+        "D13:15",
+        "D13:4",
+        "D13:8",
+        "D13:10",
+        "D13:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q27",
+      "bucket": "false_abstain",
+      "question": "What has Maria done to feel closer to her faith?",
+      "gold_answer": "Join a local church, buy a cross necklace",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: closer, faith, feel, her.",
+      "support_text": "Maria bought a cross necklace to feel closer to her faith and it has made her happy.",
+      "support_dia_ids": [
+        "D11:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q17",
+      "bucket": "temporal_selection_error",
+      "question": "When did John get his degree?",
+      "gold_answer": "The week before 2 April 2023",
+      "predicted_answer": "5 July 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, john. The supported answer is 5 July 2023.",
+      "support_text": "John looks at a picture of his family when times get hard to remember why he is doing his work.",
+      "support_dia_ids": [
+        "D22:9"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q16",
+      "bucket": "multi_hop_failure",
+      "question": "What kind of unhealthy snacks does Sam enjoy eating?",
+      "gold_answer": "soda, candy",
+      "predicted_answer": "Sam bought some unhealthy snacks and feels guilty",
+      "predicted_mode": "multi_hop",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about sam, snacks, unhealthy. The supported answer is Sam bought some unhealthy snacks and feels guilty.",
+      "support_text": "Sam confessed to Evan about buying unhealthy snacks and feeling guilty about it, while Evan shared about finishing a painting of a sunset.",
+      "support_dia_ids": [
+        "D13:3",
+        "D13:7",
+        "D13:9",
+        "D13:2",
+        "D13:4",
+        "D13:6",
+        "D13:10",
+        "D13:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q64",
+      "bucket": "temporal_selection_error",
+      "question": "When did James, his family and his dogs start on a road trip together?",
+      "gold_answer": "November 4, 2022",
+      "predicted_answer": "7 November 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about dogs, family, his, james. The supported answer is 7 November 2022.",
+      "support_text": "James and his family visited an animal sanctuary on the road trip and saw many cute rescue dogs.",
+      "support_dia_ids": [
+        "D31:11"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-49_q79",
+      "question": "Who did Evan tell about his marriage?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, his, marriage.",
+      "support_text": "At 1:32 pm on 6 January 2024, Evan excitedly informed Sam about sharing news of his marriage with their extended family, receiving overwhelming love and support.",
+      "gold_answer": "To Sam, to his friends from work, and to his and his wife's families.",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q9",
+      "question": "What helped Deborah find peace when grieving deaths of her loved ones?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: deborah, find, helped, her.",
+      "support_text": "Yoga helped Deborah find peace during a rough time, inspiring her to share it with others.",
+      "gold_answer": "yoga, old photos, the roses and dahlias in a flower garden, nature",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q33",
+      "question": "Where did Dave return from with new knowledge of different techniques of car restoration?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, knowledge, new, return.",
+      "support_text": "Calvin encouraged Dave to keep discovering new tunes and broadening his musical knowledge before parting ways as Dave had to return to work.",
+      "gold_answer": "San Francisco",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q8",
+      "question": "What new hobbies did Sam consider trying?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: new, sam, trying.",
+      "support_text": "Sam is open to trying new healthy snacks and recipes to stay healthy.",
+      "gold_answer": "Painting, kayaking, hiking, cooking, running",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q41",
+      "question": "Has Tim been to North Carolina and/or Tennesee states in the US?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: tim.",
+      "support_text": "Tim and John spoke at 1:41 pm on 12 January, 2024.",
+      "gold_answer": "Yes",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q33",
+      "question": "What LGBTQ+ events has Caroline participated in?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, events, participated.",
+      "support_text": "Melanie praised the group and asked if Caroline has participated in any events or campaigns.",
+      "gold_answer": "Pride parade, school speech, support group",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q223",
+      "question": "How did Deborah feel after receiving positive feedback at the virtual conference?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: deborah, how.",
+      "support_text": "Deborah shared how reconnecting with her late mother's friends brought up a mix of emotions, but ultimately, it was comforting.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q16",
+      "question": "Why does Dave regularly visit parks?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, visit.",
+      "support_text": "Dave described his recent visit to a car show and his love for car mods.",
+      "gold_answer": "because it relaxes and calms him",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q33",
+      "question": "Where did Joanna travel to in July 2022?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, joanna.",
+      "support_text": "Joanna excitedly shared with Nate at 12:06 am on 11 November, 2022, that she was filming her own movie from a road-trip script.",
+      "gold_answer": "Woodhaven",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q12",
+      "question": "What is Joanna allergic to?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: allergic, joanna.",
+      "support_text": "Joanna is allergic to turtles but expresses interest in watching Nate play with them.",
+      "gold_answer": "Most reptiles,animals with fur,cockroaches, dairy",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q53",
+      "question": "How many of Joanna's writing have made it to the big screen?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: how, joanna's.",
+      "support_text": "One of the actors on Joanna's movie set told her how much she liked her script, which gave Joanna chills.",
+      "gold_answer": "two",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q76",
+      "question": "How many children does Melanie have?",
+      "predicted_mode": "multi_hop",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable multi_hop answer. Top support: how, melanie.",
+      "support_text": "Caroline gave Melanie some advice on how to get started with the adoption process, emphasizing the importance of research and emotional preparation.",
+      "gold_answer": "3",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}
