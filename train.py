@@ -157,6 +157,8 @@ RESULTS_HEADER = [
 
 
 def scalar(x) -> float:
+    if isinstance(x, (float, int)):
+        return float(x)
     mx.eval(x)
     return float(x.item())
 

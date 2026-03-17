@@ -1,0 +1,43 @@
+{
+  "adapter_version": "locomo_adapter_v1",
+  "locomo_version": "locomo10_pinned_release_with_dec_2025_answer_fixes",
+  "source_path": "../data/locomo10.json",
+  "generated_at": "2026-03-17T10:02:44",
+  "git_commit": "2f6af9307d564e38b213320e0f22836dc2644271",
+  "conversation_count": 10,
+  "event_count": 2541,
+  "header_count": 272,
+  "query_count": 1986,
+  "slot_taxonomy": [
+    "location",
+    "occupation",
+    "education",
+    "relationship",
+    "plan",
+    "preference",
+    "possession",
+    "health",
+    "event",
+    "date",
+    "other"
+  ],
+  "query_mode_counts": {
+    "current": 1123,
+    "historical": 4,
+    "multi_hop": 469,
+    "temporal": 390
+  },
+  "attribute_counts": {
+    "date": 28,
+    "education": 13,
+    "event": 94,
+    "health": 7,
+    "location": 138,
+    "occupation": 109,
+    "other": 1508,
+    "plan": 102,
+    "possession": 319,
+    "preference": 166,
+    "relationship": 57
+  }
+}
