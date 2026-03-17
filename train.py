@@ -153,6 +153,23 @@ RESULTS_HEADER = [
     "hard_avg_header_value_purity",
     "hard_avg_headers_used",
     "hard_avg_retrieval_latency_ms",
+    "locomo_report_path",
+    "locomo_query_count",
+    "locomo_joint_answer_or_abstain_acc",
+    "locomo_abstain_precision",
+    "locomo_abstain_recall",
+    "locomo_answer_match_rate",
+    "locomo_answer_evidence_recall",
+    "locomo_current_joint_acc",
+    "locomo_temporal_joint_acc",
+    "locomo_multi_hop_joint_acc",
+    "locomo_abstain_like_acc",
+    "locomo_failure_temporal_selection_error",
+    "locomo_failure_missing_evidence",
+    "locomo_failure_false_abstain",
+    "locomo_failure_multi_hop_failure",
+    "locomo_failure_attribute_mismatch",
+    "locomo_failure_entity_mismatch",
 ]
 
 

@@ -22,10 +22,15 @@ uv run run_variant.py --description "one clear hypothesis"
 
 `run_variant.py` is now the canonical loop. It auto-commits the current variant with `run:<run_id>`, runs the experiment, compares the new run against the best earlier `keep`, and appends the final decision to the repo-local `results.tsv`.
 
+For day-to-day operations, see `RUNBOOK.md`.
+
 ## What matters
 
 - `train.py` - the canonical UCMD V3.6 baseline runner in one MLX-native file
 - `run_variant.py` - the locked variant loop with auto-commit and keep or discard decisions
+- `RUNBOOK.md` - the practical operating guide for the locked loop, LoCoMo regeneration, and keep rules
+- `locomo_breakdown.py` - eval-only LoCoMo slice report by query mode and category
+- `locomo_eval.py` - eval-only LoCoMo benchmark report with accuracy and failure buckets
 - `prepare.py` - compatibility helper; no mandatory data prep step remains
 - `program.md` - workflow for iterating on the frozen baseline and logging variants
 - `results.tsv` - tab-separated run log and optimization target
@@ -56,6 +61,14 @@ Final answers do not come from a free latent head. They come from evidence-weigh
 - average retrieval latency
 
 The old raw recall metric is still useful, but for V3.6 the more honest answer-path metrics are `latest_slice_recall` and `latest_slice_conflict_accuracy`.
+
+For the external LoCoMo benchmark track, regenerate the adapter and print the benchmark slices with:
+
+```bash
+uv run adapt_locomo.py --input ../data/locomo10.json --output-dir locomo_adapted
+uv run locomo_breakdown.py --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
+uv run locomo_eval.py --events locomo_adapted/events.jsonl --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
+```
 
 Each ledger row now records:
 

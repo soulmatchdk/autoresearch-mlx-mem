@@ -20,6 +20,7 @@ Do not treat headers as the source of truth. They are useful retrieval summaries
 2. Treat `train.py` as the canonical implementation.
 3. Use `uv run prepare.py` only as a compatibility helper if you want a reminder about runtime dataset paths.
 4. Run `uv run run_variant.py --description "exact single-hypothesis change"` to auto-commit, train, evaluate, compare against the best kept run, and append a row to the repo-local `results.tsv`.
+5. Use `RUNBOOK.md` when you want the operational version of the workflow rather than the rationale.
 
 ## What you should edit
 
@@ -63,6 +64,29 @@ When iterating on the baseline itself:
 When creating new variants after V3.6, optimize against `results.tsv` rather than memory or intuition. The run log is the source of truth for whether a new idea is actually winning.
 
 `uv run train.py` remains available for raw manual inspection, but it is not the canonical ledger-writing path anymore.
+
+## External benchmark track
+
+LoCoMo is now an external benchmark and realism-gap track, not a reason to reopen the frozen baseline.
+
+Use:
+
+```bash
+uv run adapt_locomo.py --input ../data/locomo10.json --output-dir locomo_adapted
+uv run locomo_breakdown.py --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
+uv run locomo_eval.py --events locomo_adapted/events.jsonl --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
+```
+
+Inspect at least:
+
+- query mode mix
+- category mix
+- answerable vs abstain-like questions
+- evidence density and no-evidence slices
+- eval-only benchmark accuracy by query mode and category
+- failure buckets such as temporal selection error, missing evidence, false abstain, and multi-hop failure
+
+Do not fold LoCoMo-specific benchmark logic back into `train.py` unless the ledger shows a real winning variant.
 
 ## Design rule
 

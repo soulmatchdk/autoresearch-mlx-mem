@@ -5,11 +5,16 @@ import subprocess
 import time
 from pathlib import Path
 
+import locomo_eval
 import train
 
 
 REPO_ROOT = Path(__file__).resolve().parent
 RESULTS_PATH = REPO_ROOT / "results.tsv"
+LOCOMO_EVENTS_PATH = REPO_ROOT / "locomo_adapted" / "events.jsonl"
+LOCOMO_QUERIES_PATH = REPO_ROOT / "locomo_adapted" / "queries.jsonl"
+LOCOMO_METADATA_PATH = REPO_ROOT / "locomo_adapted" / "metadata.json"
+LOCOMO_REPORT_DIR = REPO_ROOT / "locomo_adapted" / "eval"
 DECISION_TOLERANCE = 0.001
 
 
@@ -109,8 +114,10 @@ def best_keep_row(rows, tolerance: float):
 
 
 def build_row(run_id: str, git_commit: str, git_parent_commit: str, description: str, status: str, reason: str, summary: dict):
-    final_metrics = summary["final_metrics"]
+    final_metrics = summary.get("final_metrics") or {}
     hard_metrics = summary.get("hard_metrics") or {}
+    locomo_metrics = summary.get("locomo_metrics") or {}
+    locomo_failures = summary.get("locomo_failure_buckets") or {}
     config = summary["config"]
     return {
         "run_id": run_id,
@@ -159,6 +166,23 @@ def build_row(run_id: str, git_commit: str, git_parent_commit: str, description:
         "hard_avg_header_value_purity": hard_metrics.get("avg_header_value_purity"),
         "hard_avg_headers_used": hard_metrics.get("avg_headers_used"),
         "hard_avg_retrieval_latency_ms": hard_metrics.get("avg_retrieval_latency_ms"),
+        "locomo_report_path": summary.get("locomo_report_path"),
+        "locomo_query_count": locomo_metrics.get("query_count"),
+        "locomo_joint_answer_or_abstain_acc": locomo_metrics.get("joint_answer_or_abstain_acc"),
+        "locomo_abstain_precision": locomo_metrics.get("abstain_precision"),
+        "locomo_abstain_recall": locomo_metrics.get("abstain_recall"),
+        "locomo_answer_match_rate": locomo_metrics.get("answer_match_rate"),
+        "locomo_answer_evidence_recall": locomo_metrics.get("answer_evidence_recall"),
+        "locomo_current_joint_acc": locomo_metrics.get("current_joint_acc"),
+        "locomo_temporal_joint_acc": locomo_metrics.get("temporal_joint_acc"),
+        "locomo_multi_hop_joint_acc": locomo_metrics.get("multi_hop_joint_acc"),
+        "locomo_abstain_like_acc": locomo_metrics.get("abstain_like_acc"),
+        "locomo_failure_temporal_selection_error": locomo_failures.get("temporal_selection_error"),
+        "locomo_failure_missing_evidence": locomo_failures.get("missing_evidence"),
+        "locomo_failure_false_abstain": locomo_failures.get("false_abstain"),
+        "locomo_failure_multi_hop_failure": locomo_failures.get("multi_hop_failure"),
+        "locomo_failure_attribute_mismatch": locomo_failures.get("attribute_mismatch"),
+        "locomo_failure_entity_mismatch": locomo_failures.get("entity_mismatch"),
     }
 
 
@@ -224,6 +248,29 @@ def main():
         print("commit_mode:       empty run commit over an already committed candidate")
 
     summary = train.run_experiment()
+    if LOCOMO_EVENTS_PATH.exists() and LOCOMO_QUERIES_PATH.exists():
+        report_base = LOCOMO_REPORT_DIR / run_id
+        locomo_summary, _ = locomo_eval.evaluate_locomo(
+            str(LOCOMO_EVENTS_PATH),
+            str(LOCOMO_QUERIES_PATH),
+            str(LOCOMO_METADATA_PATH) if LOCOMO_METADATA_PATH.exists() else "",
+            write_markdown=str(report_base.with_suffix(".md")),
+            write_json=str(report_base.with_suffix(".json")),
+        )
+        summary["locomo_metrics"] = locomo_summary["headline"]
+        summary["locomo_failure_buckets"] = locomo_summary["failure_buckets"]
+        summary["locomo_report_path"] = str(report_base.with_suffix(".md").relative_to(REPO_ROOT))
+        print("\n--- locomo eval ---")
+        print(f"locomo_joint_answer_or_abstain_acc: {locomo_summary['headline']['joint_answer_or_abstain_acc']:.4f}")
+        print(f"locomo_abstain_precision:          {locomo_summary['headline']['abstain_precision']:.4f}")
+        print(f"locomo_abstain_recall:             {locomo_summary['headline']['abstain_recall']:.4f}")
+        print(f"locomo_answer_match_rate:          {locomo_summary['headline']['answer_match_rate']:.4f}")
+        print(f"locomo_answer_evidence_recall:     {locomo_summary['headline']['answer_evidence_recall']:.4f}")
+        print(f"locomo_current_joint_acc:          {locomo_summary['headline']['current_joint_acc']:.4f}")
+        print(f"locomo_temporal_joint_acc:         {locomo_summary['headline']['temporal_joint_acc']:.4f}")
+        print(f"locomo_multi_hop_joint_acc:        {locomo_summary['headline']['multi_hop_joint_acc']:.4f}")
+        print(f"locomo_abstain_like_acc:           {locomo_summary['headline']['abstain_like_acc']:.4f}")
+        print(f"locomo_report_path:                {summary['locomo_report_path']}")
     if summary.get("non_finite"):
         status = "discard"
         reason = "non-finite loss or gradient halted the run early"

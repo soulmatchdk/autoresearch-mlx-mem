@@ -33,6 +33,15 @@ OPEN_ANSWER_MARKERS = (
     "not enough information",
     "not provided",
 )
+QUESTION_WORDS = {
+    "what",
+    "when",
+    "where",
+    "who",
+    "which",
+    "why",
+    "how",
+}
 
 
 def parse_args():
@@ -274,12 +283,18 @@ def normalize_qa_items(sample: dict):
 def resolve_entity(text: str, speakers: dict):
     lowered = f" {text.lower()} "
     for label, name in speakers.items():
-        if name and f" {name.lower()} " in lowered:
+        if not name:
+            continue
+        name_lower = name.lower()
+        if f" {name_lower} " in lowered or f" {name_lower}'s " in lowered:
             return label, name
 
     proper_nouns = re.findall(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b", text)
     for phrase in proper_nouns:
-        if phrase.lower() not in {name.lower() for name in speakers.values()}:
+        phrase_lower = phrase.lower()
+        if phrase_lower in QUESTION_WORDS:
+            continue
+        if phrase_lower not in {name.lower() for name in speakers.values()}:
             return slugify(phrase), phrase
 
     first_label = next(iter(speakers))
