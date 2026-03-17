@@ -5,6 +5,7 @@ description = "Apple Silicon MLX autoresearch-style repo with a frozen UCMD V3.6
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 dependencies = [
+    "gepa==0.1.1",
     "mlx>=0.30.0",
     "numpy>=2.2.6",
     "pyarrow>=21.0.0",

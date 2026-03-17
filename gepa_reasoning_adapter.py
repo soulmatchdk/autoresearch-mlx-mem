@@ -4,13 +4,14 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from gepa.core.adapter import EvaluationBatch, GEPAAdapter
 from locomo_eval import events_by_conversation, headers_by_conversation, load_jsonl, load_metadata
 from locomo_reasoning_eval import evaluate_reasoning_batch, sample_queries
-from reasoning_layer_schema import EvaluationBatch, validate_candidate
+from reasoning_layer_schema import validate_candidate
 
 
-class ReasoningGEPAAdapter:
-    """Contract-compatible local adapter for a future native GEPA integration."""
+class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str, Any]]):
+    """Official GEPA adapter backed by the frozen LoCoMo reasoning evaluator."""
 
     def __init__(
         self,
@@ -31,13 +32,14 @@ class ReasoningGEPAAdapter:
         self.metadata = load_metadata(Path(self.metadata_path)) if Path(self.metadata_path).exists() else {}
         self.conversations = events_by_conversation(self.events)
         self.headers_by_conv = headers_by_conversation(self.headers)
+        self._batch_summaries: dict[int, dict[str, Any]] = {}
 
     def sample_batch(self, budget: int, seed: int | None = None) -> list[dict[str, Any]]:
         return sample_queries(self.queries, budget, self.seed if seed is None else seed)
 
     def evaluate(self, batch: list[dict[str, Any]], candidate: dict[str, str], capture_traces: bool = False) -> EvaluationBatch:
         validate_candidate(candidate)
-        eval_batch, _ = evaluate_reasoning_batch(
+        local_batch, summary = evaluate_reasoning_batch(
             candidate=candidate,
             query_batch=batch,
             conversations=self.conversations,
@@ -45,15 +47,14 @@ class ReasoningGEPAAdapter:
             metadata=self.metadata,
             capture_traces=True,
         )
-        if capture_traces:
-            return eval_batch
-        return EvaluationBatch(
-            outputs=eval_batch.outputs,
-            scores=eval_batch.scores,
-            trajectories=[],
-            objective_scores=eval_batch.objective_scores,
-            aggregate_metrics=eval_batch.aggregate_metrics,
+        eval_batch = EvaluationBatch(
+            outputs=local_batch.outputs,
+            scores=local_batch.scores,
+            trajectories=local_batch.trajectories if capture_traces else None,
+            objective_scores=local_batch.objective_scores,
         )
+        self._batch_summaries[id(eval_batch)] = summary
+        return eval_batch
 
     def evaluate_candidate(
         self,
@@ -61,10 +62,14 @@ class ReasoningGEPAAdapter:
         budget: int,
         config: dict[str, Any] | None = None,
         capture_traces: bool = False,
-    ) -> EvaluationBatch:
+    ) -> tuple[EvaluationBatch, dict[str, Any]]:
         config = config or {}
         batch = self.sample_batch(budget=budget, seed=config.get("seed", self.seed))
-        return self.evaluate(batch=batch, candidate=candidate, capture_traces=capture_traces)
+        eval_batch = self.evaluate(batch=batch, candidate=candidate, capture_traces=capture_traces)
+        return eval_batch, self.summary_for(eval_batch)
+
+    def summary_for(self, eval_batch: EvaluationBatch) -> dict[str, Any]:
+        return self._batch_summaries.get(id(eval_batch), {})
 
     def make_reflective_dataset(
         self,
@@ -75,7 +80,7 @@ class ReasoningGEPAAdapter:
         validate_candidate(candidate)
         allowed = set(components_to_update or candidate.keys())
         dataset: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        for trajectory in eval_batch.trajectories:
+        for trajectory in eval_batch.trajectories or []:
             targets = self._reflection_targets(trajectory)
             for component in targets:
                 if component not in allowed:

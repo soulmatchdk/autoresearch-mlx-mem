@@ -44,6 +44,24 @@ Run one locked baseline variant:
 uv run run_variant.py --description "one exact single-hypothesis change"
 ```
 
+Run the official GEPA reasoning smoke slice with the local custom proposer:
+
+```bash
+uv run gepa_reasoning_v1.py --budget 32 --max-metric-calls 48 --proposal-mode custom
+```
+
+Turn on the official GEPA `reflection-LM` path:
+
+```bash
+GEPA_REFLECTION_LM="your-model-name" uv run gepa_reasoning_v1.py --budget 32 --max-metric-calls 48 --proposal-mode auto
+```
+
+Or force it explicitly from the CLI:
+
+```bash
+uv run gepa_reasoning_v1.py --budget 32 --max-metric-calls 48 --proposal-mode reflection_lm --reflection-lm "your-model-name"
+```
+
 If you only want manual inspection without touching the ledger:
 
 ```bash
@@ -103,6 +121,27 @@ Use the benchmark track to inspect:
 - failure buckets like temporal selection error, missing evidence, false abstain, and multi-hop failure
 
 Do not change the baseline answer rule just because LoCoMo is harder. First inspect the benchmark slices and failure buckets.
+
+## GEPA reasoning slice
+
+The GEPA reasoning slice is a separate benchmark track on top of the frozen memory kernel.
+
+- `gepa_reasoning_v1.py` runs the official GEPA engine
+- `--proposal-mode custom` uses the local deterministic proposer
+- `--proposal-mode auto` uses `GEPA_REFLECTION_LM` or `--reflection-lm` when present, else falls back to the custom proposer
+- `--proposal-mode reflection_lm` requires a reflection model and will fail fast if none is configured
+
+Each GEPA run writes:
+
+- `run_config.json`
+- `leakage_red_team.json`
+- `seed_candidate.json`
+- `seed_reflective_dataset.json`
+- `best_candidate.json`
+- `best_summary.json`
+- `report.md`
+
+`gepa_runs/ledger.tsv` is append-only and now records both `engine_mode` and the resolved `reflection_lm`.
 
 ## Practical discipline
 

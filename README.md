@@ -31,6 +31,7 @@ For day-to-day operations, see `RUNBOOK.md`.
 - `RUNBOOK.md` - the practical operating guide for the locked loop, LoCoMo regeneration, and keep rules
 - `locomo_breakdown.py` - eval-only LoCoMo slice report by query mode and category
 - `locomo_eval.py` - eval-only LoCoMo benchmark report with accuracy and failure buckets
+- `gepa_reasoning_v1.py` - official GEPA reasoning-layer smoke runner for the LoCoMo benchmark track
 - `prepare.py` - compatibility helper; no mandatory data prep step remains
 - `program.md` - workflow for iterating on the frozen baseline and logging variants
 - `results.tsv` - tab-separated run log and optimization target
@@ -69,6 +70,15 @@ uv run adapt_locomo.py --input ../data/locomo10.json --output-dir locomo_adapted
 uv run locomo_breakdown.py --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
 uv run locomo_eval.py --events locomo_adapted/events.jsonl --queries locomo_adapted/queries.jsonl --metadata locomo_adapted/metadata.json
 ```
+
+For the separate GEPA reasoning slice on top of the frozen kernel:
+
+```bash
+uv run gepa_reasoning_v1.py --budget 32 --max-metric-calls 48 --proposal-mode custom
+GEPA_REFLECTION_LM="your-model-name" uv run gepa_reasoning_v1.py --budget 32 --max-metric-calls 48 --proposal-mode auto
+```
+
+`--proposal-mode auto` now promotes to the official `reflection-LM` path whenever `GEPA_REFLECTION_LM` or `--reflection-lm` is set, and otherwise falls back to the deterministic custom proposer.
 
 Each ledger row now records:
 

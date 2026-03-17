@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about john, often. The supported answer is John loves making honey garlic chicken with roasted vegetables and often tries out new recipes..",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 6.681034482758621,
+            "text": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "value": "John loves making honey garlic chicken with roasted vegetables and often tries out new recipes.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "5:51 pm on 21 October, 2023",
+            "dia_ids": [
+                "D15:32"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}

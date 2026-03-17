@@ -1,0 +1,24 @@
+{
+    "query_mode": "current",
+    "answer_candidate": "Jolene used to bake cookies with someone close to her.",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about bake, close, cookies, her. The supported answer is Jolene used to bake cookies with someone close to her..",
+    "confidence_band": "high",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 16.838333333333335,
+            "text": "Jolene used to bake cookies with someone close to her.",
+            "value": "Jolene used to bake cookies with someone close to her.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+                "D29:12"
+            ]
+        }
+    ],
+    "answer_style": "single"
+}
