@@ -1,0 +1,30 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "1 February",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about dance, his, jon, open. The supported answer is 1 February.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 12.5,
+            "text": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "value": "At 12:48 am on 1 February 2023, Jon shared with Gina his determination to open a dance studio, while Gina revealed her success in expanding her clothing store.",
+            "entity": "speaker_a",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 3,
+            "session_time": null,
+            "dia_ids": [
+                "D3:1",
+                "D3:2",
+                "D3:4",
+                "D3:6",
+                "D3:8"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

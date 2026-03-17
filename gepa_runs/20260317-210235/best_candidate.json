@@ -1,0 +1,10 @@
+{
+  "abstain_profile": "answerable_friendly",
+  "answer_style": "mode_default",
+  "current_strategy": "latest_with_support",
+  "explanation_policy": "brief_abstain_reason",
+  "generic_answer_rule": "reject_full_sentence",
+  "mode_router": "balanced_temporal",
+  "multi_hop_strategy": "aggregate_two_hops",
+  "temporal_strategy": "explicit_or_session_time"
+}

@@ -1,0 +1,33 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, october, sam.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 10.196,
+            "text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "value": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 14,
+            "session_time": null,
+            "dia_ids": [
+                "D14:1",
+                "D14:3",
+                "D14:7",
+                "D14:11",
+                "D14:2",
+                "D14:4",
+                "D14:8",
+                "D14:14"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

@@ -1,0 +1,26 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: advice, event, gina, networking.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 10.85,
+            "text": "Gina met some investors and got good advice at a recent networking event.",
+            "value": "Gina met some investors and got good advice at a recent networking event.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 18,
+            "session_time": "5:44 pm on 21 July, 2023",
+            "dia_ids": [
+                "D18:8"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

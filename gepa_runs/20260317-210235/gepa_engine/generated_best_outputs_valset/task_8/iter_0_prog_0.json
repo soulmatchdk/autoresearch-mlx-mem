@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "25 October 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, nate, turtles. The supported answer is 25 October 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "value": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": "8:16 pm on 25 October, 2022",
+            "dia_ids": [
+                "D25:21"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

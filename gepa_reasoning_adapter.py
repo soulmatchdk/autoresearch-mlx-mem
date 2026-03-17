@@ -21,6 +21,7 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         metadata_path: str = "locomo_adapted/metadata.json",
         seed: int = 13,
         active_components: list[str] | None = None,
+        active_objectives: list[str] | None = None,
     ):
         self.events_path = str(events_path)
         self.headers_path = str(headers_path)
@@ -35,6 +36,7 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         self.headers_by_conv = headers_by_conversation(self.headers)
         self._batch_summaries: dict[int, dict[str, Any]] = {}
         self.active_components = tuple(active_components or [])
+        self.active_objectives = tuple(active_objectives or [])
 
     def sample_batch(self, budget: int, seed: int | None = None) -> list[dict[str, Any]]:
         return sample_queries(self.queries, budget, self.seed if seed is None else seed)
@@ -49,11 +51,18 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
             metadata=self.metadata,
             capture_traces=True,
         )
+        objective_scores = local_batch.objective_scores
+        if self.active_objectives:
+            allowed = set(self.active_objectives)
+            objective_scores = [
+                {key: value for key, value in objectives.items() if key in allowed}
+                for objectives in local_batch.objective_scores
+            ]
         eval_batch = EvaluationBatch(
             outputs=local_batch.outputs,
             scores=local_batch.scores,
             trajectories=local_batch.trajectories if capture_traces else None,
-            objective_scores=local_batch.objective_scores,
+            objective_scores=objective_scores,
         )
         self._batch_summaries[id(eval_batch)] = summary
         return eval_batch
@@ -109,31 +118,25 @@ class ReasoningGEPAAdapter(GEPAAdapter[dict[str, Any], dict[str, Any], dict[str,
         predicted_mode = generated.get("query_mode")
         failure_bucket = feedback.get("failure_bucket")
         if gold_mode and predicted_mode and gold_mode != predicted_mode:
-            targets.append("query_mode_rubric")
-            targets.append("mode_routing_bias")
+            targets.append("mode_router")
         if predicted_mode == "current":
-            targets.append("current_policy")
+            targets.append("current_strategy")
         elif predicted_mode == "temporal":
-            targets.append("temporal_policy")
-            targets.append("temporal_grounding_rule")
+            targets.append("temporal_strategy")
         elif predicted_mode == "multi_hop":
-            targets.append("multi_hop_policy")
-            targets.append("multi_hop_evidence_requirement")
+            targets.append("multi_hop_strategy")
         else:
-            targets.append("query_mode_rubric")
+            targets.append("mode_router")
         if failure_bucket in {"false_abstain", "false_confident_answer"}:
-            targets.append("abstain_guardrail_answerable")
-            targets.append("generic_answer_rejection_rule")
+            targets.append("abstain_profile")
+            targets.append("generic_answer_rule")
         if failure_bucket == "temporal_selection_error":
-            targets.append("temporal_policy")
-            targets.append("temporal_grounding_rule")
-            targets.append("answer_synthesis_policy")
-        if feedback.get("explanation_quality") != "good":
-            targets.append("explanation_policy")
+            targets.append("temporal_strategy")
+            targets.append("answer_style")
         if failure_bucket in {"false_confident_answer", "multi_hop_failure"}:
-            targets.append("answer_style_policy")
+            targets.append("answer_style")
         if generated.get("answer") is not None or failure_bucket in {"false_confident_answer", "temporal_selection_error"}:
-            targets.append("answer_synthesis_policy")
+            targets.append("answer_style")
         seen = set()
         out = []
         for target in targets:

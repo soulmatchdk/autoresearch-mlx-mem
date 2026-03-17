@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "21 June 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 9.5,
+            "text": "Jon has been attending networking events to make things happen after losing his job.",
+            "value": "Jon has been attending networking events to make things happen after losing his job.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "2:15 pm on 21 June, 2023",
+            "dia_ids": [
+                "D16:6"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

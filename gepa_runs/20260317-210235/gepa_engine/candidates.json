@@ -1,0 +1,12 @@
+[
+  {
+    "mode_router": "balanced_temporal",
+    "current_strategy": "latest_with_support",
+    "temporal_strategy": "explicit_or_session_time",
+    "multi_hop_strategy": "aggregate_two_hops",
+    "answer_style": "mode_default",
+    "abstain_profile": "answerable_friendly",
+    "generic_answer_rule": "reject_full_sentence",
+    "explanation_policy": "brief_abstain_reason"
+  }
+]

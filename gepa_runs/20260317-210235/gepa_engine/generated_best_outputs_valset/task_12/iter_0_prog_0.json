@@ -1,0 +1,36 @@
+{
+    "query_mode": "current",
+    "answer_candidate": "showed a photo of her pet Susie",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, pet, susie. The supported answer is showed a photo of her pet Susie.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 10.326666666666666,
+            "text": "Additionally, Jolene showed a photo of her pet Susie, whom she adores for bringing comfort and brightness into her life.",
+            "value": "Additionally, Jolene showed a photo of her pet Susie, whom she adores for bringing comfort and brightness into her life.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 28,
+            "session_time": null,
+            "dia_ids": [
+                "D28:1",
+                "D28:5",
+                "D28:7",
+                "D28:9",
+                "D28:11",
+                "D28:15",
+                "D28:16",
+                "D28:18",
+                "D28:22",
+                "D28:26",
+                "D28:30"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

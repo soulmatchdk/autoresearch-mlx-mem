@@ -1,0 +1,30 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "2 September",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about dave, francisco, san. The supported answer is 2 September.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 10.0,
+            "text": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "value": "At 9:19 am on 2 September 2023, Dave and Calvin caught up, with Dave sharing car modification insights from San Francisco.",
+            "entity": "speaker_b",
+            "attribute": "date",
+            "regime": "global",
+            "session_idx": 17,
+            "session_time": null,
+            "dia_ids": [
+                "D17:1",
+                "D17:3",
+                "D17:5",
+                "D17:6",
+                "D17:7"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

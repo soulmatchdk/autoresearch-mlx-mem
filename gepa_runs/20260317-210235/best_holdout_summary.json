@@ -1,0 +1,548 @@
+{
+  "aggregate_metrics": {
+    "query_count": 48,
+    "joint_answer_or_abstain_acc": 0.20833333333333334,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 0.8333333333333334,
+    "answer_match_rate": 0.10416666666666667,
+    "answer_evidence_recall": 0.4583333333333333,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.20833333333333334,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 0.0,
+    "false_abstain_penalty": 0.23809523809523808,
+    "false_confident_answer_penalty": 0.5833333333333334
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.11904761904761904,
+    "abstain_precision": 0.3333333333333333,
+    "abstain_recall": 0.8333333333333334,
+    "false_abstain_penalty": 0.23809523809523808,
+    "false_confident_answer_penalty": 0.5833333333333334,
+    "joint_reward_mean": 0.20833333333333334,
+    "answerable_reward_mean": 0.11904761904761904,
+    "temporal_joint_reward_mean": 0.20833333333333334,
+    "temporal_evidence_reward_mean": 0.4583333333333333,
+    "answer_evidence_reward_mean": 0.4583333333333333,
+    "avoid_false_abstain_mean": 0.7619047619047619,
+    "avoid_false_confident_answer_mean": 0.4166666666666667
+  },
+  "by_slice": {
+    "temporal": {
+      "count": 48,
+      "joint_acc": 0.20833333333333334,
+      "pred_abstain_rate": 0.3125,
+      "gold_abstain_rate": 0.125,
+      "answer_match_rate": 0.10416666666666667,
+      "evidence_hit_rate": 0.4583333333333333
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 15,
+      "joint_acc": 0.3333333333333333,
+      "pred_abstain_rate": 0.9333333333333333,
+      "gold_abstain_rate": 0.3333333333333333,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 0.4666666666666667
+    },
+    "multi_hop": {
+      "count": 1,
+      "joint_acc": 0.0,
+      "pred_abstain_rate": 0.0,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.0,
+      "evidence_hit_rate": 1.0
+    },
+    "temporal": {
+      "count": 32,
+      "joint_acc": 0.15625,
+      "pred_abstain_rate": 0.03125,
+      "gold_abstain_rate": 0.03125,
+      "answer_match_rate": 0.15625,
+      "evidence_hit_rate": 0.4375
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 17,
+    "missing_evidence": 0,
+    "false_abstain": 10,
+    "multi_hop_failure": 1,
+    "attribute_mismatch": 24,
+    "entity_mismatch": 0,
+    "false_confident_answer": 38,
+    "explanation_quality": 0
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-42_q73",
+      "bucket": "temporal_selection_error",
+      "question": "When did Joanna plan on going to Nate's to watch him play with his turtles?",
+      "gold_answer": "10 November, 2022",
+      "predicted_answer": "4 November 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about him, joanna, nate's. The supported answer is 4 November 2022.",
+      "support_text": "Joanna agreed to go to Nate's place and bring dessert recipes to share with him.",
+      "support_dia_ids": [
+        "D26:19"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q56",
+      "bucket": "false_confident_answer",
+      "question": "When did Calvin visit some of the sights in Boston with a former high school friend?",
+      "gold_answer": "October 24, 2023",
+      "predicted_answer": "25 October 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, friend, high. The supported answer is 25 October 2023.",
+      "support_text": "Calvin recently visited Boston with a high school friend and found it fun and eye-opening.",
+      "support_dia_ids": [
+        "D26:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q78",
+      "bucket": "temporal_selection_error",
+      "question": "When did Nate win his second tournament?",
+      "gold_answer": "The week before 2 May, 2022.",
+      "predicted_answer": "22 August, 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about his, nate, tournament. The supported answer is 22 August, 2022.",
+      "support_text": "Nate informed Joanna at 10:57 am on 22 August, 2022, that he won an international gaming tournament and is now able to pursue his passion as a career.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:3",
+        "D19:9",
+        "D19:13",
+        "D19:6",
+        "D19:8",
+        "D19:12",
+        "D19:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q145",
+      "bucket": "false_abstain",
+      "question": "What did Evan share with Sam after their hiking trip?",
+      "gold_answer": "a photo of a man standing on a rock looking out over a valley",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, hiking, sam, trip.",
+      "support_text": "Sam shared about a recent hiking trip, while Evan mentioned a mountain drive that ended in a minor accident.",
+      "support_dia_ids": [
+        "D22:1",
+        "D22:3",
+        "D22:7",
+        "D22:11",
+        "D22:19",
+        "D22:21",
+        "D22:2",
+        "D22:4",
+        "D22:8",
+        "D22:10",
+        "D22:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q141",
+      "bucket": "false_abstain",
+      "question": "How did Evan feel when he painted the piece with the bird flying over it?",
+      "gold_answer": "a sense of joy and freedom",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, feel, how.",
+      "support_text": "Evan paints what's on their mind or how they feel, including good memories or places they want to go to.",
+      "support_dia_ids": [
+        "D11:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q58",
+      "bucket": "temporal_selection_error",
+      "question": "When did Caroline encounter people on a hike and have a negative experience?",
+      "gold_answer": "The week before 25 August 2023",
+      "predicted_answer": "28 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about caroline, experience, people. The supported answer is 28 August 2023.",
+      "support_text": "Caroline shared her story with the young people at the LGBTQ+ youth center and felt fulfilled by the experience.",
+      "support_dia_ids": [
+        "D15:5"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q47",
+      "bucket": "false_confident_answer",
+      "question": "When did Maria go hiking with her church friends?",
+      "gold_answer": "The weekend before 22 July 2023",
+      "predicted_answer": "The week before 22 July 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about church, friends, her, hiking. The supported answer is The week before 22 July 2023.",
+      "support_text": "Maria had a great experience hiking with her church friends last weekend, feeling surrounded by supportive people and enjoying nature.",
+      "support_dia_ids": [
+        "D25:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q52",
+      "bucket": "temporal_selection_error",
+      "question": "When did Jolene buy a new aquarium for Seraphim?",
+      "gold_answer": "24 June, 2023",
+      "predicted_answer": "2 March 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, new, seraphim. The supported answer is 2 March 2023.",
+      "support_text": "Jolene took Seraphim to the park and explored new places.",
+      "support_dia_ids": [
+        "D8:8"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q67",
+      "bucket": "false_confident_answer",
+      "question": "When did Jolene and her partner return home from Rio de Janeiro?",
+      "gold_answer": "29 August, 2023",
+      "predicted_answer": "30 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about her, janeiro, jolene, partner. The supported answer is 30 August 2023.",
+      "support_text": "Jolene recently went on a trip to Rio de Janeiro with her partner, where they attended yoga classes and visited cafes.",
+      "support_dia_ids": [
+        "D23:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q48",
+      "bucket": "false_abstain",
+      "question": "When did Jolene do yoga at Talkeetna?",
+      "gold_answer": "on 5 June, 2023",
+      "predicted_answer": null,
+      "predicted_mode": "temporal",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: jolene, yoga.",
+      "support_text": "Deborah told Jolene about the canceled yoga getaway due to a storm at 7:39 pm on September 8, 2023.",
+      "support_dia_ids": [
+        "D26:1",
+        "D26:3",
+        "D26:9",
+        "D26:13",
+        "D26:15",
+        "D26:19",
+        "D26:21",
+        "D26:4",
+        "D26:6",
+        "D26:10",
+        "D26:12",
+        "D26:18",
+        "D26:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q40",
+      "bucket": "false_abstain",
+      "question": "What year did Tim go to the Smoky Mountains?",
+      "gold_answer": "2022",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: mountains, smoky, tim.",
+      "support_text": "Tim shared a stunning nature picture from the Smoky Mountains, emphasizing the beauty of nature and the importance of taking a break from city life.",
+      "support_dia_ids": [
+        "D14:3",
+        "D14:5",
+        "D14:9",
+        "D14:11",
+        "D14:14",
+        "D14:20",
+        "D14:22"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q26",
+      "bucket": "temporal_selection_error",
+      "question": "Which year did Evan start taking care of his health seriously?",
+      "gold_answer": "2021",
+      "predicted_answer": "15 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about care, evan, his, taking. The supported answer is 15 August 2023.",
+      "support_text": "Evan is concerned about taking care of his son who was hurt in the soccer accident.",
+      "support_dia_ids": [
+        "D7:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q77",
+      "bucket": "false_confident_answer",
+      "question": "When did Jolene and her partner try scuba diving lessons?",
+      "gold_answer": "Friday before 17 September, 2023",
+      "predicted_answer": "15 September 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about diving, jolene, scuba. The supported answer is 15 September 2023.",
+      "support_text": "Jolene tried a scuba diving lesson last Friday and enjoyed it, hoping to become a certified diver one day.",
+      "support_dia_ids": [
+        "D29:4"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q56",
+      "bucket": "temporal_selection_error",
+      "question": "When did Andrew make his dogs a fun indoor area?",
+      "gold_answer": "few days before November 22, 2023",
+      "predicted_answer": "4 October, 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about andrew, dogs, fun. The supported answer is 4 October, 2023.",
+      "support_text": "4:18 pm on 4 October, 2023 - Andrew reconnects with Audrey, who shares about her fun beach trip with her dogs.",
+      "support_dia_ids": [
+        "D21:5",
+        "D21:7",
+        "D21:9",
+        "D21:2",
+        "D21:8",
+        "D21:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q111",
+      "bucket": "false_abstain",
+      "question": "What plans do Calvin and Dave have for when Calvin visits Boston?",
+      "gold_answer": "Check out Dave's garage and maybe get some ideas for future projects",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: boston, calvin, dave, plans.",
+      "support_text": "Dave plans to show Calvin around Boston, known for its vibrant music scene.",
+      "support_dia_ids": [
+        "D3:3",
+        "D3:7",
+        "D3:9",
+        "D3:13",
+        "D3:15",
+        "D3:12",
+        "D3:10",
+        "D3:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q12",
+      "bucket": "temporal_selection_error",
+      "question": "When did Gina get her tattoo?",
+      "gold_answer": "A few years ago",
+      "predicted_answer": "3 April 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about get, gina, her. The supported answer is 3 April 2023.",
+      "support_text": "Gina plans to work with fashion bloggers and influencers to get more attention for her store and do more ads to reach more people.",
+      "support_dia_ids": [
+        "D8:12"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q140",
+      "bucket": "false_abstain",
+      "question": "What sparked James' passion for gaming when he was a kid?",
+      "gold_answer": "Super Mario and The Legend of Zelda games",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: gaming, james', passion.",
+      "support_text": "They talked about childhood gaming memories and James' passion for gaming.",
+      "support_dia_ids": [
+        "D28:3",
+        "D28:21",
+        "D28:25",
+        "D28:27",
+        "D28:6",
+        "D28:8",
+        "D28:12",
+        "D28:14",
+        "D28:16",
+        "D28:30",
+        "D28:32"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q27",
+      "bucket": "temporal_selection_error",
+      "question": "When did Jon receive mentorship to promote his venture?",
+      "gold_answer": "15 June, 2023",
+      "predicted_answer": "21 July 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about his, jon, promote. The supported answer is 21 July 2023.",
+      "support_text": "Jon plans to collaborate with Gina on making content and managing his social media accounts to promote the dance studio.",
+      "support_dia_ids": [
+        "D18:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q61",
+      "bucket": "false_confident_answer",
+      "question": "When did Deborah go to a yoga retreat near her mom's place?",
+      "gold_answer": "a week before 24 August,2023",
+      "predicted_answer": "The week before 24 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about deborah, her, mom's, near. The supported answer is The week before 24 August 2023.",
+      "support_text": "Deborah attended a yoga retreat near her mom's place last week and found it life-changing.",
+      "support_dia_ids": [
+        "D21:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-43_q49",
+      "bucket": "temporal_selection_error",
+      "question": "When did John get an ankle injury in 2023?",
+      "gold_answer": "around November 16, 2023",
+      "predicted_answer": "26 December, 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about 2023, john. The supported answer is 26 December, 2023.",
+      "support_text": "John and Tim caught up at 3:35 pm on 26 December, 2023.",
+      "support_dia_ids": [
+        "D26:1",
+        "D26:23",
+        "D26:21",
+        "D26:19",
+        "D26:29",
+        "D26:6",
+        "D26:32",
+        "D26:36"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-48_q213",
+      "question": "How does Deborah feel when spending time with Seraphim?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: deborah, how, spending, time.",
+      "support_text": "Deborah informed Jolene about her father's recent passing, recounting how she copes with grief by cherishing memories and spending time with family.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q205",
+      "question": "What does Tim want to do after his basketball career?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: career, his, tim.",
+      "support_text": "John and Tim, who met at 8:28 pm on 11 December 2023, had a conversation where Tim shared about his English lit class struggles and John talked about his recent career-high in assists.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q145",
+      "question": "What did Evan share with Sam after their hiking trip?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, hiking, sam, trip.",
+      "support_text": "Sam shared about a recent hiking trip, while Evan mentioned a mountain drive that ended in a minor accident.",
+      "gold_answer": "a photo of a man standing on a rock looking out over a valley",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q141",
+      "question": "How did Evan feel when he painted the piece with the bird flying over it?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: evan, feel, how.",
+      "support_text": "Evan paints what's on their mind or how they feel, including good memories or places they want to go to.",
+      "gold_answer": "a sense of joy and freedom",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q48",
+      "question": "When did Jolene do yoga at Talkeetna?",
+      "predicted_mode": "temporal",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: jolene, yoga.",
+      "support_text": "Deborah told Jolene about the canceled yoga getaway due to a storm at 7:39 pm on September 8, 2023.",
+      "gold_answer": "on 5 June, 2023",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q40",
+      "question": "What year did Tim go to the Smoky Mountains?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: mountains, smoky, tim.",
+      "support_text": "Tim shared a stunning nature picture from the Smoky Mountains, emphasizing the beauty of nature and the importance of taking a break from city life.",
+      "gold_answer": "2022",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q111",
+      "question": "What plans do Calvin and Dave have for when Calvin visits Boston?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: boston, calvin, dave, plans.",
+      "support_text": "Dave plans to show Calvin around Boston, known for its vibrant music scene.",
+      "gold_answer": "Check out Dave's garage and maybe get some ideas for future projects",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q140",
+      "question": "What sparked James' passion for gaming when he was a kid?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: gaming, james', passion.",
+      "support_text": "They talked about childhood gaming memories and James' passion for gaming.",
+      "gold_answer": "Super Mario and The Legend of Zelda games",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-44_q157",
+      "question": "Which type of pizza did Audrey suggest trying first to someone new to Italian cuisine?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: audrey, new, someone, trying.",
+      "support_text": "Audrey suggests trying California or salmon roll as easier options for someone new to sushi, and mixing it up with different sauces and dips.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q84",
+      "question": "What type of car did Evan get after his old Prius broke down?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: broke, down, evan, his.",
+      "support_text": "Evan has a new Prius after his old one broke down, which he got repaired and sold.",
+      "gold_answer": "new Prius",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-47_q126",
+      "question": "What did James prepare for the first time in the cooking class?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: class, cooking, james.",
+      "support_text": "James signed up for a cooking class two days ago to learn something new.",
+      "gold_answer": "Omelette",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-43_q193",
+      "question": "What did Tim's teammates give him when they met on Aug 15th?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: him, tim's.",
+      "support_text": "John offered assistance with Tim's travel plans, and Tim thanked him for his support before ending the conversation.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    }
+  ]
+}

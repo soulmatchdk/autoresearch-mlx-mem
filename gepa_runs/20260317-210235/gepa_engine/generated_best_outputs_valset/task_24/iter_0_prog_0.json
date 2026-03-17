@@ -1,0 +1,37 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, frank, ocean, tour.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 12.291666666666666,
+            "text": "Dave inquired about Calvin's tour with Frank Ocean, discussing the challenges of fame balancing personal life and work.",
+            "value": "Dave inquired about Calvin's tour with Frank Ocean, discussing the challenges of fame balancing personal life and work.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 25,
+            "session_time": null,
+            "dia_ids": [
+                "D25:1",
+                "D25:7",
+                "D25:13",
+                "D25:15",
+                "D25:17",
+                "D25:20",
+                "D25:2",
+                "D25:4",
+                "D25:6",
+                "D25:10",
+                "D25:12",
+                "D25:22"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

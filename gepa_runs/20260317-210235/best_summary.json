@@ -1,0 +1,532 @@
+{
+  "aggregate_metrics": {
+    "query_count": 96,
+    "joint_answer_or_abstain_acc": 0.1875,
+    "abstain_precision": 0.16666666666666666,
+    "abstain_recall": 0.8571428571428571,
+    "answer_match_rate": 0.125,
+    "answer_evidence_recall": 0.3854166666666667,
+    "current_joint_acc": 0.0,
+    "temporal_joint_acc": 0.1875,
+    "multi_hop_joint_acc": 0.0,
+    "abstain_like_acc": 0.0,
+    "false_abstain_penalty": 0.33707865168539325,
+    "false_confident_answer_penalty": 0.5
+  },
+  "objective_summary": {
+    "answerable_accuracy": 0.1348314606741573,
+    "abstain_precision": 0.16666666666666666,
+    "abstain_recall": 0.8571428571428571,
+    "false_abstain_penalty": 0.33707865168539325,
+    "false_confident_answer_penalty": 0.5,
+    "joint_reward_mean": 0.1875,
+    "answerable_reward_mean": 0.1348314606741573,
+    "temporal_joint_reward_mean": 0.1875,
+    "temporal_evidence_reward_mean": 0.3854166666666667,
+    "answer_evidence_reward_mean": 0.3854166666666667,
+    "avoid_false_abstain_mean": 0.6629213483146067,
+    "avoid_false_confident_answer_mean": 0.5
+  },
+  "by_slice": {
+    "temporal": {
+      "count": 96,
+      "joint_acc": 0.1875,
+      "pred_abstain_rate": 0.375,
+      "gold_abstain_rate": 0.07291666666666667,
+      "answer_match_rate": 0.125,
+      "evidence_hit_rate": 0.3854166666666667
+    }
+  },
+  "by_predicted_mode": {
+    "current": {
+      "count": 37,
+      "joint_acc": 0.1891891891891892,
+      "pred_abstain_rate": 0.8648648648648649,
+      "gold_abstain_rate": 0.1891891891891892,
+      "answer_match_rate": 0.02702702702702703,
+      "evidence_hit_rate": 0.2702702702702703
+    },
+    "temporal": {
+      "count": 59,
+      "joint_acc": 0.1864406779661017,
+      "pred_abstain_rate": 0.06779661016949153,
+      "gold_abstain_rate": 0.0,
+      "answer_match_rate": 0.1864406779661017,
+      "evidence_hit_rate": 0.4576271186440678
+    }
+  },
+  "failure_buckets": {
+    "temporal_selection_error": 31,
+    "missing_evidence": 0,
+    "false_abstain": 30,
+    "multi_hop_failure": 0,
+    "attribute_mismatch": 37,
+    "entity_mismatch": 0,
+    "false_confident_answer": 65,
+    "explanation_quality": 1
+  },
+  "failure_examples": [
+    {
+      "query_id": "locomo_conv-42_q30",
+      "bucket": "temporal_selection_error",
+      "question": "When is Joanna going to make Nate's ice cream for her family?",
+      "gold_answer": "The weekend of 24June, 2022.",
+      "predicted_answer": "24 June 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about cream, her, ice, joanna. The supported answer is 24 June 2022.",
+      "support_text": "Joanna appreciates Nate's support for her ice cream making.",
+      "support_dia_ids": [
+        "D16:15"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q55",
+      "bucket": "temporal_selection_error",
+      "question": "When was Joanna's second movie script shown on the big screens?",
+      "gold_answer": "The Sunday before 25October, 2022.",
+      "predicted_answer": "25 October 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about big, movie, script, shown. The supported answer is 25 October 2022.",
+      "support_text": "Joanna recently had a movie script she contributed to shown on the big screen for the first time.",
+      "support_dia_ids": [
+        "D25:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q143",
+      "bucket": "false_abstain",
+      "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+      "gold_answer": "It really showed how much she loves her.",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+      "support_text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+      "support_dia_ids": [
+        "D15:20"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q179",
+      "bucket": "temporal_selection_error",
+      "question": "What emotion does Calvin mention feeling when he sees the relief of someone whose car he fixed?",
+      "gold_answer": "",
+      "predicted_answer": "like it was well-deserved after hard work",
+      "predicted_mode": "current",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about calvin, car, feeling. The supported answer is like it was well-deserved after hard work.",
+      "support_text": "Calvin shared a picture and mentioned it was his first luxury car, feeling like it was well-deserved after hard work.",
+      "support_dia_ids": [
+        "D2:1",
+        "D2:5",
+        "D2:17",
+        "D2:8",
+        "D2:10",
+        "D2:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q26",
+      "bucket": "false_confident_answer",
+      "question": "When did Dave host a card-playing night with his friends?",
+      "gold_answer": "on the Friday before 22 August, 2023",
+      "predicted_answer": "18 August 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about card, dave, friends, night. The supported answer is 18 August 2023.",
+      "support_text": "Dave had a card night with friends last Friday and enjoyed it a lot.",
+      "support_dia_ids": [
+        "D15:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q71",
+      "bucket": "temporal_selection_error",
+      "question": "When did Calvin attend a gala in Boston?",
+      "gold_answer": "November 16, 2023",
+      "predicted_answer": "17 November 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about boston, calvin, gala. The supported answer is 17 November 2023.",
+      "support_text": "Calvin attended a fancy gala in Boston recently and met interesting people.",
+      "support_dia_ids": [
+        "D30:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q66",
+      "bucket": "false_abstain",
+      "question": "Which country was Jolene located in during the last week of August 2023?",
+      "gold_answer": "Brazil",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, jolene.",
+      "support_text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+      "support_dia_ids": [
+        "D23:1",
+        "D23:9",
+        "D23:29",
+        "D23:4",
+        "D23:12",
+        "D23:18",
+        "D23:22"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q9",
+      "bucket": "temporal_selection_error",
+      "question": "When did Nate get his first two turtles?",
+      "gold_answer": "2019",
+      "predicted_answer": "25 October 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about get, his, nate, turtles. The supported answer is 25 October 2022.",
+      "support_text": "Nate loves seeing his turtles eat fruit as they get excited and it's cute.",
+      "support_dia_ids": [
+        "D25:21"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-48_q82",
+      "bucket": "temporal_selection_error",
+      "question": "When did the Deboran and Jolene agree to go surfing?",
+      "gold_answer": "in October 2023",
+      "predicted_answer": "17 September 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+      "support_text": "Jolene just started learning about surfing but hasn't gone yet.",
+      "support_dia_ids": [
+        "D29:30"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q4",
+      "bucket": "false_confident_answer",
+      "question": "When did Nate win his first video game tournament?",
+      "gold_answer": "the week before 21Janury, 2022",
+      "predicted_answer": "21 January 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+      "support_text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+      "support_dia_ids": [
+        "D1:3"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q46",
+      "bucket": "false_abstain",
+      "question": "Which places in Canada was Evan visiting in July 2023?",
+      "gold_answer": "Banff, Rocky Mountains",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, evan, july.",
+      "support_text": "At 10:52 am on 27 July, 2023, Sam confided in Evan about being teased for his weight, prompting him to make health changes.",
+      "support_dia_ids": [
+        "D4:1",
+        "D4:3",
+        "D4:7",
+        "D4:15",
+        "D4:17",
+        "D4:19",
+        "D4:2",
+        "D4:4",
+        "D4:6",
+        "D4:8",
+        "D4:12",
+        "D4:10"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-50_q124",
+      "bucket": "false_abstain",
+      "question": "How does Calvin stay motivated when faced with setbacks?",
+      "gold_answer": "Reminds himself of his passion for goals, gets help from others, and takes a break to recharge",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, motivated, setbacks, stay.",
+      "support_text": "Calvin encouraged him not to give up and stay positive, sharing his approach to staying motivated during setbacks.",
+      "support_dia_ids": [
+        "D23:1",
+        "D23:5",
+        "D23:11",
+        "D23:2",
+        "D23:4",
+        "D23:10",
+        "D23:16"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-30_q34",
+      "bucket": "false_confident_answer",
+      "question": "When did Jon visit networking events for his store?",
+      "gold_answer": "20 June, 2023",
+      "predicted_answer": "21 June 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about events, his, jon, networking. The supported answer is 21 June 2023.",
+      "support_text": "Jon has been attending networking events to make things happen after losing his job.",
+      "support_dia_ids": [
+        "D16:6"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q80",
+      "bucket": "false_abstain",
+      "question": "When did Caroline pass the adoption interview?",
+      "gold_answer": "The Friday before 22 October 2023",
+      "predicted_answer": null,
+      "predicted_mode": "temporal",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: adoption, caroline.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "support_dia_ids": [
+        "D19:1",
+        "D19:3",
+        "D19:7",
+        "D19:9",
+        "D19:2",
+        "D19:6",
+        "D19:8",
+        "D19:10",
+        "D19:13"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-47_q54",
+      "bucket": "temporal_selection_error",
+      "question": "How long did it take for James to complete his Witcher-inspired game?",
+      "gold_answer": "six months",
+      "predicted_answer": "1 September",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about game, his, inspired, james. The supported answer is 1 September.",
+      "support_text": "Summary: At 6:53 pm on 1 September 2022, James excitedly shared with John that he had completed his Unity strategy game, inspired by games like Civilization and Total War.",
+      "support_dia_ids": [
+        "D22:1",
+        "D22:5",
+        "D22:7",
+        "D22:9",
+        "D22:10",
+        "D22:12",
+        "D22:14",
+        "D22:18"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-41_q134",
+      "bucket": "false_abstain",
+      "question": "What did John do the week before August 3, 2023 involving his kids?",
+      "gold_answer": "Had a meaningful experience at a military memorial",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, his, john.",
+      "support_text": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+      "support_dia_ids": [
+        "D28:1",
+        "D28:3",
+        "D28:5",
+        "D28:11",
+        "D28:8",
+        "D28:10",
+        "D28:6"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-49_q62",
+      "bucket": "false_abstain",
+      "question": "What kind of stress was Sam dealing with in October 2023?",
+      "gold_answer": "work-related stress",
+      "predicted_answer": null,
+      "predicted_mode": "current",
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, october, sam.",
+      "support_text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+      "support_dia_ids": [
+        "D14:1",
+        "D14:3",
+        "D14:7",
+        "D14:11",
+        "D14:2",
+        "D14:4",
+        "D14:8",
+        "D14:14"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-42_q65",
+      "bucket": "false_confident_answer",
+      "question": "When did Nate win a big Valorant tourney?",
+      "gold_answer": "The Saturday before 7November, 2022",
+      "predicted_answer": "7 November 2022",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+      "support_text": "Nate won a big Valorant tournament making him the champion.",
+      "support_dia_ids": [
+        "D27:1"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-26_q32",
+      "bucket": "temporal_selection_error",
+      "question": "When did Melanie go camping in June?",
+      "gold_answer": "The week before 27 June 2023",
+      "predicted_answer": "13 September 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about camping, melanie. The supported answer is 13 September 2023.",
+      "support_text": "Melanie enjoys camping with her kids, exploring the forest, and hiking.",
+      "support_dia_ids": [
+        "D16:2"
+      ]
+    },
+    {
+      "query_id": "locomo_conv-44_q11",
+      "bucket": "temporal_selection_error",
+      "question": "When did Audrey's positive reinforcement training course for dogs take place?",
+      "gold_answer": "June, 2023",
+      "predicted_answer": "3 May 2023",
+      "predicted_mode": "temporal",
+      "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, place. The supported answer is 3 May 2023.",
+      "support_text": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+      "support_dia_ids": [
+        "D4:17"
+      ]
+    }
+  ],
+  "explanation_audit": [
+    {
+      "query_id": "locomo_conv-48_q143",
+      "question": "How does Jolene describe the feeling of finding her snake snuggled under the bed after it got out?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: bed, got, her, jolene.",
+      "support_text": "Jolene had a 'snake adventure' where her snake got out, but she found her snuggling under the bed after hours of searching.",
+      "gold_answer": "It really showed how much she loves her.",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-48_q66",
+      "question": "Which country was Jolene located in during the last week of August 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, jolene.",
+      "support_text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+      "gold_answer": "Brazil",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-30_q105",
+      "question": "What plans does Gina have after receiving advice at the networking event?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: advice, event, gina, networking.",
+      "support_text": "Gina met some investors and got good advice at a recent networking event.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q46",
+      "question": "Which places in Canada was Evan visiting in July 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, evan, july.",
+      "support_text": "At 10:52 am on 27 July, 2023, Sam confided in Evan about being teased for his weight, prompting him to make health changes.",
+      "gold_answer": "Banff, Rocky Mountains",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q124",
+      "question": "How does Calvin stay motivated when faced with setbacks?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: calvin, motivated, setbacks, stay.",
+      "support_text": "Calvin encouraged him not to give up and stay positive, sharing his approach to staying motivated during setbacks.",
+      "gold_answer": "Reminds himself of his passion for goals, gets help from others, and takes a break to recharge",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q80",
+      "question": "When did Caroline pass the adoption interview?",
+      "predicted_mode": "temporal",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable temporal answer. Top support: adoption, caroline.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "gold_answer": "The Friday before 22 October 2023",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-41_q134",
+      "question": "What did John do the week before August 3, 2023 involving his kids?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, his, john.",
+      "support_text": "At 5:19 pm on 5 August, 2023, John informed Maria that he lost his job at a mechanical engineering company that tanked.",
+      "gold_answer": "Had a meaningful experience at a military memorial",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-49_q62",
+      "question": "What kind of stress was Sam dealing with in October 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, october, sam.",
+      "support_text": "Sam and Evan caught up at 1:50 pm on 17 October, 2023.",
+      "gold_answer": "work-related stress",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q167",
+      "question": "What sports activity is Dave planning to try after the tour with Frank Ocean?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: dave, frank, ocean, tour.",
+      "support_text": "Dave inquired about Calvin's tour with Frank Ocean, discussing the challenges of fame balancing personal life and work.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-26_q194",
+      "question": "How did Caroline feel about her family after the accident?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: caroline, family, her.",
+      "support_text": "Caroline tells Melanie that she passed the adoption agency interviews last Friday and is excited about the progress she's making towards her goal of having a family.",
+      "gold_answer": "",
+      "gold_abstain": true,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-50_q28",
+      "question": "Which city was Calvin visiting in August 2023?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, calvin.",
+      "support_text": "Dave and Calvin caught up at 2:55 pm on 31 August, 2023.",
+      "gold_answer": "Miami",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    },
+    {
+      "query_id": "locomo_conv-42_q33",
+      "question": "Where did Joanna travel to in July 2022?",
+      "predicted_mode": "current",
+      "predicted_answer": null,
+      "should_abstain": true,
+      "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2022, joanna.",
+      "support_text": "Joanna excitedly shared with Nate at 12:06 am on 11 November, 2022, that she was filming her own movie from a road-trip script.",
+      "gold_answer": "Woodhaven",
+      "gold_abstain": false,
+      "explanation_quality": "good"
+    }
+  ]
+}

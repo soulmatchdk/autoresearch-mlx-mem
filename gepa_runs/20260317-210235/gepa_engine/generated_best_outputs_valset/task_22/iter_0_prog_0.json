@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "3 May 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about audrey's, dogs, place. The supported answer is 3 May 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 7.5,
+            "text": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "value": "Audrey's dogs love going on hikes and exploring nature, their happy place.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 4,
+            "session_time": "5:41 pm on 3 May, 2023",
+            "dia_ids": [
+                "D4:17"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

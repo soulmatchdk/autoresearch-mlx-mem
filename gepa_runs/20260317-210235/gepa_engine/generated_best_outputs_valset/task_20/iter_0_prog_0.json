@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "7 November 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about big, nate, valorant. The supported answer is 7 November 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 9.0,
+            "text": "Nate won a big Valorant tournament making him the champion.",
+            "value": "Nate won a big Valorant tournament making him the champion.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 27,
+            "session_time": "8:10 pm on 7 November, 2022",
+            "dia_ids": [
+                "D27:1"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

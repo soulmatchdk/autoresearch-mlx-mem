@@ -1,0 +1,31 @@
+{
+    "query_mode": "current",
+    "answer_candidate": "like it was well-deserved after hard work",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about calvin, car, feeling. The supported answer is like it was well-deserved after hard work.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 8.523333333333333,
+            "text": "Calvin shared a picture and mentioned it was his first luxury car, feeling like it was well-deserved after hard work.",
+            "value": "Calvin shared a picture and mentioned it was his first luxury car, feeling like it was well-deserved after hard work.",
+            "entity": "speaker_a",
+            "attribute": "possession",
+            "regime": "global",
+            "session_idx": 2,
+            "session_time": null,
+            "dia_ids": [
+                "D2:1",
+                "D2:5",
+                "D2:17",
+                "D2:8",
+                "D2:10",
+                "D2:14"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

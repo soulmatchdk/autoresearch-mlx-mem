@@ -4,7 +4,21 @@ import re
 from typing import Iterable
 
 from locomo_temporal_policy import MONTHS, date_phrase, parse_session_datetime, temporal_answer_from_text
-from reasoning_layer_schema import MemoryContext, MemoryEvidence, ReasoningOutput, validate_candidate, validate_confidence_band, validate_query_mode
+from reasoning_layer_schema import (
+    ABSTAIN_PROFILES,
+    ANSWER_STYLE_POLICIES,
+    CURRENT_STRATEGIES,
+    GENERIC_ANSWER_RULES,
+    MODE_ROUTERS,
+    MULTI_HOP_STRATEGIES,
+    TEMPORAL_STRATEGIES,
+    MemoryContext,
+    MemoryEvidence,
+    ReasoningOutput,
+    validate_candidate,
+    validate_confidence_band,
+    validate_query_mode,
+)
 
 
 STOPWORDS = {
@@ -153,6 +167,16 @@ def component_setting(candidate: dict[str, str], key: str, default: float, *comp
     return default
 
 
+def candidate_choice(candidate: dict[str, str], component: str, allowed: tuple[str, ...], default: str) -> str:
+    value = (candidate.get(component, "") or "").strip().lower().replace("-", "_")
+    if value in allowed:
+        return value
+    for option in allowed:
+        if re.search(rf"\b{re.escape(option)}\b", value):
+            return option
+    return default
+
+
 def extract_time_terms(text: str) -> set[str]:
     lowered = normalize_text(text)
     if not lowered:
@@ -182,11 +206,7 @@ def time_anchor_adjustment(question: str, item: MemoryEvidence, flags: set[str],
 
 def classify_query_mode(candidate: dict[str, str], question: str) -> str:
     _ = validate_candidate(candidate)
-    routing_flags = component_flags(candidate, "query_mode_rubric", "mode_routing_bias")
-    temporal_trigger = int(component_setting(candidate, "temporal_trigger", 3.0, "mode_routing_bias"))
-    multi_hop_trigger = int(component_setting(candidate, "multi_hop_trigger", 2.0, "mode_routing_bias"))
-    abstain_trigger = int(component_setting(candidate, "abstain_trigger", 3.0, "mode_routing_bias"))
-    current_margin = int(component_setting(candidate, "current_margin", 1.0, "mode_routing_bias"))
+    router = candidate_choice(candidate, "mode_router", MODE_ROUTERS, "balanced_temporal")
     lowered = f" {question.lower()} "
     temporal_score = 0
     multi_hop_score = 0
@@ -199,30 +219,51 @@ def classify_query_mode(candidate: dict[str, str], question: str) -> str:
         temporal_score += 1
     if extract_time_terms(question):
         temporal_score += 1
-    if "temporal_on_time_anchor" in routing_flags and extract_time_terms(question):
-        temporal_score += 1
-    if "temporal_on_relative_time" in routing_flags and any(token in lowered for token in (" last ", " yesterday ", " before ", " after ", " recently ", " ago ")):
-        temporal_score += 1
     if lowered.startswith(" would ") or " if " in lowered or " likely " in lowered or " how many " in lowered:
         multi_hop_score += 3
     if any(token in lowered for token in (" both ", " in common ", " which of ", " topic of discussion ", " what kind of ", " what type of ")):
         multi_hop_score += 2
     if lowered.startswith(" who ") or lowered.startswith(" which "):
         multi_hop_score += 1
-    if "keep_who_which_non_temporal" not in routing_flags and (lowered.startswith(" who ") or lowered.startswith(" which ")) and extract_time_terms(question):
+    if router == "temporal_first":
         temporal_score += 1
-    if abstain_score >= max(temporal_score, multi_hop_score) and abstain_score >= abstain_trigger:
+    elif router == "multi_hop_sensitive":
+        multi_hop_score += 1
+    elif router == "abstain_sensitive":
+        abstain_score += 1
+    elif router == "current_default":
+        temporal_score -= 1
+        multi_hop_score -= 1
+    abstain_threshold = 2 if router == "abstain_sensitive" else 3
+    temporal_threshold = 2 if router == "temporal_first" else 3
+    multi_hop_threshold = 2 if router == "multi_hop_sensitive" else 3
+    temporal_margin = 0 if router == "temporal_first" else 1
+    if abstain_score >= max(temporal_score, multi_hop_score) and abstain_score >= abstain_threshold:
         return validate_query_mode("abstain_like")
-    if temporal_score >= max(temporal_trigger, multi_hop_score + current_margin):
+    if temporal_score >= max(temporal_threshold, multi_hop_score + temporal_margin):
         return validate_query_mode("temporal")
-    if multi_hop_score >= multi_hop_trigger:
+    if multi_hop_score >= multi_hop_threshold:
         return validate_query_mode("multi_hop")
     return validate_query_mode("current")
 
 
 def infer_answer_style(question: str, query_mode: str, candidate: dict[str, str] | None = None) -> str:
+    if candidate is not None:
+        policy = candidate_choice(candidate, "answer_style", ANSWER_STYLE_POLICIES, "auto")
+        if policy == "abstain":
+            return "abstain"
+        if policy == "short_date":
+            return "temporal"
+        if policy == "short_entity":
+            return "focused_span"
+        if policy == "short_slot_value":
+            lowered = question.lower()
+            if lowered.startswith("when ") or " how long " in f" {lowered} ":
+                return "temporal"
+            if lowered.startswith("who ") or lowered.startswith("which "):
+                return "focused_span"
+            return "single"
     lowered = question.lower()
-    style_flags = component_flags(candidate or {}, "answer_style_policy") if candidate else set()
     if lowered.startswith(BOOLEAN_PREFIXES):
         return "boolean"
     if "how much" in lowered or "how many" in lowered:
@@ -235,8 +276,6 @@ def infer_answer_style(question: str, query_mode: str, candidate: dict[str, str]
         return "counterfactual"
     collection_phrases = ("what activities", "what books", "where has", "what events", "what do", "what instruments", "which of", "what type of games")
     if any(phrase in lowered for phrase in collection_phrases):
-        if "collection_only_on_explicit_plural" in style_flags and not any(token in lowered for token in ("activities", "books", "events", "instruments", "games", "which of")):
-            return "focused_span"
         return "collection"
     if query_mode == "temporal":
         return "temporal"
@@ -269,25 +308,46 @@ def directness_score(question: str, item: MemoryEvidence) -> float:
     return score
 
 
-def rank_support_items(candidate: dict[str, str], context: MemoryContext, query_mode: str) -> list[MemoryEvidence]:
-    flags = candidate_flags(candidate)
-    temporal_flags = component_flags(candidate, "temporal_policy", "temporal_grounding_rule")
-    time_anchor_bonus = component_setting(candidate, "time_anchor_bonus", 2.0, "temporal_grounding_rule")
-    time_anchor_penalty = component_setting(candidate, "time_anchor_penalty", 2.0, "temporal_grounding_rule")
+def has_explicit_temporal_text(item: MemoryEvidence) -> bool:
+    lowered = (item.text or "").lower()
+    return bool(extract_time_terms(item.text) or any(token in lowered for token in ("yesterday", "last ", "next ", "recently", "ago")))
+
+
+def evidence_strategy(candidate: dict[str, str], query_mode: str) -> str:
+    if query_mode == "temporal":
+        return candidate_choice(candidate, "temporal_strategy", TEMPORAL_STRATEGIES, "explicit_or_session_time")
+    if query_mode == "multi_hop":
+        return candidate_choice(candidate, "multi_hop_strategy", MULTI_HOP_STRATEGIES, "aggregate_two_hops")
+    if query_mode == "abstain_like":
+        return "abstain_first"
+    return candidate_choice(candidate, "current_strategy", CURRENT_STRATEGIES, "latest_only")
+
+
+def rank_support_items(candidate: dict[str, str], context: MemoryContext, query_mode: str, strategy: str) -> list[MemoryEvidence]:
     ranked = []
     for item in context.evidence_items:
-        score = item.score
+        score = float(item.score)
         direct = directness_score(context.question, item)
         score += 1.5 * direct
-        score += time_anchor_adjustment(context.question, item, temporal_flags, time_anchor_bonus, time_anchor_penalty)
-        if "prefer_direct_match" in flags and direct > 0:
-            score += 1.5
-        if "prefer_attribute_match" in flags and context.attribute and item.attribute == context.attribute:
-            score += 2.0
-        if query_mode == "current" and "blend_specificity_with_freshness" in flags:
-            score += 0.15 * item.session_idx
-        ranked.append((score, item.session_idx, item))
-    ranked.sort(key=lambda entry: (entry[0], entry[1]), reverse=True)
+        anchor_match = bool(extract_time_terms(context.question) & extract_time_terms(f"{item.session_time or ''} {item.text}"))
+        if strategy in {"latest_with_time_anchor", "ordered_history"} and anchor_match:
+            score += 3.0
+        if strategy == "explicit_or_session_time" and (has_explicit_temporal_text(item) or item.session_time):
+            score += 2.5
+        freshness = float(item.session_idx)
+        if strategy == "latest_only":
+            ranked.append((freshness, direct, score, item))
+        elif strategy == "latest_with_time_anchor":
+            ranked.append((1.0 if anchor_match else 0.0, freshness, direct, score, item))
+        elif strategy == "ordered_history":
+            ranked.append((score, freshness, item))
+        else:
+            ranked.append((score, freshness, item))
+    ranked.sort(key=lambda entry: entry[:-1], reverse=True)
+    if strategy == "latest_only":
+        return [item for _, _, _, item in ranked]
+    if strategy == "latest_with_time_anchor":
+        return [item for _, _, _, _, item in ranked]
     return [item for _, _, item in ranked]
 
 
@@ -498,21 +558,21 @@ def compact_answer(question: str, answer: str) -> str:
     return answer
 
 
-def temporal_answer_from_item(question: str, item: MemoryEvidence, flags: set[str]) -> str | None:
+def temporal_answer_from_item(question: str, item: MemoryEvidence, strategy: str) -> str | None:
     text = item.text
     answer = temporal_answer_from_text(text, item.session_time)
     if answer:
         return answer
     lowered = text.lower()
-    if "allow_duration_answer" in flags:
+    if strategy in {"explicit_or_session_time", "ordered_history"}:
         duration = duration_answer(text)
         if duration:
             return duration
-    if "allow_recently_anchor" in flags and "recently" in lowered:
+    if strategy in {"explicit_or_session_time", "ordered_history"} and "recently" in lowered:
         dt = parse_session_datetime(item.session_time)
         if dt is not None:
             return date_phrase(dt)
-    if "allow_session_time_temporal_backoff" in flags:
+    if strategy in {"explicit_or_session_time", "ordered_history", "latest_with_time_anchor"}:
         dt = parse_session_datetime(item.session_time)
         if dt is not None and directness_score(question, item) >= 2.0:
             return date_phrase(dt)
@@ -534,38 +594,37 @@ def counterfactual_answer(question: str, support_items: list[MemoryEvidence]) ->
     return None
 
 
-def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode: str, answer_style: str) -> tuple[str | None, list[MemoryEvidence]]:
-    flags = candidate_flags(candidate)
-    ranked = rank_support_items(candidate, context, query_mode)
+def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode: str, answer_style: str, strategy: str) -> tuple[str | None, list[MemoryEvidence]]:
+    ranked = rank_support_items(candidate, context, query_mode, strategy)
     if not ranked:
         return None, []
     if query_mode == "abstain_like":
         return None, ranked[:1]
+    if answer_style == "abstain":
+        return None, ranked[:1]
     if answer_style == "collection":
-        top_k = 6 if "collection_top6" in flags else 4 if "collection_top4" in flags else 3
+        top_k = 4
         answer = aggregate_collection_answer(context.question, ranked[:top_k])
         return answer, ranked[:top_k]
     if query_mode == "temporal":
-        temporal_flags = component_flags(candidate, "temporal_policy", "temporal_grounding_rule")
-        temporal_top_k = int(component_setting(candidate, "temporal_top_k", 6.0, "temporal_grounding_rule"))
-        backoff_directness = component_setting(candidate, "temporal_backoff_directness", 2.0, "temporal_grounding_rule")
-        for item in ranked[: max(1, temporal_top_k)]:
-            local_flags = set(temporal_flags)
-            if "allow_session_time_temporal_backoff" in local_flags and directness_score(context.question, item) < backoff_directness:
-                local_flags.discard("allow_session_time_temporal_backoff")
-            answer = temporal_answer_from_item(context.question, item, local_flags)
+        if strategy == "abstain_first":
+            return None, ranked[:1]
+        ordered = ranked if strategy == "ordered_history" else ranked[: min(6, len(ranked))]
+        for item in ordered:
+            if strategy == "latest_with_time_anchor" and not (has_explicit_temporal_text(item) or extract_time_terms(context.question) & extract_time_terms(f"{item.session_time or ''} {item.text}")):
+                continue
+            answer = temporal_answer_from_item(context.question, item, strategy)
             if answer:
                 return answer, [item]
         return None, ranked[:1]
     if query_mode == "multi_hop":
-        multihop_flags = component_flags(candidate, "multi_hop_policy", "multi_hop_evidence_requirement")
-        combine_k = int(component_setting(candidate, "multihop_combine_k", 3.0, "multi_hop_evidence_requirement"))
+        if strategy == "abstain_first":
+            return None, ranked[:1]
+        combine_k = 3 if strategy == "aggregate_three_hops" else 2
         if answer_style == "counterfactual":
-            combine_k = max(2, combine_k) if "combine_top3_multihop" in multihop_flags else 2
             answer = counterfactual_answer(context.question, ranked[:combine_k])
             if answer:
                 return answer, ranked[:combine_k]
-        combine_k = max(2, combine_k) if "combine_top3_multihop" in multihop_flags else 2
         for item in ranked[:combine_k]:
             answer = current_answer_from_item(context.question, item, answer_style)
             if answer:
@@ -574,8 +633,7 @@ def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode:
     for item in ranked[:4]:
         answer = current_answer_from_item(context.question, item, answer_style)
         if answer:
-            if "prefer_compact_value_span" in flags:
-                answer = compact_answer(context.question, answer)
+            answer = compact_answer(context.question, answer)
             return answer, [item]
     return None, ranked[:1]
 
@@ -583,17 +641,13 @@ def choose_answer(candidate: dict[str, str], context: MemoryContext, query_mode:
 def confidence_band(candidate: dict[str, str], query_mode: str, answer: str | None, support_items: list[MemoryEvidence]) -> str:
     if not answer or not support_items:
         return validate_confidence_band("low")
-    flags = component_flags(candidate, "confidence_policy")
-    medium_threshold = component_setting(candidate, "medium_score_threshold", 7.0, "confidence_policy")
-    high_threshold = component_setting(candidate, "high_score_threshold", 12.0, "confidence_policy")
+    profile = candidate_choice(candidate, "abstain_profile", ABSTAIN_PROFILES, "balanced")
     top_score = support_items[0].score
-    if "high_confidence_requires_strong_support" in flags and query_mode in {"temporal", "multi_hop"} and len(support_items) < 2:
-        high_threshold += 2.0
-    if top_score >= high_threshold or len(support_items) >= 2:
+    if len(support_items) >= 2 and top_score >= 2.0:
         return validate_confidence_band("high")
-    if "medium_confidence_on_single_grounded" in flags and len(support_items) == 1 and top_score >= max(1.0, medium_threshold - 1.0):
+    if profile == "answerable_friendly" and top_score >= 1.0:
         return validate_confidence_band("medium")
-    if top_score >= medium_threshold:
+    if top_score >= (2.5 if profile == "strict" else 1.5):
         return validate_confidence_band("medium")
     return validate_confidence_band("low")
 
@@ -611,47 +665,37 @@ def make_explanation(candidate: dict[str, str], question: str, query_mode: str, 
 
 
 def should_abstain(candidate: dict[str, str], query_mode: str, answer_style: str, answer: str | None, support_items: list[MemoryEvidence]) -> bool:
-    flags = candidate_flags(candidate)
-    answerable_flags = component_flags(candidate, "abstain_policy", "abstain_guardrail_answerable")
-    guardrail_flags = component_flags(candidate, "generic_answer_rejection_rule")
+    profile = candidate_choice(candidate, "abstain_profile", ABSTAIN_PROFILES, "balanced")
+    generic_rule = candidate_choice(candidate, "generic_answer_rule", GENERIC_ANSWER_RULES, "reject_full_sentence")
     if query_mode == "abstain_like":
+        return True
+    if candidate_choice(candidate, "answer_style", ANSWER_STYLE_POLICIES, "auto") == "abstain":
         return True
     if not answer or not support_items:
         return True
     top = support_items[0]
-    threshold = 2.0
-    if "low_grounding_threshold" in answerable_flags:
-        threshold = component_setting(candidate, "answerable_grounding_threshold", 1.0, "abstain_guardrail_answerable")
-    if "high_grounding_threshold" in flags:
-        threshold = 3.5
-    if top.score < threshold and "grounded_answer_beats_default_abstain" not in answerable_flags:
+    threshold = 2.5 if profile == "strict" else 1.5 if profile == "balanced" else 0.75
+    if top.score < threshold:
         return True
-    if "require_time_anchor_match" in flags and extract_time_terms(top.text + " " + (top.session_time or "")) and extract_time_terms(support_items[0].text + " " + (support_items[0].session_time or "")):
-        if not (extract_time_terms(top.text + " " + (top.session_time or "")) & extract_time_terms(answer or "")):
-            if extract_time_terms(top.text + " " + (top.session_time or "")) and extract_time_terms(answer or ""):
-                return True
     support_norm = normalize_text(top.text)
     answer_norm = normalize_text(answer)
-    generic_span_tokens = int(component_setting(candidate, "generic_span_tokens", 8.0, "generic_answer_rejection_rule"))
-    max_specific_answer_tokens = int(component_setting(candidate, "max_specific_answer_tokens", 10.0, "generic_answer_rejection_rule"))
-    if "abstain_on_sentence_copy" in guardrail_flags and answer_norm and support_norm.startswith(answer_norm):
-        if answer_style in {"single", "focused_span", "numeric", "frequency", "emotion", "boolean"} and len(answer_norm.split()) >= generic_span_tokens:
-            return True
-    if "require_specific_answer_span" in guardrail_flags and len(answer_norm.split()) >= max_specific_answer_tokens:
+    if generic_rule == "reject_full_sentence" and answer_norm and answer_norm == support_norm:
         return True
-    if "abstain_on_long_generic_answers" in guardrail_flags and len((answer or "").split()) > max_specific_answer_tokens:
+    if generic_rule == "reject_long_span" and len(answer_norm.split()) > 8:
         return True
-    if query_mode in {"current", "temporal"} and "grounded_answer_beats_default_abstain" in answerable_flags:
-        return False
+    if profile == "strict" and query_mode == "multi_hop" and len(support_items) < 2:
+        return True
     return False
 
 
 def run_reasoning(candidate: dict[str, str], context: MemoryContext) -> ReasoningOutput:
     validate_candidate(candidate)
     query_mode = classify_query_mode(candidate, context.question)
-    answer_style = infer_answer_style(context.question, query_mode, candidate)
-    answer, support_items = choose_answer(candidate, context, query_mode, answer_style)
-    abstain = should_abstain(candidate, query_mode, answer_style, answer, support_items)
+    strategy = evidence_strategy(candidate, query_mode)
+    answer_style = candidate_choice(candidate, "answer_style", ANSWER_STYLE_POLICIES, "auto")
+    runtime_answer_style = infer_answer_style(context.question, query_mode, candidate)
+    answer, support_items = choose_answer(candidate, context, query_mode, runtime_answer_style, strategy)
+    abstain = should_abstain(candidate, query_mode, runtime_answer_style, answer, support_items)
     if abstain:
         answer = None
     explanation = make_explanation(candidate, context.question, query_mode, answer, support_items, abstain)
@@ -663,5 +707,7 @@ def run_reasoning(candidate: dict[str, str], context: MemoryContext) -> Reasonin
         confidence_band=confidence_band(candidate, query_mode, answer, support_items),
         support_items=support_items,
         answer_style=answer_style,
+        evidence_strategy=strategy,
+        abstain_profile=candidate_choice(candidate, "abstain_profile", ABSTAIN_PROFILES, "balanced"),
     )
     return output

@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "17 September 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about jolene, surfing. The supported answer is 17 September 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Jolene just started learning about surfing but hasn't gone yet.",
+            "value": "Jolene just started learning about surfing but hasn't gone yet.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 29,
+            "session_time": "1:24 pm on 17 September, 2023",
+            "dia_ids": [
+                "D29:30"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

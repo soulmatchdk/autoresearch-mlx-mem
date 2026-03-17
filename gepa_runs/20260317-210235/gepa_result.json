@@ -1,0 +1,190 @@
+{
+  "candidates": [
+    {
+      "mode_router": "balanced_temporal",
+      "current_strategy": "latest_with_support",
+      "temporal_strategy": "explicit_or_session_time",
+      "multi_hop_strategy": "aggregate_two_hops",
+      "answer_style": "mode_default",
+      "abstain_profile": "answerable_friendly",
+      "generic_answer_rule": "reject_full_sentence",
+      "explanation_policy": "brief_abstain_reason"
+    }
+  ],
+  "parents": [
+    [
+      null
+    ]
+  ],
+  "val_aggregate_scores": [
+    -0.2265625
+  ],
+  "val_subscores": [
+    {
+      "0": -0.35,
+      "1": -0.35,
+      "2": -0.75,
+      "3": -0.35,
+      "4": -0.35,
+      "5": -0.35,
+      "6": 1.0,
+      "7": -0.75,
+      "8": -0.35,
+      "9": -0.35,
+      "10": 1.0,
+      "11": -0.35,
+      "12": 1.0,
+      "13": -0.75,
+      "14": -0.75,
+      "15": -0.35,
+      "16": -0.75,
+      "17": -0.35,
+      "18": -0.75,
+      "19": -0.75,
+      "20": -0.35,
+      "21": -0.35,
+      "22": -0.35,
+      "23": -0.35,
+      "24": 1.0,
+      "25": -0.35,
+      "26": -0.35,
+      "27": -0.35,
+      "28": -0.35,
+      "29": 1.0,
+      "30": -0.35,
+      "31": -0.35
+    }
+  ],
+  "best_outputs_valset": null,
+  "per_val_instance_best_candidates": {
+    "0": [
+      0
+    ],
+    "1": [
+      0
+    ],
+    "2": [
+      0
+    ],
+    "3": [
+      0
+    ],
+    "4": [
+      0
+    ],
+    "5": [
+      0
+    ],
+    "6": [
+      0
+    ],
+    "7": [
+      0
+    ],
+    "8": [
+      0
+    ],
+    "9": [
+      0
+    ],
+    "10": [
+      0
+    ],
+    "11": [
+      0
+    ],
+    "12": [
+      0
+    ],
+    "13": [
+      0
+    ],
+    "14": [
+      0
+    ],
+    "15": [
+      0
+    ],
+    "16": [
+      0
+    ],
+    "17": [
+      0
+    ],
+    "18": [
+      0
+    ],
+    "19": [
+      0
+    ],
+    "20": [
+      0
+    ],
+    "21": [
+      0
+    ],
+    "22": [
+      0
+    ],
+    "23": [
+      0
+    ],
+    "24": [
+      0
+    ],
+    "25": [
+      0
+    ],
+    "26": [
+      0
+    ],
+    "27": [
+      0
+    ],
+    "28": [
+      0
+    ],
+    "29": [
+      0
+    ],
+    "30": [
+      0
+    ],
+    "31": [
+      0
+    ]
+  },
+  "val_aggregate_subscores": [
+    {
+      "temporal_joint_reward": 0.15625,
+      "temporal_evidence_reward": 0.375,
+      "answer_evidence_reward": 0.375
+    }
+  ],
+  "per_objective_best_candidates": {
+    "temporal_joint_reward": [
+      0
+    ],
+    "temporal_evidence_reward": [
+      0
+    ],
+    "answer_evidence_reward": [
+      0
+    ]
+  },
+  "objective_pareto_front": {
+    "temporal_joint_reward": 0.15625,
+    "temporal_evidence_reward": 0.375,
+    "answer_evidence_reward": 0.375
+  },
+  "discovery_eval_counts": [
+    0
+  ],
+  "total_metric_calls": 64,
+  "num_full_val_evals": 1,
+  "run_dir": "gepa_runs/20260317-210235/gepa_engine",
+  "seed": 13,
+  "_str_candidate_key": null,
+  "best_idx": 0,
+  "validation_schema_version": 2
+}

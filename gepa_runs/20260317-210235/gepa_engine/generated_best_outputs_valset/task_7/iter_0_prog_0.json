@@ -1,0 +1,32 @@
+{
+    "query_mode": "current",
+    "answer_candidate": null,
+    "should_abstain": true,
+    "explanation": "I abstained because the best evidence was not grounded enough to give a stable current answer. Top support: 2023, august, jolene.",
+    "confidence_band": "low",
+    "support_items": [
+        {
+            "kind": "header_sentence",
+            "score": 10.268333333333333,
+            "text": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "value": "Jolene and Deborah spoke at 11:46 am on 30 August 2023.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 23,
+            "session_time": null,
+            "dia_ids": [
+                "D23:1",
+                "D23:9",
+                "D23:29",
+                "D23:4",
+                "D23:12",
+                "D23:18",
+                "D23:22"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "latest_with_support",
+    "abstain_profile": "answerable_friendly"
+}

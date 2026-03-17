@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "13 September 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about camping, melanie. The supported answer is 13 September 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 10.5,
+            "text": "Melanie enjoys camping with her kids, exploring the forest, and hiking.",
+            "value": "Melanie enjoys camping with her kids, exploring the forest, and hiking.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 16,
+            "session_time": "12:09 am on 13 September, 2023",
+            "dia_ids": [
+                "D16:2"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

@@ -17,6 +17,15 @@ from gepa_reasoning_adapter import ReasoningGEPAAdapter
 from leakage_red_team import run_leakage_red_team
 from locomo_reasoning_eval import offline_slice_name, render_report
 from reasoning_layer_prompts import SEED_CANDIDATE, SMOKE_RUN_CONFIG, candidate_to_json, clone_candidate
+from reasoning_layer_schema import (
+    ABSTAIN_PROFILES,
+    ANSWER_STYLE_POLICIES,
+    CURRENT_STRATEGIES,
+    GENERIC_ANSWER_RULES,
+    MODE_ROUTERS,
+    MULTI_HOP_STRATEGIES,
+    TEMPORAL_STRATEGIES,
+)
 
 
 LEDGER_PATH = Path("gepa_runs/ledger.tsv")
@@ -57,21 +66,46 @@ LEDGER_HEADERS = [
 TRACK_COMPONENTS = {
     "all": list(SEED_CANDIDATE.keys()),
     "mode_abstain": [
-        "query_mode_rubric",
-        "abstain_guardrail_answerable",
-        "generic_answer_rejection_rule",
+        "mode_router",
+        "abstain_profile",
+        "generic_answer_rule",
     ],
     "temporal_selection": [
-        "temporal_policy",
-        "temporal_grounding_rule",
-        "answer_synthesis_policy",
+        "temporal_strategy",
+        "answer_style",
     ],
 }
 
 TRACK_SLICES = {
     "all": ["current", "temporal", "multi_hop", "abstain_like"],
     "mode_abstain": ["current", "temporal", "multi_hop", "abstain_like"],
-    "temporal_selection": ["temporal", "current"],
+    "temporal_selection": ["temporal"],
+}
+
+TRACK_OBJECTIVES = {
+    "all": [
+        "joint_reward",
+        "answerable_reward",
+        "abstain_precision_reward",
+        "abstain_recall_reward",
+        "avoid_false_abstain",
+        "avoid_false_confident_answer",
+        "temporal_joint_reward",
+        "temporal_evidence_reward",
+        "answer_evidence_reward",
+    ],
+    "mode_abstain": [
+        "answerable_reward",
+        "abstain_precision_reward",
+        "abstain_recall_reward",
+        "avoid_false_abstain",
+        "avoid_false_confident_answer",
+    ],
+    "temporal_selection": [
+        "temporal_joint_reward",
+        "temporal_evidence_reward",
+        "answer_evidence_reward",
+    ],
 }
 
 
@@ -175,7 +209,6 @@ def compare_candidates_for_track(track: str, left: dict[str, float], right: dict
         keys = [
             ("temporal_joint_acc", True),
             ("answer_evidence_recall", True),
-            ("answerable_accuracy", True),
             ("false_abstain_penalty", False),
             ("false_confident_answer_penalty", False),
         ]
@@ -203,6 +236,10 @@ def track_components(track: str) -> list[str]:
 
 def track_slices(track: str) -> list[str]:
     return list(TRACK_SLICES[track])
+
+
+def track_objectives(track: str) -> list[str]:
+    return list(TRACK_OBJECTIVES[track])
 
 
 def balanced_track_batch(queries: list[dict[str, Any]], track: str, budget: int, seed: int) -> list[dict[str, Any]]:
@@ -284,36 +321,37 @@ def make_holdout_batch(all_queries: list[dict[str, Any]], used_batch: list[dict[
     return balanced_track_batch(remaining, track=track, budget=budget, seed=seed)
 
 
-def apply_component_tune(candidate: dict[str, str], component: str, iteration: int) -> dict[str, str]:
+COMPONENT_OPTIONS = {
+    "mode_router": list(MODE_ROUTERS),
+    "current_strategy": list(CURRENT_STRATEGIES),
+    "temporal_strategy": list(TEMPORAL_STRATEGIES),
+    "multi_hop_strategy": list(MULTI_HOP_STRATEGIES),
+    "answer_style": list(ANSWER_STYLE_POLICIES),
+    "abstain_profile": list(ABSTAIN_PROFILES),
+    "generic_answer_rule": list(GENERIC_ANSWER_RULES),
+}
+
+
+def normalize_choice(value: str) -> str:
+    return (value or "").strip().lower().replace("-", "_")
+
+
+def cycle_component_choice(candidate: dict[str, str], component: str, step: int = 1) -> dict[str, str]:
     tuned = clone_candidate(candidate)
-    if component == "temporal_policy":
-        tuned["temporal_policy"] += " Extra rule: map recently to the supporting session date whenever the event is grounded."
-    elif component == "temporal_grounding_rule":
-        tuned["temporal_grounding_rule"] += " Extra rule: one unique time-anchor match outranks several vague snippets. Flags: prefer_unique_temporal_support, prefer_time_anchor_match, allow_session_time_temporal_backoff."
-    elif component == "current_policy":
-        tuned["current_policy"] += " Extra rule: prefer attribute-matching snippets and compact value spans. Flags: prefer_attribute_match, prefer_compact_value_span, collection_top6."
-    elif component == "multi_hop_policy":
-        tuned["multi_hop_policy"] += " Extra rule: combine the top three grounded snippets before giving up on a likely answer."
-        tuned["multi_hop_evidence_requirement"] += " Extra rule: require a grounded evidence path before abstaining or answering. Flags: require_grounded_support_path."
-    elif component == "multi_hop_evidence_requirement":
-        tuned["multi_hop_evidence_requirement"] += " Extra rule: combine up to three aligned snippets before giving up. Flags: combine_top3_multihop, require_grounded_support_path."
-    elif component == "abstain_guardrail_answerable":
-        tuned["abstain_guardrail_answerable"] += " Extra rule: lower the grounding threshold when one snippet directly answers the question. Flags: grounded_answer_beats_default_abstain, low_grounding_threshold."
-    elif component == "generic_answer_rejection_rule":
-        tuned["generic_answer_rejection_rule"] += " Extra rule: abstain on copied narrative sentences and long vague spans. Flags: abstain_on_sentence_copy, require_specific_answer_span."
-    elif component == "answer_synthesis_policy":
-        tuned["answer_synthesis_policy"] += " Extra rule: prefer compact grounded value spans over full-sentence restatements."
-        tuned["current_policy"] += " Flags: prefer_compact_value_span."
-    elif component == "confidence_policy":
-        tuned["confidence_policy"] += " Extra rule: keep temporal and multi-hop confidence conservative unless support is explicit. Flags: high_confidence_requires_strong_support."
-    elif component == "explanation_policy":
-        tuned["explanation_policy"] += " Extra rule: always echo one distinctive support term in the explanation."
-    elif component == "query_mode_rubric":
-        tuned["query_mode_rubric"] += " Extra rule: treat how long/how long ago as temporal and would/if/likely as multi-hop."
-    elif component == "mode_routing_bias":
-        tuned["mode_routing_bias"] += " Extra rule: explicit date anchors should override the current default bias. Flags: temporal_on_time_anchor, temporal_on_relative_time."
-    tuned["query_mode_rubric"] += f" Iteration note: custom proposer step {iteration}."
+    options = COMPONENT_OPTIONS[component]
+    current = normalize_choice(candidate.get(component, ""))
+    try:
+        idx = options.index(current)
+    except ValueError:
+        idx = 0
+    tuned[component] = options[(idx + step) % len(options)]
     return tuned
+
+
+def apply_component_tune(candidate: dict[str, str], component: str, iteration: int) -> dict[str, str]:
+    if component not in COMPONENT_OPTIONS:
+        return clone_candidate(candidate)
+    return cycle_component_choice(candidate, component, step=max(1, iteration % len(COMPONENT_OPTIONS[component])))
 
 
 def reflective_signals(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -357,101 +395,60 @@ def reflective_signals(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def append_flags(text: str, *flags: str) -> str:
-    flags = [flag for flag in flags if flag]
-    if not flags:
-        return text
-    existing = parse_flags_from_candidate_text(text)
-    new_flags = [flag for flag in flags if flag not in existing]
-    if not new_flags:
-        return text
-    suffix = " Flags: " + ", ".join(new_flags) + "."
-    return text + suffix
-
-
-def parse_flags_from_candidate_text(text: str) -> set[str]:
-    matches = re.findall(r"Flags:\s*([^.]*)", text)
-    flags = set()
-    for match in matches:
-        for part in match.split(","):
-            token = part.strip().strip(".")
-            if token:
-                flags.add(token)
-    return flags
-
-
 def apply_reflective_tune(candidate: dict[str, str], component: str, rows: list[dict[str, Any]], iteration: int) -> dict[str, str]:
     tuned = clone_candidate(candidate)
     signals = reflective_signals(rows)
     failures = signals["failure_buckets"]
     gold_modes = signals["gold_modes"]
     missed_types = signals["missed_types"]
-
-    if component == "query_mode_rubric":
-        additions = []
-        if gold_modes.get("multi_hop", 0) > 0:
-            additions.append("Extra rule: treat both, in common, which of, what topic, and date-anchored what/who questions as multi-hop unless they ask directly for a date.")
-        if gold_modes.get("abstain_like", 0) > 0:
-            additions.append("Extra rule: treat do we know, is there any information, and explicitly unsupported-information questions as abstain-like.")
-        if gold_modes.get("temporal", 0) > 0:
-            additions.append("Extra rule: temporal questions include when, how long, how long ago, and direct date/year lookups.")
-        if additions:
-            tuned["query_mode_rubric"] += " " + " ".join(additions)
-    elif component == "mode_routing_bias":
-        if gold_modes.get("temporal", 0) > gold_modes.get("current", 0):
-            tuned["mode_routing_bias"] += " Extra rule: time-bearing questions should flip to temporal more aggressively."
-        if missed_types.get("time_anchor_alignment", 0) > 0:
-            tuned["mode_routing_bias"] += " Extra rule: explicit dates and relative time phrases outweigh the current default bias."
-    elif component == "current_policy":
-        if failures.get("temporal_selection_error", 0) > 0:
-            tuned["current_policy"] += " Extra rule: heavily prefer evidence whose session date matches any explicit date or month in the question."
-            tuned["current_policy"] = append_flags(tuned["current_policy"], "prefer_time_anchor_match", "require_time_anchor_match")
-        if failures.get("false_confident_answer", 0) > 0 or failures.get("attribute_mismatch", 0) > 0:
-            tuned["current_policy"] += " Extra rule: prefer short focus spans over repeating a whole support sentence."
-            tuned["current_policy"] = append_flags(tuned["current_policy"], "prefer_focus_span_extraction", "prefer_compact_value_span")
-    elif component == "temporal_policy":
-        if failures.get("false_abstain", 0) > 0:
-            tuned["temporal_policy"] += " Extra rule: if the event is otherwise well grounded, back off to the supporting session date instead of empty abstention."
-            tuned["temporal_policy"] = append_flags(tuned["temporal_policy"], "allow_session_time_temporal_backoff")
-        if failures.get("temporal_selection_error", 0) > 0:
-            tuned["temporal_policy"] += " Extra rule: preserve relative time phrasing when the evidence uses relative calendar language."
-    elif component == "temporal_grounding_rule":
-        if missed_types.get("time_anchor_alignment", 0) > 0:
-            tuned["temporal_grounding_rule"] += " Extra rule: favor evidence that matches the time anchor in the question over generic lexical overlap."
-            tuned["temporal_grounding_rule"] = append_flags(tuned["temporal_grounding_rule"], "prefer_time_anchor_match", "prefer_unique_temporal_support")
+    if component == "mode_router":
+        if gold_modes.get("temporal", 0) >= max(gold_modes.get("current", 0), gold_modes.get("multi_hop", 0)) and (
+            missed_types.get("time_anchor_alignment", 0) > 0 or failures.get("temporal_selection_error", 0) > 0
+        ):
+            tuned["mode_router"] = "temporal_first"
+        elif gold_modes.get("multi_hop", 0) > gold_modes.get("current", 0):
+            tuned["mode_router"] = "multi_hop_sensitive"
+        elif gold_modes.get("abstain_like", 0) > 0 and failures.get("false_confident_answer", 0) > failures.get("false_abstain", 0):
+            tuned["mode_router"] = "abstain_sensitive"
+        else:
+            tuned["mode_router"] = "balanced_temporal"
+    elif component == "current_strategy":
+        tuned["current_strategy"] = "latest_with_time_anchor" if missed_types.get("time_anchor_alignment", 0) > 0 else "latest_only"
+    elif component == "temporal_strategy":
         if missed_types.get("session_time_grounding", 0) > 0 or missed_types.get("temporal_grounding", 0) > 0:
-            tuned["temporal_grounding_rule"] += " Extra rule: allow session-time grounding when exactly one strong support snippet names the event."
-            tuned["temporal_grounding_rule"] = append_flags(tuned["temporal_grounding_rule"], "allow_session_time_temporal_backoff")
-    elif component == "multi_hop_policy":
-        tuned["multi_hop_policy"] += " Extra rule: use the top grounded evidence items to synthesize compact, non-sentence answers before giving up."
-        tuned["multi_hop_policy"] = append_flags(tuned["multi_hop_policy"], "combine_top3_multihop", "prefer_focus_span_extraction")
-    elif component == "multi_hop_evidence_requirement":
-        if missed_types.get("multi_evidence_synthesis", 0) > 0:
-            tuned["multi_hop_evidence_requirement"] += " Extra rule: require an aligned support path and combine multiple grounded snippets before abstaining."
-            tuned["multi_hop_evidence_requirement"] = append_flags(tuned["multi_hop_evidence_requirement"], "combine_top3_multihop", "require_grounded_support_path")
-    elif component == "abstain_guardrail_answerable":
-        if failures.get("false_confident_answer", 0) > 0:
-            tuned["abstain_guardrail_answerable"] += " Extra rule: keep answerable overrides narrow and do not let weak sentence copies beat abstain."
-        if failures.get("false_abstain", 0) > 0:
-            tuned["abstain_guardrail_answerable"] += " Extra rule: do not abstain when one grounded snippet directly answers the question with a compact span."
-            tuned["abstain_guardrail_answerable"] = append_flags(tuned["abstain_guardrail_answerable"], "grounded_answer_beats_default_abstain", "low_grounding_threshold")
-    elif component == "generic_answer_rejection_rule":
+            tuned["temporal_strategy"] = "explicit_or_session_time"
+        elif missed_types.get("time_anchor_alignment", 0) > 0:
+            tuned["temporal_strategy"] = "latest_with_time_anchor"
+        else:
+            tuned["temporal_strategy"] = "ordered_history"
+    elif component == "multi_hop_strategy":
+        if missed_types.get("multi_evidence_synthesis", 0) > 0 or failures.get("multi_hop_failure", 0) > 0:
+            tuned["multi_hop_strategy"] = "aggregate_three_hops"
+        else:
+            tuned["multi_hop_strategy"] = "aggregate_two_hops"
+    elif component == "abstain_profile":
+        if failures.get("false_abstain", 0) > failures.get("false_confident_answer", 0):
+            tuned["abstain_profile"] = "answerable_friendly"
+        elif failures.get("false_confident_answer", 0) > 0:
+            tuned["abstain_profile"] = "strict"
+        else:
+            tuned["abstain_profile"] = "balanced"
+    elif component == "generic_answer_rule":
         if failures.get("false_confident_answer", 0) > 0 or missed_types.get("specific_answer_span", 0) > 0:
-            tuned["generic_answer_rejection_rule"] += " Extra rule: copied narrative sentences should be rejected unless a compact answer span is extracted."
-            tuned["generic_answer_rejection_rule"] = append_flags(tuned["generic_answer_rejection_rule"], "abstain_on_sentence_copy", "require_specific_answer_span", "abstain_on_long_generic_answers")
-    elif component == "answer_synthesis_policy":
-        tuned["answer_synthesis_policy"] += " Extra rule: return the smallest grounded span that answers the question, not the surrounding narrative sentence."
-        tuned["answer_synthesis_policy"] = append_flags(tuned["answer_synthesis_policy"], "prefer_compact_value_span", "prefer_focus_span_extraction")
-        if failures.get("temporal_selection_error", 0) > 0:
-            tuned["answer_synthesis_policy"] = append_flags(tuned["answer_synthesis_policy"], "prefer_time_anchor_match")
-    elif component == "confidence_policy":
-        if failures.get("false_confident_answer", 0) > 0:
-            tuned["confidence_policy"] += " Extra rule: keep confidence conservative when support is broad or weakly grounded."
-            tuned["confidence_policy"] = append_flags(tuned["confidence_policy"], "high_confidence_requires_strong_support")
-    elif component == "explanation_policy":
-        tuned["explanation_policy"] += " Extra rule: name the direct support span or the missing span, not just the general topic."
-
-    tuned["query_mode_rubric"] += f" Iteration note: reflective custom proposer step {iteration}."
+            tuned["generic_answer_rule"] = "reject_full_sentence"
+        else:
+            tuned["generic_answer_rule"] = "reject_long_span"
+    elif component == "answer_style":
+        if gold_modes.get("temporal", 0) > 0:
+            tuned["answer_style"] = "short_date"
+        elif gold_modes.get("multi_hop", 0) > 0:
+            tuned["answer_style"] = "short_slot_value"
+        elif failures.get("false_confident_answer", 0) > 0:
+            tuned["answer_style"] = "short_entity"
+        else:
+            tuned["answer_style"] = "auto"
+    else:
+        tuned = apply_component_tune(tuned, component, iteration)
     return tuned
 
 
@@ -463,7 +460,7 @@ def make_custom_candidate_proposer(allowed_components: list[str] | None = None):
         state["calls"] += 1
         targets = list(components_to_update or [])
         if not targets:
-            targets = ["query_mode_rubric"]
+            targets = ["mode_router"]
         if allowed:
             targets = [component for component in targets if component in allowed]
         if not targets and allowed:
@@ -495,14 +492,19 @@ class FixedTrackModuleSelector:
         return [choice]
 
 
+def component_option_text(component: str) -> str:
+    options = COMPONENT_OPTIONS.get(component, [])
+    return ", ".join(f"`{option}`" for option in options)
+
+
 def build_reflection_prompt_templates(track: str, components: list[str]) -> dict[str, str]:
     common = (
-        "You are improving one text component of a reasoning system.\n\n"
+        "You are improving one discrete policy component of a reasoning system.\n\n"
         "Current component text:\n```\n<curr_param>\n```\n\n"
         "Here are reflective examples with Inputs, Generated Outputs, and Feedback:\n```\n<side_info>\n```\n\n"
-        "Make a small delta, not a rewrite. Use the feedback fields such as missed_evidence_type, bad_decision_pattern, "
-        "should_have_done, and minimal_fix_hint to repair one concrete failure mode.\n"
-        "Do not add broad restatements of the whole system. Keep the instruction terse, operational, and specific.\n"
+        "Choose one allowed value for this component. Make a small policy change, not a rewrite. "
+        "Use the feedback fields such as missed_evidence_type, bad_decision_pattern, should_have_done, and minimal_fix_hint "
+        "to repair one concrete failure mode.\n"
     )
     prompts: dict[str, str] = {}
     if track == "mode_abstain":
@@ -511,19 +513,19 @@ def build_reflection_prompt_templates(track: str, components: list[str]) -> dict
             "Do not worsen abstain precision on abstain-like questions.\n"
             "Focus only on routing to the right mode for answerable questions, letting compact grounded spans beat abstain, "
             "or rejecting generic copied answers.\n"
-            "Return only the new text for this one component within ``` blocks."
+            "Return only one allowed option for this component within ``` blocks."
         )
         for component in components:
-            prompts[component] = common + "\n" + delta
+            prompts[component] = common + f"\nAllowed options for `{component}`: {component_option_text(component)}.\n\n" + delta
     elif track == "temporal_selection":
         delta = (
             "Goal: improve temporal answer selection without increasing false abstain.\n"
             "Focus only on indirect date grounding from session time, time-anchor alignment, and compact temporal answer synthesis.\n"
             "Do not change current or multi-hop behavior, and do not make generic abstain rules stricter.\n"
-            "Return only the new text for this one component within ``` blocks."
+            "Return only one allowed option for this component within ``` blocks."
         )
         for component in components:
-            prompts[component] = common + "\n" + delta
+            prompts[component] = common + f"\nAllowed options for `{component}`: {component_option_text(component)}.\n\n" + delta
     return prompts
 
 
@@ -663,7 +665,8 @@ def main():
     run_dir.mkdir(parents=True, exist_ok=True)
     reflection_lm_name = resolve_reflection_lm_name(args.reflection_lm)
     components = track_components(args.track)
-    adapter = ReasoningGEPAAdapter(seed=args.seed, active_components=components)
+    objectives = track_objectives(args.track)
+    adapter = ReasoningGEPAAdapter(seed=args.seed, active_components=components, active_objectives=objectives)
     leakage_budget = min(24, args.budget) if args.budget > 0 else 24
     leakage_report = run_leakage_red_team(adapter, dict(SEED_CANDIDATE), budget=leakage_budget, seed=args.seed)
     (run_dir / "leakage_red_team.json").write_text(json.dumps(leakage_report, indent=2, ensure_ascii=True) + "\n")
@@ -706,6 +709,7 @@ def main():
         "run_id": run_id,
         "track": args.track,
         "active_components": components,
+        "active_objectives": objectives,
         "budget": args.budget,
         "holdout_budget": args.holdout_budget,
         "seed": args.seed,

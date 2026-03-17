@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "The week before 14 September 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about joanna's, laptop. The supported answer is The week before 14 September 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Joanna's laptop crashed last week, causing her to lose all her work which was a major blow.",
+            "value": "Joanna's laptop crashed last week, causing her to lose all her work which was a major blow.",
+            "entity": "speaker_a",
+            "attribute": "occupation",
+            "regime": "global",
+            "session_idx": 21,
+            "session_time": "1:43 pm on 14 September, 2022",
+            "dia_ids": [
+                "D21:1"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

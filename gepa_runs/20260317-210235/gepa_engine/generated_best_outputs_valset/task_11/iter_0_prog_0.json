@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "21 January 2022",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about first, game, his, nate. The supported answer is 21 January 2022.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 13.5,
+            "text": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "value": "Nate won his first video game tournament playing a team shooter game called Counter-Strike: Global Offensive.",
+            "entity": "speaker_b",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 1,
+            "session_time": "7:31 pm on 21 January, 2022",
+            "dia_ids": [
+                "D1:3"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

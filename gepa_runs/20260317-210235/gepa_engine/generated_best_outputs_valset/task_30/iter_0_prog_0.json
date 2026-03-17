@@ -1,0 +1,26 @@
+{
+    "query_mode": "temporal",
+    "answer_candidate": "22 August 2023",
+    "should_abstain": false,
+    "explanation": "I answered using the strongest grounded support, especially the evidence about calvin's, tokyo. The supported answer is 22 August 2023.",
+    "confidence_band": "medium",
+    "support_items": [
+        {
+            "kind": "event",
+            "score": 5.5,
+            "text": "Dave found Tokyo to be an incredible experience based on Calvin's description.",
+            "value": "Dave found Tokyo to be an incredible experience based on Calvin's description.",
+            "entity": "speaker_a",
+            "attribute": "other",
+            "regime": "global",
+            "session_idx": 15,
+            "session_time": "11:06 am on 22 August, 2023",
+            "dia_ids": [
+                "D15:5"
+            ]
+        }
+    ],
+    "answer_style": "mode_default",
+    "evidence_strategy": "explicit_or_session_time",
+    "abstain_profile": "answerable_friendly"
+}

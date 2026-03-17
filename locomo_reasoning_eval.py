@@ -139,61 +139,61 @@ def reflective_guidance(
                     "missed_evidence_type": "session_time_grounding",
                     "bad_decision_pattern": "abstained because no explicit date token appeared in the snippet",
                     "should_have_done": "accept the grounded session timestamp when one support snippet uniquely names the event",
-                    "minimal_fix_hint": "temporal_policy should allow indirect date grounding from session time when support is unique",
+                    "minimal_fix_hint": "temporal_strategy should allow indirect date grounding from session time when support is unique",
                 }
             return {
                 "missed_evidence_type": "temporal_grounding",
                 "bad_decision_pattern": "treated a grounded temporal clue as too weak to answer",
                 "should_have_done": "answer from the strongest grounded temporal clue instead of abstaining",
-                "minimal_fix_hint": "abstain_policy should let one grounded temporal snippet beat default abstain",
+                "minimal_fix_hint": "abstain_profile should stay answerable_friendly when one grounded temporal snippet exists",
             }
         if reasoning.query_mode == "multi_hop":
             return {
                 "missed_evidence_type": "multi_evidence_synthesis",
                 "bad_decision_pattern": "gave up before combining the available support snippets",
                 "should_have_done": "combine the best grounded snippets into one compact answer",
-                "minimal_fix_hint": "multi_hop_policy should synthesize from the top grounded evidence path before abstaining",
+                "minimal_fix_hint": "multi_hop_strategy should aggregate grounded supports before abstaining",
             }
         return {
             "missed_evidence_type": "direct_answer_span",
             "bad_decision_pattern": "abstained even though one grounded snippet likely contained the answer span",
             "should_have_done": "extract the smallest grounded answer span and answer",
-            "minimal_fix_hint": "generic_answer_guardrail should reject vague spans without forcing abstain on compact grounded spans",
+            "minimal_fix_hint": "generic_answer_rule should reject vague spans without blocking compact grounded spans",
         }
     if bucket_name == "temporal_selection_error":
         return {
             "missed_evidence_type": "time_anchor_alignment",
             "bad_decision_pattern": "selected evidence without matching the question's time anchor closely enough",
             "should_have_done": "prefer evidence whose session date or snippet text matches the time anchor in the question",
-            "minimal_fix_hint": "temporal_evidence_policy should boost time-anchor matches and downweight mismatched dates",
+            "minimal_fix_hint": "temporal_strategy should boost time-anchor matches and downweight mismatched dates",
         }
     if bucket_name == "multi_hop_failure":
         return {
             "missed_evidence_type": "multi_evidence_aggregation",
             "bad_decision_pattern": "treated a multi-hop question like a single-snippet lookup",
             "should_have_done": "aggregate the best grounded snippets before answering or abstaining",
-            "minimal_fix_hint": "multi_hop_policy should combine multiple supports before falling back to abstain",
+            "minimal_fix_hint": "multi_hop_strategy should combine multiple supports before falling back to abstain",
         }
     if bucket_name == "missing_evidence":
         return {
             "missed_evidence_type": "retrieval_gap",
             "bad_decision_pattern": "answered despite having no usable grounded evidence",
             "should_have_done": "abstain when retrieved evidence is empty or clearly off-target",
-            "minimal_fix_hint": "abstain_policy should trigger earlier when support is absent or weakly grounded",
+            "minimal_fix_hint": "abstain_profile should stay strict when support is absent or weakly grounded",
         }
     if bucket_name == "false_confident_answer":
         return {
             "missed_evidence_type": "specific_answer_span",
             "bad_decision_pattern": "returned a broad weakly grounded answer instead of a compact supported span",
             "should_have_done": "either extract a compact grounded span or abstain",
-            "minimal_fix_hint": "generic_answer_guardrail should reject copied narrative sentences as final answers",
+            "minimal_fix_hint": "generic_answer_rule should reject copied narrative sentences as final answers",
         }
     if bucket_name == "explanation_quality" or explanation_grade != "good":
         return {
             "missed_evidence_type": "explanation_faithfulness",
             "bad_decision_pattern": "the explanation did not clearly tie the decision to specific support evidence",
             "should_have_done": "cite the strongest support term or the missing support reason explicitly",
-            "minimal_fix_hint": "explanation_policy should mention one distinctive support term and the exact abstain reason",
+            "minimal_fix_hint": "keep explanations support-first and tied to one concrete evidence path",
         }
     return {
         "missed_evidence_type": "none",
@@ -241,12 +241,20 @@ def update_group(group: dict[str, int], joint_correct: int, pred_abs: int, gold_
 def aggregate_objectives(examples: list[dict[str, Any]]) -> dict[str, float]:
     answerable = [row for row in examples if row["gold_abstain"] == 0]
     abstain_cases = [row for row in examples if row["gold_abstain"] == 1]
+    temporal_cases = [row for row in examples if row.get("query_mode") == "temporal"]
     return {
         "answerable_accuracy": pct(sum(row["joint_correct"] for row in answerable), len(answerable)),
         "abstain_precision": pct(sum(1 for row in examples if row["pred_abs"] == 1 and row["gold_abstain"] == 1), sum(row["pred_abs"] for row in examples)),
         "abstain_recall": pct(sum(1 for row in abstain_cases if row["pred_abs"] == 1), len(abstain_cases)),
         "false_abstain_penalty": pct(sum(row["false_abstain"] for row in answerable), len(answerable)),
         "false_confident_answer_penalty": pct(sum(row["false_confident_answer"] for row in examples), len(examples)),
+        "joint_reward_mean": pct(sum(row["joint_correct"] for row in examples), len(examples)),
+        "answerable_reward_mean": pct(sum(row["joint_correct"] for row in answerable), len(answerable)),
+        "temporal_joint_reward_mean": pct(sum(row["joint_correct"] for row in temporal_cases), len(temporal_cases)),
+        "temporal_evidence_reward_mean": pct(sum(row["evidence_hit"] for row in temporal_cases), len(temporal_cases)),
+        "answer_evidence_reward_mean": pct(sum(row["evidence_hit"] for row in examples), len(examples)),
+        "avoid_false_abstain_mean": pct(sum(1 - row["false_abstain"] for row in answerable), len(answerable)),
+        "avoid_false_confident_answer_mean": pct(sum(1 - row["false_confident_answer"] for row in examples), len(examples)),
     }
 
 
@@ -421,11 +429,15 @@ def evaluate_reasoning_batch(
         }
         rows.append(row)
         objectives = {
-            "answerable_accuracy": float(joint_correct if gold_abs == 0 else 0),
-            "abstain_precision": float(1 if pred_abs == 1 and gold_abs == 1 else 0),
-            "abstain_recall": float(1 if pred_abs == 1 and gold_abs == 1 else 0),
-            "false_abstain_penalty": float(false_abstain),
-            "false_confident_answer_penalty": float(false_confident_answer),
+            "joint_reward": float(joint_correct),
+            "answerable_reward": float(joint_correct if gold_abs == 0 else 0),
+            "abstain_precision_reward": float(1 if pred_abs == 1 and gold_abs == 1 else 0),
+            "abstain_recall_reward": float(1 if pred_abs == 1 and gold_abs == 1 else 0),
+            "avoid_false_abstain": float(1 - false_abstain),
+            "avoid_false_confident_answer": float(1 - false_confident_answer),
+            "temporal_joint_reward": float(joint_correct if offline_slice_name(query) == "temporal" else 0),
+            "temporal_evidence_reward": float(evidence_hit if offline_slice_name(query) == "temporal" else 0),
+            "answer_evidence_reward": float(evidence_hit),
         }
         objective_scores.append(objectives)
         scores.append(scalar_score({"joint_correct": joint_correct, "false_abstain": false_abstain, "false_confident_answer": false_confident_answer}))
@@ -448,6 +460,9 @@ def evaluate_reasoning_batch(
                 "abstain": reasoning.should_abstain,
                 "explanation": reasoning.explanation,
                 "confidence_band": reasoning.confidence_band,
+                "answer_style": reasoning.answer_style,
+                "evidence_strategy": reasoning.evidence_strategy,
+                "abstain_profile": reasoning.abstain_profile,
             },
             "Feedback": {
                 "gold_mode_label": query.get("query_mode"),
