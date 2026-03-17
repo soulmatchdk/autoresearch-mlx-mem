@@ -347,11 +347,8 @@ def infer_attribute_and_value(text: str):
     return "other", clean_text(text)
 
 
-def extract_query_mode(question: str, answer: str, evidence_dia_ids, speakers: dict):
+def extract_query_mode(question: str, category=None, speakers: dict | None = None):
     q = f" {question.lower()} "
-    a = answer.lower()
-    if any(marker in a for marker in OPEN_ANSWER_MARKERS):
-        return "adversarial"
     if any(keyword in q for keyword in CURRENT_KEYWORDS):
         return "current"
     if any(keyword in q for keyword in TEMPORAL_KEYWORDS):
@@ -359,9 +356,22 @@ def extract_query_mode(question: str, answer: str, evidence_dia_ids, speakers: d
     if any(keyword in q for keyword in HISTORICAL_KEYWORDS):
         return "historical"
 
-    speaker_mentions = sum(1 for name in speakers.values() if name and name.lower() in q)
-    if len(set(evidence_dia_ids)) > 1 or speaker_mentions > 1:
+    if any(phrase in q for phrase in (" not mention", " any mention", " any information", " do we know", " was there ever ")):
+        return "adversarial"
+
+    speaker_mentions = 0
+    if speakers:
+        speaker_mentions = sum(1 for name in speakers.values() if name and name.lower() in q)
+    if speaker_mentions > 1 or any(phrase in q for phrase in (" both ", " together ", " each other ")):
         return "multi_hop"
+    if category in {2}:
+        return "temporal"
+    if category in {5}:
+        return "adversarial"
+    if category in {3, 4}:
+        return "multi_hop"
+    if category in {1}:
+        return "current"
     return "current"
 
 
@@ -378,7 +388,7 @@ def infer_query_entity(question: str, speakers: dict):
     return label
 
 
-def infer_query_attribute(question: str, answer: str):
+def infer_query_attribute(question: str):
     lowered = question.lower()
     if lowered.startswith("when "):
         return "date"
@@ -386,7 +396,7 @@ def infer_query_attribute(question: str, answer: str):
         return "location"
     if lowered.startswith("who "):
         return "relationship"
-    attribute, _ = infer_attribute_and_value(f"{question} {answer}")
+    attribute, _ = infer_attribute_and_value(question)
     return attribute
 
 
@@ -456,14 +466,14 @@ def adapt_locomo_conversation(sample: dict, sample_idx: int, adapter_version: st
         question = clean_text(qa.get("question") or qa.get("query") or qa.get("text") or "")
         answer = clean_text(qa.get("answer") or qa.get("gold_answer") or "")
         evidence_dia_ids = normalize_dia_ids(qa.get("evidence") or qa.get("evidence_dia_ids") or qa.get("supporting_dia_ids"))
-        query_mode = extract_query_mode(question, answer, evidence_dia_ids, speakers)
+        query_mode = extract_query_mode(question, qa.get("category"), speakers)
         queries.append(
             {
                 "query_id": f"locomo_{conversation_id}_q{q_idx}",
                 "conversation_id": conversation_id,
                 "text": question,
                 "entity": infer_query_entity(question, speakers),
-                "attribute": infer_query_attribute(question, answer),
+                "attribute": infer_query_attribute(question),
                 "regime": "global",
                 "time_bucket": query_time_bucket(query_mode),
                 "query_mode": query_mode,
