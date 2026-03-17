@@ -41,7 +41,13 @@ def changed_paths_for_run():
         path = line[3:]
         if " -> " in path:
             path = path.split(" -> ", 1)[1]
-        if path == "results.tsv" or path.startswith("__pycache__/") or path.endswith(".pyc"):
+        if (
+            path == "results.tsv"
+            or path == "locomo_adapted/eval/"
+            or path.startswith("locomo_adapted/eval/")
+            or path.startswith("__pycache__/")
+            or path.endswith(".pyc")
+        ):
             continue
         paths.append(path)
     return sorted(set(paths))

@@ -4,6 +4,8 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from locomo_mode_adapter import predict_from_locomo
+
 
 OPEN_ANSWER_MARKERS = (
     "not mentioned",
@@ -20,6 +22,7 @@ CONFLICT_THRESHOLD = 0.35
 def parse_args():
     parser = argparse.ArgumentParser(description="Run the UCMD V3.6 LoCoMo eval-only benchmark over adapted events and queries.")
     parser.add_argument("--events", default="locomo_adapted/events.jsonl", help="Path to adapted LoCoMo events.")
+    parser.add_argument("--headers", default="locomo_adapted/headers.jsonl", help="Path to adapted LoCoMo headers.")
     parser.add_argument("--queries", default="locomo_adapted/queries.jsonl", help="Path to adapted LoCoMo queries.")
     parser.add_argument("--metadata", default="locomo_adapted/metadata.json", help="Path to adapted LoCoMo metadata.")
     parser.add_argument("--write-markdown", default="", help="Optional Markdown report output path.")
@@ -88,24 +91,13 @@ def events_by_conversation(events):
     return grouped
 
 
-def scope_events(query: dict, conversation_events: list[dict]):
-    return [
-        event
-        for event in conversation_events
-        if event["entity"] == query["entity"]
-        and event["attribute"] == query["attribute"]
-        and event["regime"] == query["regime"]
-    ]
-
-
-def candidate_events(query: dict, scoped_events: list[dict]):
-    if not scoped_events:
-        return []
-    mode = query.get("query_mode", "current")
-    if mode == "current":
-        latest_t = max(event["timestamp"] for event in scoped_events)
-        return [event for event in scoped_events if event["timestamp"] == latest_t]
-    return list(scoped_events)
+def headers_by_conversation(headers):
+    grouped = defaultdict(list)
+    for header in headers:
+        grouped[header["conversation_id"]].append(header)
+    for conversation_id in grouped:
+        grouped[conversation_id].sort(key=lambda item: (item["session_idx"], item["header_id"]))
+    return grouped
 
 
 def value_stats(events: list[dict]):
@@ -246,6 +238,28 @@ def render_report(summary: dict):
             ]
         )
     lines.append(markdown_table(["query_mode", "count", "joint_acc", "pred_abstain", "gold_abstain", "answer_match", "evidence_hit"], query_mode_rows))
+    lines.extend(["", "## Policy Mode", ""])
+
+    policy_mode_rows = []
+    for name, stats in summary["by_policy_mode"].items():
+        policy_mode_rows.append(
+            [
+                name,
+                stats["count"],
+                f"{stats['joint_acc']:.4f}",
+                f"{stats['pred_abstain_rate']:.4f}",
+                f"{stats['gold_abstain_rate']:.4f}",
+                f"{stats['answer_match_rate']:.4f}",
+                f"{stats['evidence_hit_rate']:.4f}",
+            ]
+        )
+    lines.append(markdown_table(["policy_mode", "count", "joint_acc", "pred_abstain", "gold_abstain", "answer_match", "evidence_hit"], policy_mode_rows))
+    lines.extend(["", "## Query To Policy", ""])
+
+    policy_map_rows = []
+    for name, stats in summary["query_to_policy_mode"].items():
+        policy_map_rows.append([name, stats["count"], stats["dominant_policy_mode"], f"{stats['dominant_policy_share']:.4f}"])
+    lines.append(markdown_table(["query_mode", "count", "dominant_policy_mode", "dominant_policy_share"], policy_map_rows))
     lines.extend(["", "## Category", ""])
 
     category_rows = []
@@ -277,6 +291,21 @@ def render_report(summary: dict):
             ]
         )
     lines.append(markdown_table(["slice", "count", "joint_acc", "pred_abstain", "answer_match", "evidence_hit"], focus_rows))
+    lines.extend(["", "## Policy Focus", ""])
+
+    policy_focus_rows = []
+    for name, stats in summary["policy_focus_groups"].items():
+        policy_focus_rows.append(
+            [
+                name,
+                stats["count"],
+                f"{stats['joint_acc']:.4f}",
+                f"{stats['pred_abstain_rate']:.4f}",
+                f"{stats['answer_match_rate']:.4f}",
+                f"{stats['evidence_hit_rate']:.4f}",
+            ]
+        )
+    lines.append(markdown_table(["policy_slice", "count", "joint_acc", "pred_abstain", "answer_match", "evidence_hit"], policy_focus_rows))
     lines.extend(["", "## Failure Buckets", ""])
 
     failure_rows = [[name, count] for name, count in sorted(summary["failure_buckets"].items())]
@@ -285,26 +314,40 @@ def render_report(summary: dict):
         lines.extend(["", "## Failure Examples", ""])
         for idx, item in enumerate(summary["failure_examples"], start=1):
             lines.append(
-                f"{idx}. `{item['query_id']}` | mode=`{item['query_mode']}` | bucket=`{item['bucket']}` | "
+                f"{idx}. `{item['query_id']}` | mode=`{item['query_mode']}` | policy=`{item['policy_mode']}` | bucket=`{item['bucket']}` | "
                 f"gold=`{item['gold_answer']}` | pred=`{item['predicted_answer'] or 'ABSTAIN'}`"
             )
             lines.append(f"   question: {item['question']}")
             if item["support_value"]:
                 lines.append(f"   support_value: {item['support_value']}")
+            if item["support_text"]:
+                lines.append(f"   support_text: {item['support_text']}")
             if item["support_dia_ids"]:
                 lines.append(f"   support_dia_ids: {item['support_dia_ids']}")
     lines.append("")
     return "\n".join(lines)
 
 
-def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | None = None, write_markdown: str = "", write_json: str = "", max_failures: int = 20):
+def evaluate_locomo(
+    events_path: str,
+    queries_path: str,
+    metadata_path: str | None = None,
+    headers_path: str = "",
+    write_markdown: str = "",
+    write_json: str = "",
+    max_failures: int = 20,
+):
     events = load_jsonl(Path(events_path))
+    headers_file = Path(headers_path) if headers_path else Path(events_path).with_name("headers.jsonl")
+    headers = load_jsonl(headers_file) if headers_file.exists() else []
     queries = load_jsonl(Path(queries_path))
     metadata = load_metadata(Path(metadata_path)) if metadata_path else {}
     conversations = events_by_conversation(events)
+    headers_by_conv = headers_by_conversation(headers)
 
     overall = make_group()
     by_query_mode = defaultdict(make_group)
+    by_policy_mode = defaultdict(make_group)
     by_category = defaultdict(make_group)
     focus_groups = {
         "current": make_group(),
@@ -312,6 +355,13 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
         "multi_hop": make_group(),
         "abstain_like": make_group(),
     }
+    policy_focus_groups = {
+        "current": make_group(),
+        "temporal": make_group(),
+        "multi_hop": make_group(),
+        "abstain_like": make_group(),
+    }
+    query_to_policy_mode = defaultdict(Counter)
     failure_buckets = Counter(
         {
             "temporal_selection_error": 0,
@@ -330,9 +380,9 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
 
     for query in queries:
         conversation_events = conversations.get(query["conversation_id"], [])
-        scoped = scope_events(query, conversation_events)
-        candidates = candidate_events(query, scoped)
-        choice = choose_prediction(query, scoped, candidates)
+        conversation_headers = headers_by_conv.get(query["conversation_id"], [])
+        profile, choice = predict_from_locomo(query, conversation_events, conversation_headers)
+        policy_mode = choice.get("policy_mode") or profile.get("policy_mode", "current")
         pred_abs = int(choice["abstain"])
         gold_abs = int(is_abstain_like(query.get("gold_answer", "")))
         pred_answer = choice["predicted_value"]
@@ -355,6 +405,14 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
         mode_bucket["answer_match"] += answer_match
         mode_bucket["evidence_hit"] += int(evidence_hit)
 
+        policy_bucket = by_policy_mode[policy_mode]
+        policy_bucket["count"] += 1
+        policy_bucket["joint_correct"] += joint_correct
+        policy_bucket["predicted_abstain"] += pred_abs
+        policy_bucket["gold_abstain"] += gold_abs
+        policy_bucket["answer_match"] += answer_match
+        policy_bucket["evidence_hit"] += int(evidence_hit)
+
         category_bucket = by_category[str(query.get("category", "unknown"))]
         category_bucket["count"] += 1
         category_bucket["joint_correct"] += joint_correct
@@ -362,6 +420,8 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
         category_bucket["gold_abstain"] += gold_abs
         category_bucket["answer_match"] += answer_match
         category_bucket["evidence_hit"] += int(evidence_hit)
+
+        query_to_policy_mode[query.get("query_mode", "unknown")][policy_mode] += 1
 
         if query.get("query_mode") in focus_groups:
             focus = focus_groups[query["query_mode"]]
@@ -373,6 +433,23 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
             focus["evidence_hit"] += int(evidence_hit)
         if gold_abs:
             focus = focus_groups["abstain_like"]
+            focus["count"] += 1
+            focus["joint_correct"] += joint_correct
+            focus["predicted_abstain"] += pred_abs
+            focus["gold_abstain"] += gold_abs
+            focus["answer_match"] += answer_match
+            focus["evidence_hit"] += int(evidence_hit)
+
+        if policy_mode in policy_focus_groups:
+            focus = policy_focus_groups[policy_mode]
+            focus["count"] += 1
+            focus["joint_correct"] += joint_correct
+            focus["predicted_abstain"] += pred_abs
+            focus["gold_abstain"] += gold_abs
+            focus["answer_match"] += answer_match
+            focus["evidence_hit"] += int(evidence_hit)
+        if gold_abs:
+            focus = policy_focus_groups["abstain_like"]
             focus["count"] += 1
             focus["joint_correct"] += joint_correct
             focus["predicted_abstain"] += pred_abs
@@ -397,11 +474,11 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
             bucket_name = "false_abstain"
             failure_buckets[bucket_name] += 1
         elif gold_abs == 0 and joint_correct == 0:
-            if not scoped:
+            if not choice["support_events"]:
                 bucket_name = "missing_evidence"
-            elif query.get("query_mode") == "multi_hop":
+            elif policy_mode == "multi_hop" or query.get("query_mode") == "multi_hop":
                 bucket_name = "multi_hop_failure"
-            elif query.get("query_mode") in {"current", "temporal"} and not evidence_hit:
+            elif policy_mode in {"current", "temporal"} and not evidence_hit:
                 bucket_name = "temporal_selection_error"
             elif not evidence_hit:
                 bucket_name = "missing_evidence"
@@ -413,19 +490,33 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
                 {
                     "query_id": query["query_id"],
                     "query_mode": query.get("query_mode", "unknown"),
+                    "policy_mode": policy_mode,
                     "bucket": bucket_name,
                     "question": query.get("text", ""),
                     "gold_answer": query.get("gold_answer", ""),
                     "predicted_answer": pred_answer,
                     "support_value": support.get("value") if support else None,
+                    "support_text": support.get("text") if support else None,
                     "support_dia_ids": support.get("dia_ids") if support else [],
                     "failure_tags": failure_tags,
                 }
             )
 
     by_query_mode_summary = {name: summarize_group(bucket) for name, bucket in sorted(by_query_mode.items())}
+    by_policy_mode_summary = {name: summarize_group(bucket) for name, bucket in sorted(by_policy_mode.items())}
     by_category_summary = {name: summarize_group(bucket) for name, bucket in sorted(by_category.items())}
     focus_summary = {name: summarize_group(bucket) for name, bucket in focus_groups.items()}
+    policy_focus_summary = {name: summarize_group(bucket) for name, bucket in policy_focus_groups.items()}
+    query_to_policy_summary = {}
+    for query_mode, counts in sorted(query_to_policy_mode.items()):
+        total = sum(counts.values())
+        dominant_policy_mode, dominant_count = counts.most_common(1)[0]
+        query_to_policy_summary[query_mode] = {
+            "count": total,
+            "dominant_policy_mode": dominant_policy_mode,
+            "dominant_policy_share": pct(dominant_count, total),
+            "counts": dict(counts),
+        }
     headline = {
         "query_count": overall["count"],
         "joint_answer_or_abstain_acc": pct(overall["joint_correct"], overall["count"]),
@@ -442,8 +533,11 @@ def evaluate_locomo(events_path: str, queries_path: str, metadata_path: str | No
         "metadata": metadata,
         "headline": headline,
         "by_query_mode": by_query_mode_summary,
+        "by_policy_mode": by_policy_mode_summary,
+        "query_to_policy_mode": query_to_policy_summary,
         "by_category": by_category_summary,
         "focus_groups": focus_summary,
+        "policy_focus_groups": policy_focus_summary,
         "failure_buckets": dict(failure_buckets),
         "failure_examples": failure_examples,
     }
@@ -466,6 +560,7 @@ def main():
         args.events,
         args.queries,
         args.metadata,
+        headers_path=args.headers,
         write_markdown=args.write_markdown,
         write_json=args.write_json,
         max_failures=args.max_failures,
