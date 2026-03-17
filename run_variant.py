@@ -50,9 +50,13 @@ def git_diff_summary(paths):
 
 def stage_and_commit(paths, run_id: str):
     if not paths:
-        raise RuntimeError("No code or doc changes found for this run. results.tsv alone is not enough.")
+        # Allow a clean-head evaluation run when the candidate was already committed
+        # and only the ledger is still dirty from earlier experiments.
+        run_git(["commit", "--allow-empty", "-m", f"run:{run_id}"])
+        return "empty"
     run_git(["add", "-A", "--", *paths])
     run_git(["commit", "-m", f"run:{run_id}", "--only", "--", *paths])
+    return "paths"
 
 
 def read_results_rows(path: Path):
@@ -211,11 +215,13 @@ def main():
 
     run_id = time.strftime("%Y%m%d-%H%M%S")
     git_parent_commit = head_commit()
-    stage_and_commit(paths, run_id)
+    commit_mode = stage_and_commit(paths, run_id)
     git_commit = head_commit()
     print(f"\ncommitted run:{run_id}")
     print(f"git_parent_commit: {git_parent_commit}")
     print(f"git_commit:        {git_commit}")
+    if commit_mode == "empty":
+        print("commit_mode:       empty run commit over an already committed candidate")
 
     summary = train.run_experiment()
     if summary.get("non_finite"):
